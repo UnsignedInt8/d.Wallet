@@ -1,8 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-
 import Application from './Application';
+
+import './styles/index.scss';
 
 // Create main element
 const mainElement = document.createElement('div');

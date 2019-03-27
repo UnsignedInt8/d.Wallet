@@ -1,0 +1,36 @@
+.home {
+  display: grid;
+  background: rgb(15, 13, 41);
+  width: 100vw;
+  height: 100vh;
+
+  grid-template-columns: 64px auto;
+}
+
+.home-bar {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1;
+  background: rgb(4, 6, 39);
+
+  div.icon {
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  div.icon:hover {
+      background-color: rgb(33, 47, 61);
+      transition: all 0.5s;
+  }
+
+  div.selected {
+      background-color: rgb(29, 84, 185);
+  }
+}
+
+.home-content {
+  grid-column: 2;
+}
