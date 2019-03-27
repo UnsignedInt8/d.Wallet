@@ -1,6 +1,6 @@
 .home {
   display: grid;
-  background: rgb(15, 13, 41);
+  background: rgb(17, 15, 41);
   width: 100vw;
   height: 100vh;
 
@@ -10,8 +10,15 @@
 .home-bar {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   grid-column: 1;
-  background: rgb(4, 6, 39);
+  background: rgb(1, 3, 34);
+  box-shadow: 2px 0px 14px -2px rgba(7, 8, 20, 1);
+
+  .icons {
+      display: flex;
+      flex-direction: column;
+  }
 
   div.icon {
     height: 64px;
@@ -22,8 +29,12 @@
   }
 
   div.icon:hover {
-      background-color: rgb(33, 47, 61);
+      background-color: rgb(48, 66, 83);
       transition: all 0.5s;
+  }
+
+  div.icon:active {
+      background-color: rgb(71, 84, 148);
   }
 
   div.selected {
@@ -33,4 +44,8 @@
 
 .home-content {
   grid-column: 2;
+}
+
+.titlebar-padding {
+    padding-top: 24px;
 }

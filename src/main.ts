@@ -19,7 +19,7 @@ const createWindow = async () => {
         await installExtensions();
     }
 
-    win = new BrowserWindow({ width: 800, height: 600, webPreferences: {} });
+    win = new BrowserWindow({ width: 461, height: 648, webPreferences: {}, titleBarStyle: 'hidden' });
 
     if (process.env.NODE_ENV !== 'production') {
         win.loadURL(`http://localhost:2003`);
