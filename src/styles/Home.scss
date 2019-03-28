@@ -1,6 +1,6 @@
 .home {
   display: grid;
-  background: rgb(12, 14, 36);
+  background: rgb(26, 26, 48);
   width: 100vw;
   height: 100vh;
 
@@ -55,11 +55,12 @@
 .home-content {
   grid-column: 2;
   color: white;
-  padding-left: 24px;
   position: relative;
+  height: 96.5vh;
+  overflow: hidden;
 
   display: grid;
-  grid-template-rows: 200px 60px auto 64px;
+  grid-template-rows: 200px 60px auto 0px;
   grid-template-columns: auto;
   grid-template-areas:
     "chart"
@@ -68,7 +69,7 @@
     "buttons";
 
   span {
-    transition: all 0.15s;
+    transition: all 0.12s;
   }
 
   .chart {
@@ -82,7 +83,7 @@
     justify-content: flex-end;
     flex-direction: row;
     margin-bottom: 10px;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     padding-right: 16px;
     text-transform: uppercase;
@@ -91,16 +92,26 @@
     right: 0;
 
     .date {
-        color: dimgray;
+      color: dimgray;
     }
 
     span {
-        display: inline-block;
-        margin-left: 12px;
+      display: inline-block;
+      margin-left: 12px;
     }
   }
 
-  .num {
+  .balance-title {
+    grid-area: balance;
+    font-size: 11px;
+    color: dimgray;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+
+  .balance {
     grid-area: balance;
     font-size: 48px;
     display: flex;
@@ -113,7 +124,77 @@
     font-size: 16px;
     margin-left: 12px;
     font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.5s;
+  }
 
+  .txs {
+    grid-area: txs;
+    overflow-y: scroll;
+
+    .tx {
+      display: grid;
+      margin-top: 4px;
+      margin-bottom: 4px;
+      padding-top: 10px;
+      padding-bottom: 0px;
+      padding-right: 15px;
+      background: rgba(46, 49, 82, 0.25);
+      grid-template-columns: 40px auto auto;
+      grid-template-rows: 24px 24px;
+      grid-template-areas:
+        "icon hash hash"
+        "icon amount date";
+
+      .hash {
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+        grid-area: hash;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        color: rgb(235, 235, 235);
+      }
+
+      .amount {
+        grid-area: amount;
+        font-size: 12px;
+        font-family: "Lato", "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+      }
+
+      .date {
+        grid-area: date;
+        text-align: right;
+        font-size: 12px;
+        color: dimgray;
+      }
+
+      .icon {
+          grid-area: icon;
+          text-align: center;
+          margin-top: -2px;
+      }
+    }
+  }
+
+  button.send {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    padding-top: 5px;
+    padding-right: 10px;
+    background-color: #1988f7;
+    cursor: pointer;
+
+    -webkit-box-shadow: 0px 7px 40px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 7px 40px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 7px 40px 0px rgba(0, 0, 0, 0.75);
+    transition: all 0.5s;
+  }
+
+  button.send:hover {
+    background-color: #2bdf07;
     transition: all 0.5s;
   }
 }

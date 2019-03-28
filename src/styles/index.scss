@@ -43,6 +43,27 @@ div {
   color: #44b329;
 }
 
+.in {
+  color: #1dce06;
+}
+
+.out {
+  color: #dd0b51;
+}
+
 .drop {
   color: red;
+}
+
+button {
+  width: 100%;
+  outline: none;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 3px;
+  border: none;
+  font-size: 12px;
+  color: white;
+  background-color: #4080d3;
+  margin: 8px;
 }
