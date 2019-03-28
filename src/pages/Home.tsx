@@ -73,11 +73,13 @@ class Home extends React.Component<{}, HomeState> {
                         </AreaChart>
                     </div>
 
-                    <div>
-                        <div className={`num lato-bold ${this.state.selectedSymbol}`}>
-                            <Flip bottom opposite collapse when={this.state.showSymbol}><span>2.67834</span></Flip>
-                            <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol.toUpperCase()}</span></Flip>
-                        </div>
+                    <div className='price'>
+                        <span className='date'>{new Date().toDateString()}</span> <span className={`rise`}>4027 {`USD/${this.state.selectedSymbol}`}</span>
+                    </div>
+
+                    <div className={`num lato-bold ${this.state.selectedSymbol}`}>
+                        <Flip bottom opposite collapse when={this.state.showSymbol}><span>2.67834</span></Flip>
+                        <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol.toUpperCase()}</span></Flip>
                     </div>
 
                 </div>

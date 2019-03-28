@@ -58,13 +58,50 @@
   padding-left: 24px;
   position: relative;
 
+  display: grid;
+  grid-template-rows: 200px 60px auto 64px;
+  grid-template-columns: auto;
+  grid-template-areas:
+    "chart"
+    "balance"
+    "txs"
+    "buttons";
+
   span {
     transition: all 0.15s;
   }
 
+  .chart {
+    width: 100%;
+    grid-area: chart;
+  }
+
+  .price {
+    grid-area: chart;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    margin-bottom: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    padding-right: 16px;
+    text-transform: uppercase;
+    position: absolute;
+    bottom: 4px;
+    right: 0;
+
+    .date {
+        color: dimgray;
+    }
+
+    span {
+        display: inline-block;
+        margin-left: 12px;
+    }
+  }
+
   .num {
-    margin-top: -18px;
-    margin-bottom: 32px;
+    grid-area: balance;
     font-size: 48px;
     display: flex;
     justify-content: flex-end;
@@ -78,10 +115,6 @@
     font-weight: 600;
 
     transition: all 0.5s;
-  }
-
-  .chart {
-    width: 100%;
   }
 }
 
