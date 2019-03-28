@@ -1,10 +1,10 @@
 .home {
   display: grid;
-  background: rgb(17, 15, 39);
+  background: rgb(12, 14, 36);
   width: 100vw;
   height: 100vh;
 
-  grid-template-columns: 64px auto;
+  grid-template-columns: 68px auto;
 }
 
 .home-bar {
@@ -14,6 +14,7 @@
   grid-column: 1;
   background: rgb(1, 3, 34);
   box-shadow: 2px 0px 10px -2px rgba(0, 0, 0, 0.25);
+  z-index: 1;
 
   .icons {
     display: flex;
@@ -25,7 +26,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
     cursor: pointer;
+
+    .indicator {
+      width: 3px;
+      position: absolute;
+      left: 0;
+      height: 36px;
+      opacity: 1;
+    }
+
+    .indicator-none {
+      opacity: 0;
+    }
   }
 
   div.icon:hover {
@@ -36,26 +50,38 @@
   div.icon:active {
     background-color: rgb(71, 84, 148);
   }
-
-  div.selected {
-    background-color: rgba(83, 136, 235, 0.25);
-  }
 }
 
 .home-content {
   grid-column: 2;
   color: white;
   padding-left: 24px;
+  position: relative;
+
+  span {
+    transition: all 0.15s;
+  }
 
   .num {
-    margin-top: 8px;
+    margin-top: -18px;
+    margin-bottom: 32px;
     font-size: 48px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    padding-right: 16px;
   }
 
   .symbol {
-      font-size: 16px;
-      margin-left: 4px;
-      font-weight: 600;
+    font-size: 16px;
+    margin-left: 12px;
+    font-weight: 600;
+
+    transition: all 0.5s;
+  }
+
+  .chart {
+    width: 100%;
   }
 }
 
