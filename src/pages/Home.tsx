@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Flip, Fade } from 'react-reveal';
 import '../styles/Home.scss';
 import { platform } from 'os';
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, CartesianAxis, Tooltip, Legend, Carousel } from 'recharts';
+import { AreaChart, Area } from 'recharts';
 import CoinRanking, { Coins } from '../api/CoinRanking';
+import Application from '../Application';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -64,8 +65,7 @@ class Home extends React.Component<{}, HomeState> {
             this.setState({ currentHistory: data.history });
             return;
         }
-        
-        console.log(`refresh history ${this.state.selectedSymbol}`);
+
         let result = await CoinRanking.fetchHistory(this.state.selectedSymbol as Coins);
         if (!result) return;
 
@@ -132,7 +132,7 @@ class Home extends React.Component<{}, HomeState> {
                         <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
                     </div>
 
-                    <button className='send' title='Send'>
+                    <button className='send' title='Send' onClick={e => Application.history.push('/send')}>
                         <img src={send} alt="Send" />
                     </button>
 

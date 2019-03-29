@@ -18,13 +18,13 @@ const render = (Component: () => JSX.Element) => {
     );
 };
 
-render(Application);
+render(() => <Application />);
 
 // Hot Module Replacement API
 if (typeof module.hot !== 'undefined') {
     module.hot.accept('./Application', () => {
         import('./Application').then(World => {
-            render(World.default);
+            render(() => <World.default />);
         });
     });
 }
