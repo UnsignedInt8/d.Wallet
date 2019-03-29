@@ -1,5 +1,48 @@
 .sending {
-    background-color: #178fff;
-    width: 100vw;
-    height: 100vh;
+  background: rgb(17, 22, 42);
+  padding-top: 3.5vh;
+
+  width: 100vw;
+  height: 96.5vh;
+
+  display: grid;
+  grid-template-rows: auto 64px;
+  grid-template-areas:
+    "compose"
+    "buttons";
+
+  .compose-area {
+    grid-area: compose;
+    padding-top: 24px;
+    height: 80vh;
+    overflow: scroll;
+  }
+
+  .compose {
+    display: grid;
+    grid-template-rows: 48px 48px 48px 48px;
+    grid-template-areas:
+      "to"
+      "amount"
+      "message"
+      "fees";
+
+    input {
+      color: rgb(174, 185, 220);
+      font-size: 18px;
+
+      padding-inline-start: 42px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      margin: 0 12px 8px 12px;
+      background-color: rgb(11, 15, 31);
+      outline: none;
+      border: none;
+      border-radius: 6px;
+    }
+  }
+
+  .buttons {
+    grid-area: buttons;
+  }
 }

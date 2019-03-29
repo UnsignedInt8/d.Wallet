@@ -7,6 +7,7 @@ html {
   -webkit-app-region: drag;
   -webkit-user-select: none;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: rgb(26, 26, 48);
 }
 
 div {
@@ -14,7 +15,7 @@ div {
 }
 
 .switch {
-  transition: none;
+  transition: all 0.05s;
 }
 
 span {

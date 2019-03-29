@@ -7,7 +7,7 @@ import { History } from 'history';
 
 function glide(val: number) {
     return spring(val, {
-        stiffness: 174,
+        stiffness: 200,
         damping: 24,
     });
 }
@@ -21,10 +21,10 @@ function slide(val: number) {
 
 const pageTransitions = {
     atEnter: {
-        offset: 100,
+        offset: window.innerWidth,
     },
     atLeave: {
-        offset: glide(-100),
+        offset: glide(-window.innerWidth),
     },
     atActive: {
         offset: glide(0),

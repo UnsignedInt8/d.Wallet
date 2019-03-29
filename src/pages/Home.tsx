@@ -137,7 +137,7 @@ class Home extends React.Component<{}, HomeState> {
                     </button>
 
                     <div className='txs'>
-                        {txs.map(tx => {
+                        {txs.slice(0, 10).map(tx => {
                             return (
                                 <div className='tx' key={tx.hash}>
                                     <div className='icon'>
