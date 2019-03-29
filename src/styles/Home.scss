@@ -88,7 +88,7 @@
     padding-right: 16px;
     text-transform: uppercase;
     position: absolute;
-    bottom: 4px;
+    bottom: -6px;
     right: 0;
 
     .date {
@@ -99,16 +99,6 @@
       display: inline-block;
       margin-left: 12px;
     }
-  }
-
-  .balance-title {
-    grid-area: balance;
-    font-size: 11px;
-    color: dimgray;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    margin-bottom: 12px;
   }
 
   .balance {
@@ -173,6 +163,12 @@
         margin-top: -2px;
       }
     }
+
+    .tx:hover {
+        background-color: #aec0d167;
+        transition: all 0.5s;
+        cursor: pointer;
+    }
   }
 
   button.send {
@@ -200,5 +196,5 @@
 }
 
 .titlebar-padding {
-  padding-top: 24px;
+  padding-top: 3.5vh;
 }

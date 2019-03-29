@@ -3,6 +3,7 @@ import { Flip, Fade } from 'react-reveal';
 import '../styles/Home.scss';
 import { platform } from 'os';
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, CartesianAxis, Tooltip, Legend, Carousel } from 'recharts';
+import CoinRanking, { Coins } from '../api/CoinRanking';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -29,10 +30,57 @@ interface HomeState {
     selectedSymbol: string;
     showSymbol: boolean;
     symbolColor: string;
+    currentPrice: string;
+    currentChange: number;
+    currentHistory?: { price: string, timestamp: number }[];
 }
 
 class Home extends React.Component<{}, HomeState> {
-    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color };
+
+    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [] };
+    refersher?: NodeJS.Timer | number;
+    history = {};
+
+    componentDidMount() {
+        this.refersher = setInterval(() => this.refreshPrice(), 30 * 1000);
+        this.refreshPrice();
+        this.refreshHistory();
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.refersher as NodeJS.Timer);
+    }
+
+    private async refreshPrice() {
+        let result = await CoinRanking.fetchPrice(this.state.selectedSymbol as Coins)
+        if (!result) return;
+        this.setState({ currentPrice: Number.parseFloat(result.price).toFixed(2), currentChange: result.change });
+    }
+
+    private async refreshHistory() {
+        let now = Date.now() - 10 * 3600 * 1000;
+        let data = history[this.state.selectedSymbol];
+        if (data && data.time > now) {
+            this.setState({ currentHistory: data.history });
+            return;
+        }
+        
+        console.log(`refresh history ${this.state.selectedSymbol}`);
+        let result = await CoinRanking.fetchHistory(this.state.selectedSymbol as Coins);
+        if (!result) return;
+
+        let coinHistory = { time: Date.now(), history: result };
+        history[this.state.selectedSymbol] = coinHistory;
+
+        this.setState({ currentHistory: coinHistory.history });
+    }
+
+    private selectCoin(i) {
+        this.setState(
+            { selectedSymbol: i.symbol, showSymbol: false, symbolColor: i.color, currentPrice: '' },
+            () => { this.setState({ showSymbol: true }); this.refreshPrice(); this.refreshHistory(); }
+        );
+    }
 
     render() {
         let isDarwin = platform() === 'darwin';
@@ -44,7 +92,7 @@ class Home extends React.Component<{}, HomeState> {
                         {
                             symbols.map(i => {
                                 return (
-                                    <div key={i.symbol} className={`icon`} onClick={e => this.setState({ selectedSymbol: i.symbol, showSymbol: false, symbolColor: i.color }, () => { this.setState({ showSymbol: true }) })}>
+                                    <div key={i.symbol} className={`icon`} onClick={e => this.selectCoin(i)}>
                                         <div className={`${this.state.selectedSymbol === i.symbol ? 'indicator' : 'indicator-none'}`} style={{ backgroundColor: i.color }} />
                                         <img src={i.img} alt={i.symbol} />
                                     </div>
@@ -60,13 +108,19 @@ class Home extends React.Component<{}, HomeState> {
 
                 <div className={`home-content ${isDarwin ? 'titlebar-padding' : ''}`}>
                     <div className='chart'>
-                        <AreaChart width={window.innerWidth - 68} height={200} data={btcPrice.data.history} style={{ marginLeft: -0 }}>
+                        <AreaChart width={window.innerWidth - 68} height={200} data={this.state.currentHistory} style={{ marginLeft: -0 }}>
                             <Area dataKey='price' fill='transparent' stroke={this.state.symbolColor} />
                         </AreaChart>
                     </div>
 
                     <div className='price'>
-                        <span className='date'>{new Date().toDateString()}</span> <span className={`rise`}>4027 {`USD/${this.state.selectedSymbol}`}</span>
+                        <span className='date'>{new Date().toDateString()}</span>
+                        <span className={`${this.state.currentChange > 0 ? 'rise' : 'drop'}`}>
+                            {this.state.currentPrice || '---'} {`USD/${this.state.selectedSymbol}`}
+                        </span>
+                        <span className={`${this.state.currentChange > 0 ? 'rise' : 'drop'}`} style={{ marginLeft: 6 }}>
+                            {`${this.state.currentChange}%`}
+                        </span>
                     </div>
 
                     {/* <div className='balance-title'>
