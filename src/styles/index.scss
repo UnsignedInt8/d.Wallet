@@ -14,9 +14,9 @@ html {
   transition: all 0.05s;
 }
 
-span {
-  transition: all 0.5s;
-}
+// span {
+//   transition: all 0.5s;
+// }
 
 @import url("https://fonts.googleapis.com/css?family=Lato");
 
@@ -74,4 +74,5 @@ button {
   background-color: #4080d3;
   margin: 8px;
   cursor: pointer;
+  -webkit-app-region: no-drag;
 }

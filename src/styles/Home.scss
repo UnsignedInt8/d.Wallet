@@ -55,6 +55,7 @@
 }
 
 .expand-area {
+  background: #1988f7;
   grid-area: content;
   position: absolute;
   top: 0;
@@ -79,9 +80,9 @@
     "txs"
     "buttons";
 
-  span {
-    transition: all 0.12s;
-  }
+  // span {
+  //   transition: all 0.12s;
+  // }
 
   .chart {
     width: 100%;

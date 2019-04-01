@@ -7,6 +7,7 @@ import CoinRanking, { Coins } from '../api/CoinRanking';
 import Application from '../Application';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 import Send from './Send';
+import anime from 'animejs';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -85,7 +86,24 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     private toggleSending() {
-        this.setState(prev => ({ expandSending: !prev.expandSending }));
+        this.setState(prev => ({ expandSending: !prev.expandSending }), () => {
+            if (this.state.expandSending) {
+                anime({
+                    targets: '#sending-page',
+                    translateY: [window.innerHeight, 0],
+                    easing: 'easeOutQuint',
+                    duration: 600,
+                });
+            } else {
+                anime({
+                    targets: '#open-sending',
+                    scale: [0, 1],
+                    opacity: [0, 5],
+                    duration: 200,
+                    easing: 'spring(1, 80, 2, 4)',
+                });
+            }
+        });
     }
 
     render() {
@@ -137,12 +155,12 @@ class Home extends React.Component<{}, HomeState> {
 
                         {this.state.expandSending ?
                             <Flipped flipId='send'>
-                                <div className='expand-area'>
-                                    <Send />
+                                <div id='sending-page' className='expand-area'>
+                                    <Send onCancel={() => this.toggleSending()} />
                                 </div>
                             </Flipped> :
-                            <Flipped flipId='send'>
-                                <button className='send' title='Send' onClick={e => this.toggleSending()}>
+                            <Flipped flipId='send2' spring={{ stiffness: 220, damping: 15 }} stagger='forward'>
+                                <button id='open-sending' className='send' title='Send' onClick={e => this.toggleSending()}>
                                     <img src={send} alt="Send" />
                                 </button>
                             </Flipped>
