@@ -131,6 +131,7 @@
     "history": "^4.9.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-flip-toolkit": "^6.5.7",
     "react-motion": "^0.5.2",
     "react-redux": "^5.0.7",
     "react-reveal": "^1.2.2",
