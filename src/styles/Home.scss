@@ -6,6 +6,7 @@
   height: 100vh;
 
   grid-template-columns: 68px auto;
+  grid-template-areas: "nav content";
 }
 
 .home-bar {
@@ -51,6 +52,15 @@
   div.icon:active {
     background-color: rgb(71, 84, 148);
   }
+}
+
+.expand-area {
+  grid-area: content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .home-content {
@@ -166,9 +176,9 @@
     }
 
     .tx:hover {
-        background-color: #aec0d167;
-        transition: all 0.5s;
-        cursor: pointer;
+      background-color: #aec0d167;
+      transition: all 0.5s;
+      cursor: pointer;
     }
   }
 

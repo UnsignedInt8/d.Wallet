@@ -10,10 +10,6 @@ html {
   background: rgb(25, 32, 48);
 }
 
-div {
-  transition: all 0.5s;
-}
-
 .switch {
   transition: all 0.05s;
 }
@@ -77,4 +73,5 @@ button {
   color: white;
   background-color: #4080d3;
   margin: 8px;
+  cursor: pointer;
 }

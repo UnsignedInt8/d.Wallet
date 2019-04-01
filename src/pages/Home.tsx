@@ -5,6 +5,8 @@ import { platform } from 'os';
 import { AreaChart, Area } from 'recharts';
 import CoinRanking, { Coins } from '../api/CoinRanking';
 import Application from '../Application';
+import { Flipper, Flipped } from 'react-flip-toolkit';
+import Send from './Send';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -32,11 +34,13 @@ interface HomeState {
     currentPrice: string;
     currentChange: number;
     currentHistory?: { price: string, timestamp: number }[];
+
+    expandSending: boolean;
 }
 
 class Home extends React.Component<{}, HomeState> {
 
-    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [] };
+    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: true };
     refersher?: NodeJS.Timer | number;
     history = {};
 
@@ -80,85 +84,97 @@ class Home extends React.Component<{}, HomeState> {
         );
     }
 
+    private toggleSending() {
+        this.setState(prev => ({ expandSending: !prev.expandSending }));
+    }
+
     render() {
         let isDarwin = platform() === 'darwin';
 
         return (
-            <div className={`home`}>
-                <div className={`home-bar ${isDarwin ? 'titlebar-padding' : ''}`}>
-                    <div className='icons'>
-                        {
-                            symbols.map(i => {
+            <Flipper flipKey={this.state.expandSending}>
+                <div className={`home`}>
+                    <div className={`home-bar ${isDarwin ? 'titlebar-padding' : ''}`}>
+                        <div className='icons'>
+                            {
+                                symbols.map(i => {
+                                    return (
+                                        <div key={i.symbol} className={`icon`} onClick={e => this.selectCoin(i)}>
+                                            <div className={`${this.state.selectedSymbol === i.symbol ? 'indicator' : 'indicator-none'}`} style={{ backgroundColor: i.color }} />
+                                            <img src={i.img} alt={i.symbol} />
+                                        </div>
+                                    );
+                                })
+                            }
+                        </div>
+
+                        <div className='icon'>
+                            <img src={settings} />
+                        </div>
+                    </div>
+
+                    <div className={`home-content ${isDarwin ? 'titlebar-padding' : ''}`}>
+                        <div className='chart'>
+                            <AreaChart width={window.innerWidth - 68} height={200} data={this.state.currentHistory} style={{ marginLeft: -0 }}>
+                                <Area dataKey='price' fill='transparent' stroke={this.state.symbolColor} />
+                            </AreaChart>
+                        </div>
+
+                        <div className='price'>
+                            <span className='date'>{new Date().toDateString()}</span>
+                            <span className={`${this.state.currentChange > 0 ? 'rise' : 'drop'}`}>
+                                {this.state.currentPrice || '---'} {`USD/${this.state.selectedSymbol}`}
+                            </span>
+                            <span className={`${this.state.currentChange > 0 ? 'rise' : 'drop'}`} style={{ marginLeft: 6 }}>
+                                {`${this.state.currentChange}%`}
+                            </span>
+                        </div>
+
+                        <div className={`balance lato-bold ${this.state.selectedSymbol}`}>
+                            <Flip bottom opposite collapse when={this.state.showSymbol}><span>12.897523</span></Flip>
+                            <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
+                        </div>
+
+                        {this.state.expandSending ?
+                            <Flipped flipId='send'>
+                                <div className='expand-area'>
+                                    <Send />
+                                </div>
+                            </Flipped> :
+                            <Flipped flipId='send'>
+                                <button className='send' title='Send' onClick={e => this.toggleSending()}>
+                                    <img src={send} alt="Send" />
+                                </button>
+                            </Flipped>
+
+                        }
+
+                        <div className='txs'>
+                            {txs.slice(0, 10).map(tx => {
                                 return (
-                                    <div key={i.symbol} className={`icon`} onClick={e => this.selectCoin(i)}>
-                                        <div className={`${this.state.selectedSymbol === i.symbol ? 'indicator' : 'indicator-none'}`} style={{ backgroundColor: i.color }} />
-                                        <img src={i.img} alt={i.symbol} />
+                                    <div className='tx' key={tx.hash}>
+                                        <div className='icon'>
+                                            <img src={tx.outputs_value % 2 == 0 ? inIcon : outIcon} />
+                                        </div>
+
+                                        <div className='hash'>
+                                            {tx.hash}
+                                        </div>
+
+                                        <div className={`amount ${tx.outputs_value % 2 == 0 ? 'in' : 'out'}`}>
+                                            {tx.outputs_value / 10000000}
+                                        </div>
+
+                                        <div className='date'>
+                                            {new Date(tx.block_time * 1000).toLocaleString()}
+                                        </div>
                                     </div>
                                 );
-                            })
-                        }
-                    </div>
-
-                    <div className='icon'>
-                        <img src={settings} />
+                            })}
+                        </div>
                     </div>
                 </div>
-
-                <div className={`home-content ${isDarwin ? 'titlebar-padding' : ''}`}>
-                    <div className='chart'>
-                        <AreaChart width={window.innerWidth - 68} height={200} data={this.state.currentHistory} style={{ marginLeft: -0 }}>
-                            <Area dataKey='price' fill='transparent' stroke={this.state.symbolColor} />
-                        </AreaChart>
-                    </div>
-
-                    <div className='price'>
-                        <span className='date'>{new Date().toDateString()}</span>
-                        <span className={`${this.state.currentChange > 0 ? 'rise' : 'drop'}`}>
-                            {this.state.currentPrice || '---'} {`USD/${this.state.selectedSymbol}`}
-                        </span>
-                        <span className={`${this.state.currentChange > 0 ? 'rise' : 'drop'}`} style={{ marginLeft: 6 }}>
-                            {`${this.state.currentChange}%`}
-                        </span>
-                    </div>
-
-                    {/* <div className='balance-title'>
-                        Balance
-                    </div> */}
-
-                    <div className={`balance lato-bold ${this.state.selectedSymbol}`}>
-                        <Flip bottom opposite collapse when={this.state.showSymbol}><span>12.897523</span></Flip>
-                        <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
-                    </div>
-
-                    <button className='send' title='Send' onClick={e => Application.history.push('/send')}>
-                        <img src={send} alt="Send" />
-                    </button>
-
-                    <div className='txs'>
-                        {txs.slice(0, 10).map(tx => {
-                            return (
-                                <div className='tx' key={tx.hash}>
-                                    <div className='icon'>
-                                        <img src={tx.outputs_value % 2 == 0 ? inIcon : outIcon} />
-                                    </div>
-
-                                    <div className='hash'>
-                                        {tx.hash}
-                                    </div>
-
-                                    <div className={`amount ${tx.outputs_value % 2 == 0 ? 'in' : 'out'}`}>
-                                        {tx.outputs_value / 10000000}
-                                    </div>
-
-                                    <div className='date'>
-                                        {new Date(tx.block_time * 1000).toLocaleString()}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
+            </Flipper>
         );
     }
 }
