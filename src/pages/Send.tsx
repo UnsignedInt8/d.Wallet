@@ -17,7 +17,7 @@ const pen = require('../assets/chat.svg');
 const mining = require('../assets/mining.svg');
 
 const coinProps = {
-    default: { feeUnit: 'Sat/B', maxTo: 2 },
+    default: { feeUnit: 'Sat/B', maxTo: 10 },
     eth: { feeUnit: 'Gwei', maxTo: 1 },
 }
 
@@ -74,7 +74,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                     <div className='plus-container'>
                         {
-                            this.state.toNums > 1 ?
+                            this.state.toNums > 1 && coin.maxTo > 1 ?
                                 <button className='plus' onClick={_ => this.removeReceiver()}>
                                     <span>-</span>
                                 </button>

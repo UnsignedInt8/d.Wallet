@@ -7,6 +7,7 @@ import CoinRanking, { Coins } from '../api/CoinRanking';
 import Application from '../Application';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 import Send from './Send';
+import Receive from './Receive';
 import anime from 'animejs';
 
 const btc = require('../assets/btc.svg');
@@ -18,6 +19,7 @@ const settings = require('../assets/menu.svg');
 const send = require('../assets/send.svg');
 const inIcon = require('../assets/in.svg');
 const outIcon = require('../assets/out.svg');
+const qrcode = require('../assets/qrcode.svg');
 
 const symbols = [
     { img: btc, symbol: 'btc', color: '#f7931a' },
@@ -37,11 +39,12 @@ interface HomeState {
     currentHistory?: { price: string, timestamp: number }[];
 
     expandSending: boolean;
+    expandReceiving: boolean;
 }
 
 class Home extends React.Component<{}, HomeState> {
 
-    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: true };
+    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: false, expandReceiving: true };
     refersher?: NodeJS.Timer | number;
     history = {};
 
@@ -106,6 +109,10 @@ class Home extends React.Component<{}, HomeState> {
         });
     }
 
+    private toggleReceving() {
+
+    }
+
     render() {
         let isDarwin = platform() === 'darwin';
 
@@ -125,8 +132,13 @@ class Home extends React.Component<{}, HomeState> {
                         }
                     </div>
 
-                    <div className='icon'>
-                        <img src={settings} />
+                    <div className='icons'>
+                        <div className='icon' onClick={_ => this.toggleReceving()}>
+                            <img src={qrcode} />
+                        </div>
+                        <div className='icon'>
+                            <img src={settings} />
+                        </div>
                     </div>
                 </div>
 
@@ -159,6 +171,14 @@ class Home extends React.Component<{}, HomeState> {
                         <button id='open-sending' className='send' title='Send' onClick={e => this.toggleSending()}>
                             <img src={send} alt="Send" />
                         </button>
+                    }
+
+                    {
+                        this.state.expandReceiving ?
+                            <div id='receving-page' className='expand-area'>
+                                <Receive symbol={this.state.selectedSymbol} address='bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej' onCancel={() => { }} />
+                            </div>
+                            : undefined
                     }
 
                     <div className='txs'>
