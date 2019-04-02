@@ -18,33 +18,33 @@
     overflow: scroll;
   }
 
+  input {
+    margin: 8px 12px 0px 12px;
+
+    display: block;
+    color: #badeff;
+    font-size: 18px;
+    padding-left: 42px;
+    padding-top: 12px;
+    padding-bottom: 11px;
+    padding-right: 8px;
+    background-color: rgba(44, 82, 231, 0.24);
+    outline: none;
+    border: none;
+    border-radius: 6px;
+
+    -webkit-app-region: no-drag;
+  }
+
+  input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
   .compose {
     position: relative;
     display: flex;
     flex: 1;
     flex-direction: column;
-
-    input {
-      margin: 8px 12px 0px 12px;
-
-      display: block;
-      color: #badeff;
-      font-size: 18px;
-      padding-left: 42px;
-      padding-top: 12px;
-      padding-bottom: 11px;
-      padding-right: 8px;
-      background-color: rgba(44, 82, 231, 0.24);
-      outline: none;
-      border: none;
-      border-radius: 6px;
-
-      -webkit-app-region: no-drag;
-    }
-
-    input::placeholder {
-      color: rgba(255, 255, 255, 0.2);
-    }
 
     img {
       position: absolute;
@@ -64,6 +64,68 @@
     img.pen {
       top: 127px;
     }
+  }
+
+  .plus-container {
+    padding: 4px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  div.mining {
+    display: grid;
+    position: relative;
+
+    input.mining {
+      padding-right: 52px;
+    }
+
+    img.mining {
+      position: absolute;
+      top: 23px;
+      left: 27px;
+      width: 14px;
+      height: 14px;
+    }
+
+    span {
+      display: block;
+      margin-right: 22px;
+      position: absolute;
+      font-size: 10px;
+      top: 24px;
+      right: 0;
+    }
+  }
+
+  button.plus {
+    border-radius: 50%;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.45);
+    width: 32px;
+    height: 32px;
+    transition: all 0.5s;
+
+    span {
+      display: block;
+      margin-top: -5px;
+      font-size: 28px;
+      font-weight: 200;
+    }
+  }
+
+  button.plus:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border-color: rgba(255, 255, 255, 0);
+    transition: all 0.5s;
+  }
+
+  button.plus:active {
+    background: white;
+    border-color: white;
+    color: black;
   }
 
   .buttons {
@@ -98,5 +160,9 @@
       background: rgb(230, 230, 230) !important;
       color: black;
     }
+  }
+
+  div {
+    transition: all 0.5s;
   }
 }

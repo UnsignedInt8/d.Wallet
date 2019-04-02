@@ -3,6 +3,7 @@ import '../styles/Send.scss';
 import anime from 'animejs';
 
 interface PageProps {
+    symbol: string;
     onCancel: () => void;
 }
 
@@ -13,6 +14,7 @@ interface PageState {
 const sendIcon = require('../assets/send2.svg');
 const calc = require('../assets/calculator.svg');
 const pen = require('../assets/chat.svg');
+const mining = require('../assets/mining.svg');
 
 export default class Send extends React.Component<PageProps, PageState>{
 
@@ -36,9 +38,9 @@ export default class Send extends React.Component<PageProps, PageState>{
                     {new Array(this.state.toNums).fill(Date.now()).map((v, i) => {
                         return (
                             <div key={i} className='compose'>
-                                <input type="text" placeholder='Address' />
+                                <input type="text" placeholder={`${this.props.symbol.toUpperCase()} Address`} />
                                 <input type="number" placeholder='Amount' />
-                                <input type="text" placeholder='Message' />
+                                <input type="text" placeholder='Message' maxLength={140} />
 
                                 <img className='send' src={sendIcon} />
                                 <img className='calc' src={calc} />
@@ -46,6 +48,18 @@ export default class Send extends React.Component<PageProps, PageState>{
                             </div>
                         );
                     })}
+
+                    <div className='mining'>
+                        <input className='mining' type="number" placeholder={`${this.props.symbol.toUpperCase()} Fees`} />
+                        <img className='mining' src={mining} />
+                        <span>Sat/Byte</span>
+                    </div>
+
+                    <div className='plus-container'>
+                        <button className='plus'>
+                            <span>+</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div className='buttons'>
