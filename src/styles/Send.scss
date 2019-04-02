@@ -6,7 +6,7 @@
   height: 96.5vh;
 
   display: grid;
-  grid-template-rows: auto 56px;
+  grid-template-rows: auto 54px;
   grid-template-areas:
     "compose"
     "buttons";
@@ -14,7 +14,7 @@
   .compose-area {
     grid-area: compose;
     padding-top: 10px;
-    height: 80vh;
+    min-height: 80vh;
     overflow: scroll;
   }
 
@@ -134,7 +134,8 @@
     justify-content: space-evenly;
     padding-left: 8px;
     padding-right: 8px;
-    padding-bottom: 4px;
+    padding-bottom: 2px;
+    // background-color: black;
 
     button {
       transition: all 0.5s;

@@ -16,6 +16,11 @@ const calc = require('../assets/calculator.svg');
 const pen = require('../assets/chat.svg');
 const mining = require('../assets/mining.svg');
 
+const coinProps = {
+    default: { feeUnit: 'Sat/B', maxTo: 2 },
+    eth: { feeUnit: 'Gwei', maxTo: 1 },
+}
+
 export default class Send extends React.Component<PageProps, PageState>{
 
     state: PageState = { toNums: 1 };
@@ -31,11 +36,23 @@ export default class Send extends React.Component<PageProps, PageState>{
         });
     }
 
+    private addReceiver() {
+        let coin = coinProps[this.props.symbol] || coinProps.default;
+        this.setState({ toNums: Math.min(this.state.toNums + 1, coin.maxTo) });
+    }
+
+    private removeReceiver() {
+        this.setState({ toNums: Math.max(this.state.toNums - 1, 1) });
+    }
+
     render() {
+
+        let coin = coinProps[this.props.symbol] || coinProps.default;
+
         return (
             <div className='sending'>
                 <div className='compose-area'>
-                    {new Array(this.state.toNums).fill(Date.now()).map((v, i) => {
+                    {new Array(Math.min(this.state.toNums, coin.maxTo)).fill(Date.now()).map((v, i) => {
                         return (
                             <div key={i} className='compose'>
                                 <input type="text" placeholder={`${this.props.symbol.toUpperCase()} Address`} />
@@ -52,14 +69,26 @@ export default class Send extends React.Component<PageProps, PageState>{
                     <div className='mining'>
                         <input className='mining' type="number" placeholder={`${this.props.symbol.toUpperCase()} Fees`} />
                         <img className='mining' src={mining} />
-                        <span>Sat/Byte</span>
+                        <span>{`${coin.feeUnit}`}</span>
                     </div>
 
                     <div className='plus-container'>
-                        <button className='plus'>
-                            <span>+</span>
-                        </button>
+                        {
+                            this.state.toNums > 1 ?
+                                <button className='plus' onClick={_ => this.removeReceiver()}>
+                                    <span>-</span>
+                                </button>
+                                : undefined
+                        }
+                        {
+                            this.state.toNums < coin.maxTo ?
+                                <button className='plus' onClick={_ => this.addReceiver()}>
+                                    <span>+</span>
+                                </button>
+                                : undefined
+                        }
                     </div>
+
                 </div>
 
                 <div className='buttons'>
