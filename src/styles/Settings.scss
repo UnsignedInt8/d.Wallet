@@ -1,4 +1,34 @@
 #settings {
-    background: rgb(116, 201, 4);
-    height: 100%;
+  background: rgb(116, 201, 4);
+  height: 100%;
+  padding-top: 3.5vh;
+
+  .setting-item {
+    padding: 6px 12px 6px 12px;
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 100fr 1fr;
+    grid-template-areas:
+      "title switch"
+      "desc .";
+
+    .setting-title {
+      grid-area: title;
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+    .setting-desc {
+      grid-area: desc;
+      font-size: 12px;
+    }
+
+    .setting-switch {
+      grid-area: switch;
+
+      .react-switch-bg {
+          background: rgba(255, 255, 255, 0.95) ;
+      }
+    }
+  }
 }

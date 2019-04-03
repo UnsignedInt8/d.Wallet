@@ -153,6 +153,17 @@ class Home extends React.Component<{}, HomeState> {
             });
             return;
         }
+
+        this.setState(prev => ({ expandSettings: !prev.expandSettings, expandReceiving: false }), () => {
+            if (this.state.expandSettings) {
+                anime({
+                    targets: '#settings-page',
+                    translateY: [window.innerHeight, 0],
+                    easing: 'easeOutQuint',
+                    duration: 600,
+                });
+            }
+        });
     }
 
     render() {
@@ -178,7 +189,7 @@ class Home extends React.Component<{}, HomeState> {
                         <div className='icon' onClick={_ => this.toggleReceving()}>
                             <img src={qrcode} />
                         </div>
-                        <div className='icon'>
+                        <div className='icon' onClick={_ => this.toggleSettings()}>
                             <img src={settings} />
                         </div>
                     </div>
