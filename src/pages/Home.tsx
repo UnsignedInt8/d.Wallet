@@ -9,6 +9,7 @@ import { Flipper, Flipped } from 'react-flip-toolkit';
 import Send from './Send';
 import Receive from './Receive';
 import anime from 'animejs';
+import Settings from './Settings';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -40,11 +41,12 @@ interface HomeState {
 
     expandSending: boolean;
     expandReceiving: boolean;
+    expandSettings?: boolean;
 }
 
 class Home extends React.Component<{}, HomeState> {
 
-    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: false, expandReceiving: false };
+    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: false, expandReceiving: false, expandSettings: true };
     refersher?: NodeJS.Timer | number;
     history = {};
 
@@ -140,6 +142,19 @@ class Home extends React.Component<{}, HomeState> {
         });
     }
 
+    private toggleSettings() {
+        if (this.state.expandSettings) {
+            anime({
+                targets: '#settings-page',
+                translateY: window.innerHeight,
+                easing: 'easeOutQuint',
+                duration: 600,
+                complete: () => this.setState({ expandSettings: false }),
+            });
+            return;
+        }
+    }
+
     render() {
         let isDarwin = platform() === 'darwin';
 
@@ -198,6 +213,14 @@ class Home extends React.Component<{}, HomeState> {
                         <button id='open-sending' className='send' title='Send' onClick={e => this.toggleSending()}>
                             <img src={send} alt="Send" />
                         </button>
+                    }
+
+                    {
+                        this.state.expandSettings ?
+                            <div id='settings-page' className='expand-area'>
+                                <Settings />
+                            </div>
+                            : undefined
                     }
 
                     {
