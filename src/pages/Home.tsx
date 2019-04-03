@@ -130,6 +130,8 @@ class Home extends React.Component<{}, HomeState> {
             return;
         }
 
+        if (this.state.expandSettings) return;
+
         this.setState(prev => ({ expandReceiving: !prev.expandReceiving, expandSending: false }), () => {
             if (this.state.expandReceiving) {
                 anime({
