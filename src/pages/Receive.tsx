@@ -2,19 +2,27 @@ import * as React from 'react';
 import * as QRCode from 'qrcode.react';
 import '../styles/Receive.scss';
 
-const qrcode = require('../assets/qrcode.svg');
-
 interface Props {
     address: string;
     symbol: string;
     onCancel: () => void;
 }
 
+const coins = {
+    'btc': 'Bitcoin',
+    'eth': 'Ethereum',
+    'bch': 'Bitcoin Cash',
+    'ltc': 'Litecoin',
+    'usdt': 'USDT'
+}
+
 export default class Receive extends React.Component<Props, {}>{
 
     render() {
+        const value = `${coins[this.props.symbol].toLowerCase()}:${this.props.address}`;
+        
         return (
-            <div id='receiving' className='lato-bold' onClick={_ => this.props.onCancel()}>
+            <div id='receiving' className='lato-bold' >
                 <div id='info'>
                     Your {this.props.symbol.toUpperCase()} address and QR Code:
                     <div>
@@ -24,9 +32,9 @@ export default class Receive extends React.Component<Props, {}>{
                 <div id='qrcode'>
                     <div id='qrcode-container'>
                         <div id='title'>
-                            Bitcoin Address
+                            {coins[this.props.symbol]} Address
                         </div>
-                        <QRCode value={this.props.address} level='Q' bgColor='transparent' fgColor='white' />
+                        <QRCode value={value} level='Q' bgColor='transparent' fgColor='white' />
                     </div>
                 </div>
             </div>

@@ -44,7 +44,7 @@ interface HomeState {
 
 class Home extends React.Component<{}, HomeState> {
 
-    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: false, expandReceiving: true };
+    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: false, expandReceiving: false };
     refersher?: NodeJS.Timer | number;
     history = {};
 
@@ -89,7 +89,7 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     private toggleSending() {
-        this.setState(prev => ({ expandSending: !prev.expandSending }), () => {
+        this.setState(prev => ({ expandSending: !prev.expandSending, expandReceiving: false }), () => {
             if (this.state.expandSending) {
                 anime({
                     targets: '#sending-page',
@@ -98,6 +98,13 @@ class Home extends React.Component<{}, HomeState> {
                     duration: 600,
                 });
             } else {
+                anime({
+                    targets: '#sending-page',
+                    translateY: window.innerHeight,
+                    easing: 'easeOutQuint',
+                    duration: 600,
+                });
+
                 anime({
                     targets: '#open-sending',
                     scale: [0, 1],
@@ -110,7 +117,27 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     private toggleReceving() {
+        if (this.state.expandReceiving) {
+            anime({
+                targets: '#receiving-page',
+                translateY: window.innerHeight,
+                easing: 'easeOutQuint',
+                duration: 600,
+                complete: () => { this.setState({ expandReceiving: false, expandSending: false }) }
+            });
+            return;
+        }
 
+        this.setState(prev => ({ expandReceiving: !prev.expandReceiving, expandSending: false }), () => {
+            if (this.state.expandReceiving) {
+                anime({
+                    targets: '#receiving-page',
+                    translateY: [window.innerHeight, 0],
+                    easing: 'easeOutQuint',
+                    duration: 600,
+                });
+            }
+        });
     }
 
     render() {
@@ -175,8 +202,8 @@ class Home extends React.Component<{}, HomeState> {
 
                     {
                         this.state.expandReceiving ?
-                            <div id='receving-page' className='expand-area'>
-                                <Receive symbol={this.state.selectedSymbol} address='bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej' onCancel={() => { }} />
+                            <div id='receiving-page' className='expand-area'>
+                                <Receive symbol={this.state.selectedSymbol} address='bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej' onCancel={() => this.toggleReceving()} />
                             </div>
                             : undefined
                     }
