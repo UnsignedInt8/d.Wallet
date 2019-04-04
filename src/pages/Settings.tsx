@@ -21,7 +21,7 @@ export default class Settings extends React.Component<{}, State> {
         return (
             <div id='settings'>
                 <div className='setting-item'>
-                    <div className='setting-title' onClick={_ => this.switchAutoLock(!this.state.autoLock)}>Auto Lock</div>
+                    <div className='setting-title' onClick={_ => this.switchAutoLock(!this.state.autoLock)}></div>
                     <div className='setting-desc'>Automatically lock app after 5 minutes</div>
                     <div className='setting-switch'>
                         <Switch
@@ -38,6 +38,10 @@ export default class Settings extends React.Component<{}, State> {
                             width={48} />
                     </div>
                 </div>
+
+                <div className='setting-item'>
+                </div>
+
             </div>
         );
     }

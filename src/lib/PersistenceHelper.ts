@@ -9,6 +9,7 @@ interface Options {
     configName: string;
     defaults: any;
     password: string;
+    encryption: boolean;
 }
 
 export default class PersistenceHelper {
@@ -31,18 +32,18 @@ export default class PersistenceHelper {
     }
 
     load(key: string, defaultValue?: string): string | undefined {
-        let ekey = crypto.encrypt(key, this.opts.password);
+        let ekey = this.opts.encryption ? crypto.encrypt(key, this.opts.password) : key;
         let evalue = this.data[ekey];
         if (evalue) {
-            return crypto.decrypt(evalue, this.opts.password);
+            return this.opts.encryption ? crypto.decrypt(evalue, this.opts.password) : evalue;
         }
 
         return defaultValue;
     }
 
     save(key: string, value: string) {
-        let ekey = crypto.encrypt(key, this.opts.password);
-        let evalue = crypto.encrypt(value, this.opts.password);
+        let ekey = this.opts.encryption ? crypto.encrypt(key, this.opts.password) : key;
+        let evalue = this.opts.encryption ? crypto.encrypt(value, this.opts.password) : value;
 
         this.data[ekey] = evalue;
         fs.writeFile(this.configFile, JSON.stringify(this.data), { encoding: 'utf8' }, err => err ? console.error(err) : undefined);

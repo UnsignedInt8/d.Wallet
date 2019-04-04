@@ -31,15 +31,6 @@ const pageTransitions = {
     },
 };
 
-// const switchRule = css`
-//   position: relative;
-//   transition: all 0.1s;
-
-//   & > div {
-//     position: absolute;
-//   }
-// `;
-
 export default class Application extends React.Component {
 
     static history: History;
