@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+const crypto = require('crypto');
 
 const algorithm = 'aes-256-ctr';
 const iv = Buffer.from('d499aec91cb6228b0749b42d1bdf7c12', 'hex');

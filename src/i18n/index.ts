@@ -1,5 +1,5 @@
 import en_US from './en_US';
-import electron from 'electron';
+const electron = require('electron');
 
 let locale = (electron.app || electron.remote.app).getLocale();
 
@@ -8,6 +8,6 @@ const langs = {
     'en-US': en_US,
 }
 
-class i18n {
-    
+export function getLang(locale: string) {
+    return langs[locale as 'en'] || en_US;
 }

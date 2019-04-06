@@ -9,6 +9,9 @@ class AppSettings {
 
         this._autolock = this.helper.load('autolock', 'true') === 'true';
         this._lang = this.helper.load('lang', '') || '';
+
+        console.log(this.helper);
+        console.log(this._autolock, this._lang);
     }
 
     @observable
@@ -36,7 +39,7 @@ class AppSettings {
 
 let instance: AppSettings | undefined;
 
-export default function getInstance(password: string) {
+export function getAppSettings(password: string) {
     if (instance) return instance;
     instance = new AppSettings(password);
     return instance;

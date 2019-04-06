@@ -4,6 +4,7 @@ import { AnimatedSwitch } from 'react-router-transition';
 import { Home, Welcome, Send } from './pages';
 import { spring } from 'react-motion';
 import { History } from 'history';
+import PersistenceHelper from './lib/PersistenceHelper';
 
 function glide(val: number) {
     return spring(val, {

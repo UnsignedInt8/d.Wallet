@@ -1,31 +1,34 @@
 import * as React from 'react';
 import '../styles/Settings.scss';
 const Switch = require("react-switch");
+import PasswordMan from '../data/PasswordManager';
+import { getAppSettings } from '../data/AppSettings';
+import { getLang } from '../i18n';
+import { observer } from 'mobx-react';
 
 interface State {
-    autoLock: boolean;
+
 }
 
+@observer
 export default class Settings extends React.Component<{}, State> {
 
-    constructor(props, context) {
-        super(props, context);
-        this.state = { autoLock: false }
-    }
+    private appSettings = getAppSettings(PasswordMan.password);
+    private i18n = getLang(this.appSettings.lang);
 
     private switchAutoLock(on: boolean) {
-        this.setState({ autoLock: on });
+        this.appSettings.autolock = on;
     }
 
     render() {
         return (
             <div id='settings'>
                 <div className='setting-item'>
-                    <div className='setting-title' onClick={_ => this.switchAutoLock(!this.state.autoLock)}></div>
+                    <div className='setting-title' onClick={_ => this.switchAutoLock(!this.appSettings.autolock)}>{this.i18n.settings.autoLock.title}</div>
                     <div className='setting-desc'>Automatically lock app after 5 minutes</div>
                     <div className='setting-switch'>
                         <Switch
-                            checked={this.state.autoLock}
+                            checked={this.appSettings.autolock}
                             onChange={checked => this.switchAutoLock(checked)}
                             onColor="#c2ff86"
                             onHandleColor="#ace625"

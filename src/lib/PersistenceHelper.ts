@@ -1,8 +1,8 @@
 // https://medium.com/cameron-nokes/how-to-store-user-data-in-electron-3ba6bf66bc1e
 
-import electron from 'electron';
-import path from 'path';
-import fs from 'fs';
+const electron = require('electron');
+const path = require('path');
+const fs = require('fs') ;
 import * as crypto from './CryptoHelper';
 
 interface Options {
@@ -47,5 +47,16 @@ export default class PersistenceHelper {
 
         this.data[ekey] = evalue;
         fs.writeFile(this.configFile, JSON.stringify(this.data), { encoding: 'utf8' }, err => err ? console.error(err) : undefined);
+    }
+
+    static exists(configName: string) {
+        let userPath = (electron.app || electron.remote.app).getPath('userData');
+        let configFile = path.join(userPath, `${configName}.json`);
+
+        return new Promise<boolean>(resolve => {
+            fs.exists(configFile, e => {
+                resolve(e);
+            });
+        });
     }
 }
