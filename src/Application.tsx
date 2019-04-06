@@ -5,6 +5,7 @@ import { Home, Welcome, Send } from './pages';
 import { spring } from 'react-motion';
 import { History } from 'history';
 import PersistenceHelper from './lib/PersistenceHelper';
+import { ipcRenderer } from 'electron';
 
 function glide(val: number) {
     return spring(val, {
@@ -55,3 +56,7 @@ export default class Application extends React.Component {
         );
     }
 }
+
+ipcRenderer.on('autolock', () => {
+    console.log('autolock');
+});

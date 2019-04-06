@@ -1,8 +1,9 @@
-import { app, BrowserWindow, remote } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
 let win: BrowserWindow | null;
+let blurTimer: any;
 
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer');
@@ -55,4 +56,17 @@ app.on('activate', () => {
     if (win === null) {
         createWindow();
     }
+});
+
+app.on('browser-window-blur', () => {
+    if (!blurTimer) return;
+    blurTimer = setInterval(() => {
+        if (!win) return;
+        win.webContents.send('autolock');
+    }, 10 * 1000);
+});
+
+app.on('browser-window-focus', () => {
+    clearTimeout(blurTimer);
+    blurTimer = undefined;
 });
