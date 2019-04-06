@@ -5,12 +5,13 @@
 
   .setting-item {
     padding: 6px 12px 6px 12px;
+    margin-bottom: 4px;
     display: grid;
     grid-template-rows: auto auto;
     grid-template-columns: 100fr 1fr;
     grid-template-areas:
       "title switch"
-      "desc .";
+      "detail detail";
 
     .setting-title {
       grid-area: title;
@@ -18,8 +19,8 @@
       font-weight: 400;
     }
 
-    .setting-desc {
-      grid-area: desc;
+    .setting-detail {
+      grid-area: detail;
       font-size: 12px;
     }
 

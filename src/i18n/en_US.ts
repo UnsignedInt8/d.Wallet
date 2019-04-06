@@ -16,7 +16,10 @@ const lang = {
             title: 'Auto Lock',
             desc: 'Automatically lock app after 5 minutes',
         },
-        languages: 'Languages',
+        languages: {
+            title: 'Languages',
+            system: 'System',
+        },
     }
 }
 

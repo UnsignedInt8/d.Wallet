@@ -5,19 +5,38 @@ import PasswordMan from '../data/PasswordManager';
 import { getAppSettings } from '../data/AppSettings';
 import { getLang } from '../i18n';
 import { observer } from 'mobx-react';
+import Select from 'react-select';
 
-interface State {
-
+const selectColor = {
+    option: (provided, state) => ({
+        ...provided,
+        color: state.isSelected ? 'white' : 'black',
+    }),
+    container: (base, state) => ({
+        ...base,
+        marginTop: 8,
+        outline: 'none',
+    })
 }
 
 @observer
-export default class Settings extends React.Component<{}, State> {
+export default class Settings extends React.Component<{}, {}> {
 
     private appSettings = getAppSettings(PasswordMan.password);
     private i18n = getLang(this.appSettings.lang);
 
+
+    private supportedLangs = [
+        { value: 'en-US', label: 'English', },
+        { value: '', label: this.i18n.settings.languages.system, }
+    ]
+
     private switchAutoLock(on: boolean) {
         this.appSettings.autolock = on;
+    }
+
+    private changeLang(selected: any) {
+        this.appSettings.lang = selected.value;
     }
 
     render() {
@@ -25,7 +44,7 @@ export default class Settings extends React.Component<{}, State> {
             <div id='settings'>
                 <div className='setting-item'>
                     <div className='setting-title' onClick={_ => this.switchAutoLock(!this.appSettings.autolock)}>{this.i18n.settings.autoLock.title}</div>
-                    <div className='setting-desc'>Automatically lock app after 5 minutes</div>
+                    <div className='setting-detail'>Automatically lock app after 5 minutes</div>
                     <div className='setting-switch'>
                         <Switch
                             checked={this.appSettings.autolock}
@@ -43,6 +62,10 @@ export default class Settings extends React.Component<{}, State> {
                 </div>
 
                 <div className='setting-item'>
+                    <div className='setting-title'>{this.i18n.settings.languages.title}</div>
+                    <div className='setting-detail'>
+                        <Select onChange={e => this.changeLang(e)} options={this.supportedLangs} styles={selectColor} defaultValue={this.supportedLangs.filter(i => i.value === this.appSettings.lang)[0]} isClearable={false} isSearchable={false} />
+                    </div>
                 </div>
 
             </div>

@@ -9,9 +9,6 @@ class AppSettings {
 
         this._autolock = this.helper.load('autolock', 'true') === 'true';
         this._lang = this.helper.load('lang', '') || '';
-
-        console.log(this.helper);
-        console.log(this._autolock, this._lang);
     }
 
     @observable
