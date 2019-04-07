@@ -90,6 +90,17 @@ class Welcome extends React.Component<{}, State> {
         });
     }
 
+    private closePage(page: 'recover' | 'create') {
+        anime({
+            targets: '.welcome-content, .welcome-buttons',
+            opacity: 1,
+            delay: 500,
+        });
+        this.componentDidMount();
+
+        AnimeHelper.expandPage('#expanding-page', 0, window.innerHeight, () => this.setState({ expandNewKey: false, expandRecoverKey: false }));
+    }
+
     render() {
         return (
             <div className='welcome-page'>
@@ -122,7 +133,7 @@ class Welcome extends React.Component<{}, State> {
                 {
                     this.state.expandNewKey || this.state.expandRecoverKey ?
                         <div id='expanding-page'>
-                            {this.state.expandRecoverKey ? <RecoverKey onCancel={() => { }} /> : undefined}
+                            {this.state.expandRecoverKey ? <RecoverKey onCancel={() => this.closePage('recover')} /> : undefined}
                             {this.state.expandNewKey ? <NewKey /> : undefined}
                         </div> : undefined
                 }
