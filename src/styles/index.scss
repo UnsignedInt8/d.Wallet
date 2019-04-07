@@ -18,8 +18,8 @@ html {
 //   transition: all 0.5s;
 // }
 
-@import url("https://fonts.googleapis.com/css?family=Lato");
-@import url('https://fonts.googleapis.com/css?family=Quicksand');
+@import url("https://fonts.googleapis.com/css?family=Lato|Questrial");
+// @import url('https://fonts.googleapis.com/css?family=Quicksand');
 
 .lato-bold {
   font-family: "Lato", sans-serif;
@@ -27,6 +27,10 @@ html {
 
 .quicksand {
   font-family: "Quicksand", sans-serif;
+}
+
+.questrial {
+  font-family: "Questrial", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .btc {
