@@ -1,9 +1,13 @@
 import * as React from 'react';
 import Particles from 'react-particles-js';
 import '../styles/Welcome.scss';
-const btc = require('../assets/bitcoin-logo.svg');
-const logo = require('../assets/logo.svg');
 import anime from 'animejs';
+import { getLang } from '../i18n';
+import AnimeHelper from '../lib/AnimeHelper';
+import RecoverKey from './RecoverKey';
+import NewKey from './NewKey';
+
+const i18n = getLang();
 
 const nightSky: any = {
     "particles": {
@@ -49,7 +53,14 @@ const nightSky: any = {
     "retina_detect": true
 };
 
-class Welcome extends React.Component {
+interface State {
+    expandRecoverKey: boolean;
+    expandNewKey: boolean;
+}
+
+class Welcome extends React.Component<{}, State> {
+
+    state: State = { expandNewKey: false, expandRecoverKey: false };
 
     componentDidMount() {
         anime({
@@ -60,24 +71,31 @@ class Welcome extends React.Component {
             delay: function (el, i) { return i * 250 },
             direction: 'alternate',
             loop: false,
-            complete: () => {
-                anime({
-                    targets: '#slogan',
-                    opacity: 1,
-                    duration: 3000
-                })
-            },
+            complete: () => anime({
+                targets: '#slogan',
+                opacity: 1,
+                duration: 3000
+            }),
+        });
+    }
+
+    private expandPage(page: 'recover' | 'create') {
+        anime({
+            targets: '.welcome-content, .welcome-buttons',
+            opacity: 0,
+        });
+
+        this.setState({ expandNewKey: page === 'create', expandRecoverKey: page === 'recover' }, () => {
+            AnimeHelper.expandPage('#expanding-page', window.innerHeight, 0);
         });
     }
 
     render() {
         return (
-            <div id='welcome'>
+            <div className='welcome-page'>
                 <Particles className='particlejs' params={nightSky} width={`100%`} height={`100%`} />
 
-                <div id='welcome-content' className='questrial '>
-                    {/* <img id='btc' src={btc} /> */}
-
+                <div className='questrial welcome-content'>
                     <div>
                         <svg id='logo' version="1.1" width="177.225" height="50.977" viewBox="0 0 254.225 50.977">
                             <g id="svgGroup" stroke-linecap="round" fill-rule="evenodd" font-size="0pt" stroke="#fff" stroke-width="1" fill="none" className="lines">
@@ -95,11 +113,20 @@ class Welcome extends React.Component {
                     </div>
                 </div>
 
-                <div id='welcome-buttons'>
-                    <button>Recover</button>
+                <div className='welcome-buttons'>
+                    <button onClick={_ => this.expandPage('recover')}>{i18n.welcome.import}</button>
                     <span>|</span>
-                    <button>Create</button>
+                    <button onClick={_ => this.expandPage('create')}>{i18n.welcome.create}</button>
                 </div>
+
+                {
+                    this.state.expandNewKey || this.state.expandRecoverKey ?
+                        <div id='expanding-page'>
+                            {this.state.expandRecoverKey ? <RecoverKey onCancel={() => { }} /> : undefined}
+                            {this.state.expandNewKey ? <NewKey /> : undefined}
+                        </div> : undefined
+                }
+
             </div >
         );
     }

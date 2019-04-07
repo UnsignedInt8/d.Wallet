@@ -1,4 +1,16 @@
 const lang = {
+    buttons: {
+        cancel: 'Cancel',
+    },
+    welcome: {
+        create: 'Create',
+        import: 'Import',
+        recover: {
+            title: 'Import Wallet',
+            typingMnemonic: 'Please typing your Mnemonic Phrase in the box',
+            setPassword: 'Set a Password (Required)',
+        }
+    },
     sending: {
         address: 'Address',
         amount: 'Amount',

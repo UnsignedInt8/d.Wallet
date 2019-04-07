@@ -130,6 +130,7 @@
   "dependencies": {
     "animejs": "^3.0.1",
     "axios": "^0.18.0",
+    "bip39": "^3.0.0",
     "history": "^4.9.0",
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",

@@ -85,3 +85,22 @@ button {
   cursor: pointer;
   -webkit-app-region: no-drag;
 }
+
+
+input {
+  margin: 8px 12px 0px 12px;
+
+  display: block;
+  color: #badeff;
+  font-size: 18px;
+  padding-left: 42px;
+  padding-top: 12px;
+  padding-bottom: 11px;
+  padding-right: 8px;
+  background-color: rgba(44, 82, 231, 0.24);
+  outline: none;
+  border: none;
+  border-radius: 6px;
+
+  -webkit-app-region: no-drag;
+}
