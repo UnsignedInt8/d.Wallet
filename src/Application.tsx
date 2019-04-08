@@ -4,8 +4,9 @@ import { AnimatedSwitch } from 'react-router-transition';
 import { Home, Welcome, Send } from './pages';
 import { spring } from 'react-motion';
 import { History } from 'history';
-import PersistenceHelper from './lib/PersistenceHelper';
 import { ipcRenderer } from 'electron';
+import { observer } from 'mobx-react';
+import LockScreen from './pages/LockScreen';
 
 function glide(val: number) {
     return spring(val, {
@@ -33,15 +34,29 @@ const pageTransitions = {
     },
 };
 
-export default class Application extends React.Component {
+interface State {
+    lock: boolean;
+}
+
+@observer
+export default class Application extends React.Component<{}, State> {
 
     static history: History;
+
+    state: State = { lock: false };
+
+    componentDidMount() {
+        ipcRenderer.on('autolock', () => this.lockApp());
+    }
+
+    private lockApp() {
+        this.setState({ lock: true });
+    }
 
     render() {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
                 <AnimatedSwitch
-                    // css={switchRule}
                     className='switch'
                     {...pageTransitions}
                     mapStyles={styles => ({
@@ -52,11 +67,9 @@ export default class Application extends React.Component {
                     <Route path='/send' component={Send} />
                     <Route path="/" component={Home} />
                 </AnimatedSwitch>
+
+                <LockScreen />
             </Router>
         );
     }
 }
-
-ipcRenderer.on('autolock', () => {
-    console.log('autolock');
-});

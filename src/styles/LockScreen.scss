@@ -1,0 +1,117 @@
+#lock-screen {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: white;
+  background: rgb(154, 205, 50);
+
+  #clock {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .clock {
+    font-size: 15px;
+    color: white;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+
+  #security {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    svg {
+      display: block;
+    }
+
+    .path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 0;
+      &.circle {
+        -webkit-animation: dash 0.9s ease-in-out;
+        animation: dash 0.9s ease-in-out;
+      }
+      &.line {
+        stroke-dashoffset: 1000;
+        -webkit-animation: dash 0.9s 0.35s ease-in-out forwards;
+        animation: dash 0.9s 0.35s ease-in-out forwards;
+      }
+      &.check {
+        stroke-dashoffset: -100;
+        -webkit-animation: dash-check 0.9s 0.35s ease-in-out forwards;
+        animation: dash-check 0.9s 0.35s ease-in-out forwards;
+      }
+    }
+
+    p {
+      text-align: center;
+      margin: 20px 0 60px;
+      font-size: 1.25em;
+      &.success {
+        color: #73af55;
+      }
+      &.error {
+        color: #d06079;
+      }
+    }
+
+    @-webkit-keyframes dash {
+      0% {
+        stroke-dashoffset: 1000;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes dash {
+      0% {
+        stroke-dashoffset: 1000;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @-webkit-keyframes dash-check {
+      0% {
+        stroke-dashoffset: -100;
+      }
+      100% {
+        stroke-dashoffset: 900;
+      }
+    }
+
+    @keyframes dash-check {
+      0% {
+        stroke-dashoffset: -100;
+      }
+      100% {
+        stroke-dashoffset: 900;
+      }
+    }
+
+    #password {
+      position: relative;
+
+      img {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 20px;
+        left: 24px;
+        opacity: 0.5;
+      }
+    }
+  }
+}

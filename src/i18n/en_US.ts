@@ -3,6 +3,7 @@ const lang = {
         cancel: 'Cancel',
         ok: 'OK',
     },
+
     welcome: {
         create: 'Create',
         import: 'Import',
@@ -20,6 +21,7 @@ const lang = {
             attention: 'Please save the Mnemonic Phrase safely, and do not take a screenshot. Anyone may have access to your assets if you lose the Mnemonic Phrase',
         }
     },
+
     sending: {
         address: 'Address',
         amount: 'Amount',
@@ -28,10 +30,12 @@ const lang = {
         send: 'Send',
         cancel: 'Cancel',
     },
+
     receiving: {
         desc: (symbol: string) => `Your ${symbol.toUpperCase()} address and QR Code:`,
         address: 'Address',
     },
+
     settings: {
         autoLock: {
             title: 'Auto Lock',
@@ -41,6 +45,10 @@ const lang = {
             title: 'Languages',
             system: 'System',
         },
+    },
+
+    lockScreen: {
+        title: 'Unlock Your Wallet',
     }
 }
 
