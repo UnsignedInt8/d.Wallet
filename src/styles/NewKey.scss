@@ -1,5 +1,18 @@
 #newkey-page {
-    #newkey-content {
-        grid-area: content;
+  background: rgb(42, 159, 255);
+
+  #newkey-content {
+    grid-area: content;
+    margin-top: 3.5vh;
+    margin-left: 12px;
+    margin-right: 12px;
+    font-size: 14px;
+
+    #mnemonic {
+      background: rgba(0, 0, 0, 0.1);
+      margin: 12px -12px 12px -12px;
+      padding: 14px;
+      font-size: 16px;
     }
+  }
 }

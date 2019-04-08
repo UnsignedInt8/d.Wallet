@@ -1,6 +1,7 @@
 const lang = {
     buttons: {
         cancel: 'Cancel',
+        ok: 'OK',
     },
     welcome: {
         create: 'Create',
@@ -12,7 +13,11 @@ const lang = {
         recover: {
             title: 'Import Wallet',
             typingMnemonic: 'Please typing your Mnemonic Phrase in the box',
+        },
 
+        new: {
+            title: 'New Wallet',
+            attention: 'Please save the Mnemonic Phrase safely, and do not take a screenshot. Anyone may have access to your assets if you lose the Mnemonic Phrase',
         }
     },
     sending: {

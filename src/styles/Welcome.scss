@@ -10,6 +10,13 @@
     "content"
     "buttons";
 
+  .title {
+    font-family: Questrial, sans-serif;
+    font-weight: 100;
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
   div.particlejs {
     position: absolute;
     width: 100vw;
@@ -78,6 +85,12 @@
       color: black;
       transition: all 0.5s;
     }
+
+    button.disabled {
+      cursor: not-allowed;
+      background: none !important;
+      color: rgba(105, 105, 105, 0.37) !important;
+    }
   }
 
   #expanding-page {
@@ -97,18 +110,18 @@
       width: 20px;
       height: 20px;
       position: absolute;
-      top: 20px;
+      top: 24px;
       left: 12px;
       opacity: 0.5;
     }
 
     input {
-      margin: 8px 0px 8px 0px;
-      background-color: rgba(7, 88, 14, 0.22);
+      margin: 12px 0px 0px 0px;
+      background-color: rgba(0, 0, 0, 0.125);
     }
 
     input::placeholder {
-      color: rgba(255, 255, 255, 0.30);
+      color: rgba(255, 255, 255, 0.3);
     }
   }
 }

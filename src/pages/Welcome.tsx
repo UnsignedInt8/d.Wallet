@@ -108,7 +108,7 @@ class Welcome extends React.Component<{}, State> {
 
                 <div className='questrial welcome-content'>
                     <div>
-                        <svg id='logo' version="1.1" width="177.225" height="50.977" viewBox="0 0 254.225 50.977">
+                        <svg id='logo' version="1.1" width="177.225" height="50.977" viewBox="0 0 256.225 50.977">
                             <g id="svgGroup" strokeLinecap="round" fillRule="evenodd" fontSize="0pt" stroke="#fff" strokeWidth="1" fill="none" className="lines">
                                 <path stroke='rgb(187, 255, 0)' d="M 30.313 50.4 L 30.313 44.64 Q 25.993 50.976 17.425 50.976 A 18.221 18.221 0 0 1 11.172 49.942 A 15.891 15.891 0 0 1 4.753 45.576 A 18.614 18.614 0 0 1 0.078 34.352 A 24.433 24.433 0 0 1 0.001 32.4 A 21.406 21.406 0 0 1 1.011 25.701 A 18.105 18.105 0 0 1 4.753 19.224 A 16.19 16.19 0 0 1 15.501 13.937 A 22.553 22.553 0 0 1 17.785 13.824 Q 25.921 13.824 30.313 20.232 L 30.313 0 L 35.713 0 L 35.713 50.4 L 30.313 50.4 Z M 18.145 46.08 A 13.572 13.572 0 0 0 22.29 45.477 A 10.796 10.796 0 0 0 27.361 42.048 A 13.452 13.452 0 0 0 30.372 35.356 A 18.42 18.42 0 0 0 30.601 32.4 A 17.249 17.249 0 0 0 30.045 27.916 A 13.129 13.129 0 0 0 27.361 22.752 Q 23.977 18.72 18.145 18.72 A 13.36 13.36 0 0 0 13.523 19.49 A 11.661 11.661 0 0 0 8.785 22.752 A 13.302 13.302 0 0 0 5.563 29.945 A 18.039 18.039 0 0 0 5.401 32.4 A 16.504 16.504 0 0 0 6.003 36.962 A 12.936 12.936 0 0 0 8.785 42.048 A 11.827 11.827 0 0 0 17.433 46.064 A 15.898 15.898 0 0 0 18.145 46.08 Z" id="0" vectorEffect="non-scaling-stroke" />
                                 <path stroke='rgb(0, 195, 255)' d="M 44.209 43.056 L 51.193 43.056 L 51.193 50.4 L 44.209 50.4 L 44.209 43.056 Z" id="1" vectorEffect="non-scaling-stroke" />
@@ -134,7 +134,7 @@ class Welcome extends React.Component<{}, State> {
                     this.state.expandNewKey || this.state.expandRecoverKey ?
                         <div id='expanding-page'>
                             {this.state.expandRecoverKey ? <RecoverKey onCancel={() => this.closePage('recover')} /> : undefined}
-                            {this.state.expandNewKey ? <NewKey /> : undefined}
+                            {this.state.expandNewKey ? <NewKey onCancel={() => this.closePage('create')} /> : undefined}
                         </div> : undefined
                 }
 

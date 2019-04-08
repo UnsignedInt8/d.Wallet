@@ -8,13 +8,6 @@
     margin-right: 12px;
     font-size: 14px;
 
-    .title {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      font-weight: 100;
-      font-size: 24px;
-      margin-bottom: 12px;
-    }
-
     #mnemonic {
       box-sizing: border-box;
       color: white;
@@ -40,9 +33,4 @@
     }
   }
 
-  button.disabled {
-    cursor: not-allowed;
-    background: none !important;
-    color: rgba(105, 105, 105, 0.37) !important;
-  }
 }

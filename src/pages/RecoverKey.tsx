@@ -17,10 +17,13 @@ interface State {
     confirmPw?: string;
 }
 
-console.log(bip39.generateMnemonic())
 export default class RecoverKey extends React.Component<Props, State> {
 
     state: State = {};
+
+    componentDidMount() {
+        jquery('#mnemonic').focus();
+    }
 
     private onTextAreaChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         let mnemonic = e.target.value.split(' ');
@@ -29,7 +32,6 @@ export default class RecoverKey extends React.Component<Props, State> {
         this.setState({ isValidMnemonic: isValid });
         if (isValid) jquery('#set-password').focus();
     }
-
 
     render() {
         return (
@@ -50,7 +52,7 @@ export default class RecoverKey extends React.Component<Props, State> {
 
                     <div className='password'>
                         <img src={lock} />
-                        <input id='set-password' type="password" maxLength={32} onChange={e => this.setState({ confirmPw: e.target.value })} placeholder={i18n.welcome.confirmPassword} />
+                        <input type="password" maxLength={32} onChange={e => this.setState({ confirmPw: e.target.value })} placeholder={i18n.welcome.confirmPassword} />
                     </div>
                 </div>
 
