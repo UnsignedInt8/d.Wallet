@@ -106,5 +106,9 @@
       margin: 8px 0px 8px 0px;
       background-color: rgba(7, 88, 14, 0.22);
     }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.30);
+    }
   }
 }

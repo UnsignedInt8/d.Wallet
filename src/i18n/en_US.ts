@@ -5,10 +5,14 @@ const lang = {
     welcome: {
         create: 'Create',
         import: 'Import',
+        setPassword: 'Set a Password (Required)',
+        password: 'Password',
+        confirmPassword: 'Confirm Password',
+
         recover: {
             title: 'Import Wallet',
             typingMnemonic: 'Please typing your Mnemonic Phrase in the box',
-            setPassword: 'Set a Password (Required)',
+
         }
     },
     sending: {

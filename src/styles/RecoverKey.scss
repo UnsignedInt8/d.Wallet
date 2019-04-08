@@ -28,6 +28,16 @@
       resize: none;
       padding: 4px 6px 4px 6px;
     }
+
+    textarea {
+      transition: all 0.5s;
+    }
+
+    textarea.valid {
+      border-color: #c4ff3d !important;
+      color: #d4fa7b !important;
+      transition: all 0.5s;
+    }
   }
 
   button.disabled {
