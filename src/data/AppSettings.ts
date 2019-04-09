@@ -6,7 +6,7 @@ class AppSettings {
 
     constructor(password: string) {
         this.helper = new PersistenceHelper({ configName: 'config', defaults: {}, password, encryption: true });
-
+        
         this._autolock = this.helper.load('autolock', 'true') === 'true';
         this._lang = this.helper.load('lang', '') || '';
     }
