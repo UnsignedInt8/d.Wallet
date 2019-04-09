@@ -9,6 +9,16 @@ class AppSettings {
 
         this._autolock = this.helper.load('autolock', 'true') === 'true';
         this._lang = this.helper.load('lang', '') || '';
+        this._mnemonic = this.helper.load('mnemonic', '') || '';
+    }
+
+    private _mnemonic: string;
+
+    get mnemonic() { return this._mnemonic; }
+    set mnemonic(value: string) {
+        if (value === this._mnemonic) return;
+        this._mnemonic = value;
+        this.helper.save('mnemonic', value);
     }
 
     @observable
@@ -38,7 +48,6 @@ let instance: AppSettings | undefined;
 
 export function getAppSettings(password: string) {
     if (instance) return instance;
-    if (!password) return undefined;
     instance = new AppSettings(password);
     return instance;
 }

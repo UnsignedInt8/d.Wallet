@@ -3,6 +3,7 @@ import '../styles/LockScreen.scss';
 import * as Clock from 'react-live-clock';
 import { getLang } from '../i18n';
 import * as jquery from 'jquery';
+import PassMan from '../data/PasswordManager';
 
 const lock = require('../assets/padlock.svg');
 const i18n = getLang();
@@ -27,8 +28,8 @@ export default class LockScreen extends React.Component<Props, State> {
 
     private onPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (this.state.validated) return;
-        
-        let validated = e.target.value ? true : false;
+
+        let validated = PassMan.verify(e.target.value);
         this.setState({ validated });
 
         if (!validated) return;
