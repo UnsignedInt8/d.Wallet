@@ -12,10 +12,10 @@ const i18n = getLang();
 const nightSky: any = {
     "particles": {
         "number": {
-            "value": 160,
+            "value": 250,
             "density": {
                 "enable": true,
-                "value_area": 500
+                "value_area": 1000
             }
         },
         "line_linked": {

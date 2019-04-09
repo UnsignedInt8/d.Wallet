@@ -11,12 +11,28 @@ interface State {
     validated: boolean;
 }
 
-export default class LockScreen extends React.Component<{}, State> {
+interface Props {
+    onValidationPass: () => void;
+}
+
+export default class LockScreen extends React.Component<Props, State> {
+
+    static readonly id = '#lock-screen';
 
     state: State = { validated: false }
 
     componentDidMount() {
         jquery('input').focus();
+    }
+
+    private onPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
+        if (this.state.validated) return;
+        
+        let validated = e.target.value ? true : false;
+        this.setState({ validated });
+
+        if (!validated) return;
+        setTimeout(() => this.props.onValidationPass(), 1500);
     }
 
     render() {
@@ -26,7 +42,7 @@ export default class LockScreen extends React.Component<{}, State> {
                 <div id='security'>
                     {
                         this.state.validated ?
-                            <div style={{ width: 52, height: 52 }}>
+                            <div id='validation'>
                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
                                     <circle className="path circle" fill="none" stroke="#fff" strokeWidth="5" strokeMiterlimit="10" cx="65.1" cy="65.1" r="62.1" />
                                     <polyline className="path check" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
@@ -39,7 +55,7 @@ export default class LockScreen extends React.Component<{}, State> {
                     </div>
 
                     <div id='password'>
-                        <input type="password" maxLength={32} />
+                        <input type="password" maxLength={32} onChange={e => this.onPasswordChange(e)} />
                         <img src={lock} />
                     </div>
                 </div>

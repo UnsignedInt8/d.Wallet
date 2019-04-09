@@ -22,7 +22,7 @@ const selectColor = {
 @observer
 export default class Settings extends React.Component<{}, {}> {
 
-    private appSettings = getAppSettings(PasswordMan.password);
+    private appSettings = getAppSettings(PasswordMan.password)!!;
     private i18n = getLang(this.appSettings.lang);
 
 

@@ -40,7 +40,22 @@ const createWindow = async () => {
     }
 
     win.on('closed', () => {
+        if (win) win.removeAllListeners();
         win = null;
+    });
+
+    win.on('focus', () => {
+        clearTimeout(blurTimer);
+        blurTimer = undefined;
+    });
+
+    win.on('blur', () => {
+        if (blurTimer) return;
+
+        blurTimer = setInterval(() => {
+            if (!win) return;
+            win.webContents.send('autolock');
+        }, 10 * 1000);
     });
 };
 
@@ -56,17 +71,4 @@ app.on('activate', () => {
     if (win === null) {
         createWindow();
     }
-});
-
-app.on('browser-window-blur', () => {
-    if (!blurTimer) return;
-    blurTimer = setInterval(() => {
-        if (!win) return;
-        win.webContents.send('autolock');
-    }, 10 * 1000);
-});
-
-app.on('browser-window-focus', () => {
-    clearTimeout(blurTimer);
-    blurTimer = undefined;
 });

@@ -30,6 +30,16 @@
     justify-content: center;
     flex-direction: column;
 
+    #validation {
+      width: 72px;
+      height: 72px;
+      position: absolute;
+      left: calc (50% - 36);
+      right: calc (50% - 36);
+
+      top: 20%;
+    }
+
     svg {
       display: block;
     }

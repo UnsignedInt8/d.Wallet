@@ -7,6 +7,9 @@ import { History } from 'history';
 import { ipcRenderer } from 'electron';
 import { observer } from 'mobx-react';
 import LockScreen from './pages/LockScreen';
+import animeHelper from './lib/AnimeHelper';
+import { getAppSettings } from './data/AppSettings';
+import PassMan from './data/PasswordManager';
 
 function glide(val: number) {
     return spring(val, {
@@ -35,7 +38,7 @@ const pageTransitions = {
 };
 
 interface State {
-    lock: boolean;
+    lockApp: boolean;
 }
 
 @observer
@@ -43,14 +46,21 @@ export default class Application extends React.Component<{}, State> {
 
     static history: History;
 
-    state: State = { lock: false };
+    state: State = { lockApp: false };
 
     componentDidMount() {
         ipcRenderer.on('autolock', () => this.lockApp());
     }
 
     private lockApp() {
-        this.setState({ lock: true });
+        if (this.state && this.state.lockApp) return;
+
+        let appSettings = getAppSettings(PassMan.password);
+        this.setState({ lockApp: true }, () => animeHelper.expandPage(LockScreen.id, window.innerHeight, 0));
+    }
+
+    private unlockApp() {
+        animeHelper.expandPage(LockScreen.id, 0, window.innerHeight, () => this.setState({ lockApp: false }));
     }
 
     render() {
@@ -68,7 +78,10 @@ export default class Application extends React.Component<{}, State> {
                     <Route path="/" component={Home} />
                 </AnimatedSwitch>
 
-                <LockScreen />
+                {this.state.lockApp ?
+                    <LockScreen onValidationPass={() => this.unlockApp()} />
+                    : undefined}
+
             </Router>
         );
     }

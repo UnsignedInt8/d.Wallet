@@ -6,7 +6,7 @@ class AppSettings {
 
     constructor(password: string) {
         this.helper = new PersistenceHelper({ configName: 'config', defaults: {}, password, encryption: true });
-        
+
         this._autolock = this.helper.load('autolock', 'true') === 'true';
         this._lang = this.helper.load('lang', '') || '';
     }
@@ -38,6 +38,7 @@ let instance: AppSettings | undefined;
 
 export function getAppSettings(password: string) {
     if (instance) return instance;
+    if (!password) return undefined;
     instance = new AppSettings(password);
     return instance;
 }

@@ -4,7 +4,7 @@ import PersistenceHelper from '../lib/PersistenceHelper';
 
 class PasswordManager {
     private _pw: string = '';
-    private helper = new PersistenceHelper({ configName: 'password', defaults: {}, encryption: false, password: '' });
+    private helper = new PersistenceHelper({ configName: 'fingerprint', defaults: {}, encryption: false, password: '' });
 
     get password() { return this._pw || ''; }
     set password(value: string) {
@@ -12,11 +12,11 @@ class PasswordManager {
         this._pw = pw;
 
         let pwHash = crypto.createHash('sha256').update(pw, 'utf8').digest('hex');
-        this.helper.save('password', pwHash);
+        this.helper.save('fingerprint', pwHash);
     }
 
     verify(password: string) {
-        let pw = this.helper.load('password');
+        let pw = this.helper.load('fingerprint');
         if (!pw) return false;
 
         let h1 = crypto.createHash('sha256').update(password, 'utf8').digest('hex');
@@ -26,7 +26,7 @@ class PasswordManager {
     }
 
     isProtected() {
-        if (this.helper.load('password')) return true;
+        if (this.helper.load('fingerprint')) return true;
         return false;
     }
 }
