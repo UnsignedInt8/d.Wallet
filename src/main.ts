@@ -52,9 +52,10 @@ const createWindow = async () => {
     win.on('blur', () => {
         if (blurTimer) return;
 
-        blurTimer = setInterval(() => {
+        blurTimer = setTimeout(() => {
             if (!win) return;
             win.webContents.send('autolock');
+            blurTimer = null;
         }, 10 * 1000);
     });
 };

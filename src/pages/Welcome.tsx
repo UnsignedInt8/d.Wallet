@@ -15,7 +15,7 @@ const i18n = getLang();
 const nightSky: any = {
     "particles": {
         "number": {
-            "value": 250,
+            "value": 500,
             "density": {
                 "enable": true,
                 "value_area": 1000
@@ -80,8 +80,6 @@ class Welcome extends React.Component<{}, State> {
                 duration: 3000
             }),
         });
-
-        console.log('password', PassMan.password);
     }
 
     private expandPage(page: 'recover' | 'create') {
@@ -147,7 +145,7 @@ class Welcome extends React.Component<{}, State> {
                         </div> : undefined
                 }
 
-            </div >
+            </div>
         );
     }
 }

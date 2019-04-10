@@ -50,15 +50,18 @@ export default class Application extends React.Component<{}, State> {
 
     componentDidMount() {
         ipcRenderer.on('autolock', () => this.lockApp());
-        if (PassMan.isProtected() && !PassMan.password) this.setState({ lockApp: true });
+        if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
     }
 
-    private lockApp() {
+    private lockApp(force = false) {
         if (this.state && this.state.lockApp) return;
         if (!PassMan.isProtected()) return;
 
-        let appSettings = getAppSettings(PassMan.password);
-        if (!appSettings.autolock) return;
+        if (!force) {
+            if (!PassMan.password) return;
+            let appSettings = getAppSettings(PassMan.password);
+            if (!appSettings.autolock) return;
+        }
 
         this.setState({ lockApp: true }, () => animeHelper.expandPage(LockScreen.id, window.innerHeight, 0));
     }

@@ -4,6 +4,7 @@ import * as Clock from 'react-live-clock';
 import { getLang } from '../i18n';
 import * as jquery from 'jquery';
 import PassMan from '../data/PasswordManager';
+import { getAppSettings } from '../data/AppSettings';
 
 const lock = require('../assets/padlock.svg');
 const i18n = getLang();
@@ -33,6 +34,11 @@ export default class LockScreen extends React.Component<Props, State> {
         this.setState({ validated });
 
         if (!validated) return;
+        if (!PassMan.password) {
+            PassMan.password = e.target.value;
+            getAppSettings(PassMan.password);
+        }
+        
         setTimeout(() => this.props.onValidationPass(), 1500);
     }
 

@@ -1,10 +1,11 @@
 // import crypto from 'crypto';
 const crypto = require('crypto');
 import PersistenceHelper from '../lib/PersistenceHelper';
+import { EventEmitter } from 'events';
 
 const key = 'fingerprint';
 
-class PasswordManager {
+class PasswordManager extends EventEmitter {
     private _pw: string = '';
     private helper = new PersistenceHelper({ configName: key, defaults: {}, encryption: false, password: '' });
 
@@ -15,6 +16,8 @@ class PasswordManager {
 
         let pwHash = crypto.createHash('sha256').update(pw, 'utf8').digest('hex');
         this.helper.save(key, pwHash);
+
+        super.emit('password');
     }
 
     clean() {

@@ -4,12 +4,12 @@ import '../styles/Home.scss';
 import { platform } from 'os';
 import { AreaChart, Area } from 'recharts';
 import CoinRanking, { Coins } from '../api/CoinRanking';
-import Application from '../Application';
-import { Flipper, Flipped } from 'react-flip-toolkit';
+import PassMan from '../data/PasswordManager';
 import Send from './Send';
 import Receive from './Receive';
 import anime from 'animejs';
 import Settings from './Settings';
+import { AppSettings, getAppSettings } from '../data/AppSettings';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -46,18 +46,27 @@ interface HomeState {
 
 class Home extends React.Component<{}, HomeState> {
 
-    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: false, expandReceiving: false, expandSettings: true };
-    refersher?: NodeJS.Timer | number;
-    history = {};
+    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: false, expandReceiving: false, expandSettings: false };
+    private refersher?: NodeJS.Timer | number;
+    private history = {};
+    private appSettings?: AppSettings;
 
     componentDidMount() {
         this.refersher = setInterval(() => this.refreshPrice(), 30 * 1000);
         this.refreshPrice();
         this.refreshHistory();
+
+        if (PassMan.password) this.appSettings = getAppSettings(PassMan.password);
+        PassMan.on('password', this.onPasswordChanged)
     }
 
     componentWillUnmount() {
         clearInterval(this.refersher as NodeJS.Timer);
+        PassMan.removeListener('password', this.onPasswordChanged)
+    }
+
+    private onPasswordChanged = () => {
+        this.appSettings = getAppSettings(PassMan.password);
     }
 
     private async refreshPrice() {

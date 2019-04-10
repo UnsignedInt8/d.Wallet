@@ -1,7 +1,7 @@
 import PersistenceHelper from '../lib/PersistenceHelper';
 import { observable, computed } from 'mobx';
 
-class AppSettings {
+export class AppSettings {
     private helper: PersistenceHelper;
 
     constructor(password: string) {
@@ -47,6 +47,7 @@ class AppSettings {
 let instance: AppSettings | undefined;
 
 export function getAppSettings(password: string) {
+    if (!password) throw Error('invalid password');
     if (instance) return instance;
     instance = new AppSettings(password);
     return instance;
