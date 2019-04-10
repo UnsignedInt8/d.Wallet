@@ -3,22 +3,20 @@
   grid-template-rows: 150px auto;
   height: 100%;
   background: rgb(250, 106, 178);
-  max-width: 100%;
   overflow: hidden;
 
   #info {
     grid-row: 1;
     font-size: 12px;
-    max-width: 100%;
     padding: 39px 12px 12px 12px;
     color: white;
 
-    div {
-      max-width: 72vw;
+    div#address {
       font-size: 17px;
       user-select: text;
       -webkit-app-region: no-drag;
       word-wrap: break-word;
+      word-break: break-all;
       overflow-wrap: break-word;
       margin-top: 8px;
       border: 1px dashed white;
@@ -30,12 +28,11 @@
     grid-row: 2;
     padding: 24px;
     height: 100%;
-    position: relative;
 
     #qrcode-container {
       position: absolute;
       right: 26px;
-      bottom: 72px;
+      bottom: 20px;
 
       #title {
         margin-bottom: 6px;

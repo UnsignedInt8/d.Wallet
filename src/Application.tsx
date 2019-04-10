@@ -50,6 +50,7 @@ export default class Application extends React.Component<{}, State> {
 
     componentDidMount() {
         ipcRenderer.on('autolock', () => this.lockApp());
+        if (!PassMan.isProtected()) Application.history.push('/welcome');
         if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
     }
 

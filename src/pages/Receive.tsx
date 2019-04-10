@@ -25,7 +25,7 @@ export default class Receive extends React.Component<Props, {}>{
             <div id='receiving' className='lato-bold' >
                 <div id='info'>
                     Your {this.props.symbol.toUpperCase()} address and QR Code:
-                    <div>
+                    <div id='address'>
                         {this.props.address}
                     </div>
                 </div>
