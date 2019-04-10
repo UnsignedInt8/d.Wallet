@@ -39,6 +39,7 @@ const pageTransitions = {
 
 interface State {
     lockApp: boolean;
+    firstUse?: boolean;
 }
 
 @observer
@@ -46,12 +47,26 @@ export default class Application extends React.Component<{}, State> {
 
     static history: History;
 
-    state: State = { lockApp: false };
+    state: State = { lockApp: false, firstUse: true };
 
     componentDidMount() {
         ipcRenderer.on('autolock', () => this.lockApp());
-        if (!PassMan.isProtected()) Application.history.push('/welcome');
-        if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
+        PassMan.on('password', this.onPasswordChanged);
+
+        let firstUse = !PassMan.isProtected();
+        this.setState({ firstUse }, () => {
+            if (!PassMan.isProtected()) Application.history.push('/welcome');
+            if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
+        });
+
+    }
+
+    componentWillUnmount() {
+        PassMan.removeListener('password', this.onPasswordChanged);
+    }
+
+    private onPasswordChanged = () => {
+        this.setState({ firstUse: false });
     }
 
     private lockApp(force = false) {
@@ -82,13 +97,13 @@ export default class Application extends React.Component<{}, State> {
                     })}
                 >
                     <Route path='/welcome' exact component={Welcome} />
-                    <Route path="/" component={Home} />
+                    {!this.state.firstUse ? <Route path="/" component={Home} /> : undefined}
                 </AnimatedSwitch>
 
                 {this.state.lockApp ?
                     <LockScreen onValidationPass={() => this.unlockApp()} />
-                    : undefined}
-
+                    : undefined
+                }
             </Router>
         );
     }

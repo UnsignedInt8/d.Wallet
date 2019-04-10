@@ -2,12 +2,12 @@
 
 const electron = require('electron');
 const path = require('path');
-const fs = require('fs') ;
+const fs = require('fs');
 import * as crypto from './CryptoHelper';
 
 interface Options {
     configName: string;
-    defaults: any;
+    defaults?: any;
     password: string;
     encryption: boolean;
 }
@@ -27,7 +27,7 @@ export default class PersistenceHelper {
         try {
             this.data = JSON.parse(fs.readFileSync(this.configFile, 'utf8'));
         } catch (error) {
-            this.data = opts.defaults;
+            this.data = opts.defaults || {};
         }
     }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as QRCode from 'qrcode.react';
 import '../styles/Receive.scss';
-const logo = require('../assets/logo.svg');
+const logo = require('../assets/logo-fill.svg');
 
 interface Props {
     address: string;
