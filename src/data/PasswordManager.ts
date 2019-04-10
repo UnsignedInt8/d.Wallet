@@ -2,9 +2,11 @@
 const crypto = require('crypto');
 import PersistenceHelper from '../lib/PersistenceHelper';
 
+const key = 'fingerprint';
+
 class PasswordManager {
     private _pw: string = '';
-    private helper = new PersistenceHelper({ configName: 'fingerprint', defaults: {}, encryption: false, password: '' });
+    private helper = new PersistenceHelper({ configName: key, defaults: {}, encryption: false, password: '' });
 
     get password() { return this._pw || ''; }
     set password(value: string) {
@@ -12,11 +14,15 @@ class PasswordManager {
         this._pw = pw;
 
         let pwHash = crypto.createHash('sha256').update(pw, 'utf8').digest('hex');
-        this.helper.save('fingerprint', pwHash);
+        this.helper.save(key, pwHash);
+    }
+
+    clean() {
+        this.helper.save(key, '');
     }
 
     verify(password: string) {
-        let pw = this.helper.load('fingerprint');
+        let pw = this.helper.load(key);
         if (!pw) return false;
 
         let h1 = crypto.createHash('sha256').update(password, 'utf8').digest('hex');
@@ -26,7 +32,7 @@ class PasswordManager {
     }
 
     isProtected() {
-        if (this.helper.load('fingerprint')) return true;
+        if (this.helper.load(key)) return true;
         return false;
     }
 }

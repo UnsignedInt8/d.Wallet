@@ -15,6 +15,7 @@ interface State {
 
 interface Props {
     onCancel: () => void;
+    onOk: () => void;
 }
 
 export default class NewKey extends React.Component<Props, State> {
@@ -25,6 +26,8 @@ export default class NewKey extends React.Component<Props, State> {
         PassMan.password = this.state.password!;
         let appSettings = getAppSettings(PassMan.password);
         appSettings.mnemonic = this.state.mnemonic;
+        
+        this.props.onOk();
     }
 
     render() {

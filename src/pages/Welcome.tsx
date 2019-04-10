@@ -6,6 +6,9 @@ import { getLang } from '../i18n';
 import AnimeHelper from '../lib/AnimeHelper';
 import RecoverKey from './RecoverKey';
 import NewKey from './NewKey';
+import Application from '../Application';
+import { getAppSettings } from '../data/AppSettings';
+import PassMan from '../data/PasswordManager';
 
 const i18n = getLang();
 
@@ -77,6 +80,8 @@ class Welcome extends React.Component<{}, State> {
                 duration: 3000
             }),
         });
+
+        console.log('password', PassMan.password);
     }
 
     private expandPage(page: 'recover' | 'create') {
@@ -99,6 +104,10 @@ class Welcome extends React.Component<{}, State> {
         this.componentDidMount();
 
         AnimeHelper.expandPage('#expanding-page', 0, window.innerHeight, () => this.setState({ expandNewKey: false, expandRecoverKey: false }));
+    }
+
+    private onOk() {
+        Application.history.push('/');
     }
 
     render() {
@@ -133,8 +142,8 @@ class Welcome extends React.Component<{}, State> {
                 {
                     this.state.expandNewKey || this.state.expandRecoverKey ?
                         <div id='expanding-page'>
-                            {this.state.expandRecoverKey ? <RecoverKey onCancel={() => this.closePage('recover')} /> : undefined}
-                            {this.state.expandNewKey ? <NewKey onCancel={() => this.closePage('create')} /> : undefined}
+                            {this.state.expandRecoverKey ? <RecoverKey onCancel={() => this.closePage('recover')} onOk={() => this.onOk()} /> : undefined}
+                            {this.state.expandNewKey ? <NewKey onCancel={() => this.closePage('create')} onOk={() => this.onOk()} /> : undefined}
                         </div> : undefined
                 }
 
