@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as QRCode from 'qrcode.react';
 import '../styles/Receive.scss';
+const logo = require('../assets/logo.svg');
 
 interface Props {
     address: string;
@@ -20,7 +21,7 @@ export default class Receive extends React.Component<Props, {}>{
 
     render() {
         const value = `${coins[this.props.symbol].toLowerCase()}:${this.props.address}`;
-        
+
         return (
             <div id='receiving' className='lato-bold' >
                 <div id='info'>
@@ -30,6 +31,7 @@ export default class Receive extends React.Component<Props, {}>{
                     </div>
                 </div>
                 <div id='qrcode'>
+                    <img id='logo' src={logo} />
                     <div id='qrcode-container'>
                         <div id='title'>
                             {coins[this.props.symbol]} Address
