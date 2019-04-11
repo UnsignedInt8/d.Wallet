@@ -10,6 +10,8 @@ import Receive from './Receive';
 import anime from 'animejs';
 import Settings from './Settings';
 import { AppSettings, getAppSettings } from '../data/AppSettings';
+import { Wallet } from '../wallet/Wallet';
+import BTCWallet from '../wallet/BTCWallet';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -58,6 +60,10 @@ class Home extends React.Component<{}, HomeState> {
 
         if (PassMan.password) this.appSettings = getAppSettings(PassMan.password);
         PassMan.on('password', this.onPasswordChanged)
+
+        if (PassMan.password) {
+            this.appSettings = getAppSettings(PassMan.password)
+        }
     }
 
     componentWillUnmount() {
@@ -67,6 +73,11 @@ class Home extends React.Component<{}, HomeState> {
 
     private onPasswordChanged = () => {
         this.appSettings = getAppSettings(PassMan.password);
+
+
+        console.log('abc');
+        let wallet = new BTCWallet({ mnemonic: this.appSettings.mnemonic, path: BTCWallet.defaultPath });
+        console.log(wallet.address, wallet);
     }
 
     private async refreshPrice() {

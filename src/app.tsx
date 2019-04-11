@@ -4,6 +4,9 @@ import { AppContainer } from 'react-hot-loader';
 import Application from './Application';
 import './styles/index.scss';
 
+// https://github.com/bitpay/bitcore/issues/1457#issuecomment-467594031
+Object.defineProperty(global, '_bitcore', { get() { return undefined }, set() { } })
+
 // Create main element
 const mainElement = document.createElement('div');
 document.body.appendChild(mainElement);
