@@ -1,20 +1,21 @@
 import { Wallet } from "./Wallet";
 import { observable, computed } from "mobx";
 import * as bitcoin from 'bitcoinjs-lib';
-import { testnet, regtest } from "bitcoinjs-lib/types/networks";
 
 export default class BTCWallet extends Wallet {
 
-    static readonly defaultPath = `m/44'/0'/0'/0`;
-
     private _network?: bitcoin.Network;
 
-    constructor(opts: { mnemonic: string, path: string, segwit?: boolean, network?: bitcoin.Network }) {
+    constructor(opts: { mnemonic: string, path?: string, segwit?: boolean, network?: bitcoin.Network }) {
         super(opts);
         this._segwit = opts.segwit === undefined ? true : opts.segwit;
     }
 
-    @observable private _address?: string;
+    protected getDefaultPath(): string {
+        return `m/44'/0'/0'/0`;
+    }
+
+    private _address?: string;
     get address() {
         if (this._address) return this._address;
         let key = this._root.derive(super.getPathIndex(0));
@@ -26,9 +27,8 @@ export default class BTCWallet extends Wallet {
         return this._address as string;
     }
 
-    @observable private _segwit = true;
+    private _segwit = true;
 
-    @computed
     get segwit() { return this._segwit; }
     set segwit(value: boolean) {
         if (this._segwit === value) return;
