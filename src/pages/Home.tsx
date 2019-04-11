@@ -12,6 +12,7 @@ import Settings from './Settings';
 import { AppSettings, getAppSettings } from '../data/AppSettings';
 import { Wallet } from '../wallet/Wallet';
 import BTCWallet from '../wallet/BTCWallet';
+import ETHWallet from '../wallet/ETHWallet';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -74,10 +75,11 @@ class Home extends React.Component<{}, HomeState> {
     private onPasswordChanged = () => {
         this.appSettings = getAppSettings(PassMan.password);
 
-
-        console.log('abc');
         let wallet = new BTCWallet({ mnemonic: this.appSettings.mnemonic, path: BTCWallet.defaultPath });
         console.log(wallet.address, wallet);
+
+        let w2 = new ETHWallet({ mnemonic: this.appSettings.mnemonic, path: ETHWallet.defaultPath });
+        console.log(w2.address);
     }
 
     private async refreshPrice() {

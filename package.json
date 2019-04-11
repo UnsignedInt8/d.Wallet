@@ -95,6 +95,7 @@
     "@types/react-router-dom": "^4.3.1",
     "@types/react-select": "^2.0.15",
     "@types/react-test-renderer": "^16.8.1",
+    "@types/secp256k1": "^3.5.0",
     "@types/webdriverio": "^4.13.3",
     "@types/webpack-env": "^1.13.9",
     "awesome-typescript-loader": "^3.5.0",
@@ -137,9 +138,14 @@
     "bitcoinjs-lib": "^5.0.1",
     "bitcore-lib": "^8.1.1",
     "bitcore-mnemonic": "^8.1.1",
+    "eth-crypto": "^1.3.3",
     "ethereumjs-tx": "^1.3.7",
+    "ethereumjs-util": "^6.1.0",
+    "ethereumjs-wallet": "^0.6.3",
     "history": "^4.9.0",
     "jquery": "^3.4.0",
+    "keccak": "^2.0.0",
+    "keythereum": "^1.0.4",
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",
     "qrcode.react": "^0.9.3",
@@ -155,6 +161,7 @@
     "react-select": "^2.4.2",
     "react-switch": "^4.1.0",
     "recharts": "^1.5.0",
+    "secp256k1": "^3.6.2",
     "styled-components": "^4.2.0"
   }
 }
