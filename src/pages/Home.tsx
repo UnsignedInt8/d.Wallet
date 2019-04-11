@@ -80,6 +80,8 @@ class Home extends React.Component<{}, HomeState> {
 
         let w2 = new ETHWallet({ mnemonic: this.appSettings.mnemonic, path: ETHWallet.defaultPath });
         console.log(w2.address);
+
+        console.log(this.appSettings.mnemonic);
     }
 
     private async refreshPrice() {

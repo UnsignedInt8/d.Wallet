@@ -1,6 +1,8 @@
 const createKeccakHash = require('keccak')
 const crypto = require('crypto');
 import rlp = require('rlp')
+import BN from 'bn.js';
+import * as ethjsUtil from 'ethjs-util';
 
 /**
  * Creates Keccak hash of the input
@@ -40,4 +42,30 @@ export const sha256 = function (a: Buffer): Buffer {
  */
 export const rlphash = function (a: rlp.Input): Buffer {
     return keccak(rlp.encode(a))
+}
+
+export const toBuffer = function (v: any): Buffer {
+    if (!Buffer.isBuffer(v)) {
+        if (Array.isArray(v)) {
+            v = Buffer.from(v)
+        } else if (typeof v === 'string') {
+            if (ethjsUtil.isHexString(v)) {
+                v = Buffer.from(ethjsUtil.padToEven(ethjsUtil.stripHexPrefix(v)), 'hex')
+            } else {
+                v = Buffer.from(v)
+            }
+        } else if (typeof v === 'number') {
+            v = ethjsUtil.intToBuffer(v)
+        } else if (v === null || v === undefined) {
+            v = Buffer.allocUnsafe(0)
+        } else if (BN.isBN(v)) {
+            v = v.toArrayLike(Buffer)
+        } else if (v.toArray) {
+            // converts a BN to a Buffer
+            v = Buffer.from(v.toArray())
+        } else {
+            throw new Error('invalid type')
+        }
+    }
+    return v
 }
