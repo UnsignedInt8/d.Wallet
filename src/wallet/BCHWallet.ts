@@ -10,17 +10,24 @@ export default class BCHWallet extends Wallet {
         super(opts);
     }
 
-    protected getDefaultPath(): string {
+    protected getExternalPath(): string {
         return `m/44'/145'/0'/0`;
     }
 
-    private _address?: string[];
-    get mainAddress() {
-        if (this._address) return this._address;
-        let key = this._root.derive(this.getPathIndex(0))['privateKey'].toString();
-        this._address = [new PrivateKey(key).toAddress().toString().split(':')[1]];
-        return this._address as string[];
+    protected getChangePath(): string {
+        return `m/44'/145'/0'/1`;
     }
 
+    private _mainAddress?: string[];
+    get mainAddress() {
+        if (this._mainAddress) return this._mainAddress;
+        let key = this._root.derive(this.getExternalPathIndex(0))['privateKey'].toString();
+        this._mainAddress = [new PrivateKey(key).toAddress().toString().split(':')[1]];
+        return this._mainAddress as string[];
+    }
+
+    protected discoverAddresses() {
+
+    }
 
 }

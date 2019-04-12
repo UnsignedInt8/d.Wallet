@@ -1,8 +1,11 @@
 import { Wallet } from "./Wallet";
 import { observable, computed } from "mobx";
 import * as bitcoin from 'bitcoinjs-lib';
+import { HDPrivateKey } from "bitcore-lib";
 
 export default class BTCWallet extends Wallet {
+
+    static readonly symbol: 'btc';
 
     private _network?: bitcoin.Network;
 
@@ -12,23 +15,25 @@ export default class BTCWallet extends Wallet {
         this._network = opts.network;
     }
 
-    protected getDefaultPath(): string {
+    protected getExternalPath(): string {
         return `m/44'/0'/0'/0`;
     }
 
-    private _address?: string[];
-    get mainAddress() {
-        if (this._address) return this._address;
-        let key = this._root.derive(super.getPathIndex(0));
+    protected getChangePath(): string {
+        return `m/44'/0'/0'/1`;
+    }
 
-        let pkh = this.segwit ? bitcoin.payments.p2wpkh : bitcoin.payments.p2pkh;
+    private _mainAddress?: string[];
+    get mainAddress() {
+        if (this._mainAddress) return this._mainAddress;
+        let key = this._root.derive(super.getExternalPathIndex(0));
 
         let p2wpkh = bitcoin.payments.p2wpkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
         let p2pkh = bitcoin.payments.p2pkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
         let p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh });
-        this._address = [p2wpkh.address!, p2pkh.address!, p2sh.address!];
+        this._mainAddress = [p2wpkh.address!, p2pkh.address!, p2sh.address!];
 
-        return this._address as string[];
+        return this._mainAddress as string[];
     }
 
     private _segwit = true;
@@ -36,7 +41,6 @@ export default class BTCWallet extends Wallet {
     get segwit() { return this._segwit; }
     set segwit(value: boolean) {
         if (this._segwit === value) return;
-        this._address = undefined;
         this._segwit = value;
     }
 
@@ -44,12 +48,8 @@ export default class BTCWallet extends Wallet {
 
     }
 
-    private getKeys() {
-
-    }
-
     buildTx(args: { inputs: { txId: string, vout: number }[], outputs: { address: string, amount: number }[] }) {
-        let key = this._root.derive(this.getPathIndex(0));
+        let key = this._root.derive(this.getExternalPathIndex(0));
         const keyPair = bitcoin.ECPair.fromPrivateKey(key['privateKey'].toBuffer());
         const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this._network });
 
@@ -63,7 +63,10 @@ export default class BTCWallet extends Wallet {
         outputs.forEach(o => {
             builder.addOutput(o.address, o.amount);
         });
+    }
 
+
+    protected discoverAddresses() {
 
     }
 }

@@ -77,12 +77,14 @@ class Home extends React.Component<{}, HomeState> {
     private onPasswordChanged = () => {
         this.appSettings = getAppSettings(PassMan.password);
 
-        let wallet = new LTCWallet({ mnemonic: this.appSettings.mnemonic });
-        console.log(wallet.mainAddress, wallet);
+        // let wallet = new LTCWallet({ mnemonic: this.appSettings.mnemonic });
+        // console.log(wallet.mainAddress, wallet);
 
-        let w2 = new ETHWallet({ mnemonic: this.appSettings.mnemonic, });
-        console.log(w2.mainAddress);
+        // let w2 = new ETHWallet({ mnemonic: this.appSettings.mnemonic, });
+        // console.log(w2.mainAddress);
 
+        let w = new BTCWallet({ mnemonic: this.appSettings.mnemonic });
+        w.getExternalKeys(0, 1);
         console.log(this.appSettings.mnemonic);
     }
 

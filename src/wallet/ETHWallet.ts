@@ -13,17 +13,25 @@ export default class ETHWallet extends Wallet {
         super(opts);
     }
 
-    protected getDefaultPath(): string {
+    protected getExternalPath(): string {
         return `m/44'/60'/0'/0`;
     }
 
-    private _address?: string[];
+    protected getChangePath(): string {
+        throw new Error('ETH does not need change addresses');
+    }
+
+    protected discoverAddresses() {
+        throw new Error('ETH dose not need discovering addresses');
+    }
+
+    private _mainAddress?: string[];
     get mainAddress() {
-        if (this._address) return this._address;
-        let hdKey = this._root.derive(this.getPathIndex(0));
+        if (this._mainAddress) return this._mainAddress;
+        let hdKey = this._root.derive(this.getExternalPathIndex(0));
         let ethPubkey = ETHUtils.privateToPublic(hdKey['privateKey'].toBuffer());
-        this._address = [this.pubToAddress(ethPubkey)];
-        return this._address as string[];
+        this._mainAddress = [this.pubToAddress(ethPubkey)];
+        return this._mainAddress as string[];
     }
 
 

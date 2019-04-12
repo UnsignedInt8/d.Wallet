@@ -6,16 +6,23 @@ export default class LTCWallet extends Wallet {
         throw new Error("Method not implemented.");
     }
 
-    private _address?: string[];
+    private _mainAddress?: string[];
     get mainAddress() {
-        let hdKey = this._root.derive(this.getPathIndex(0));
+        let hdKey = this._root.derive(this.getExternalPathIndex(0));
         let key = hdKey['privateKey'].toString();
-        this._address = [new PrivateKey(key).toAddress().toString()];
-        return this._address as string[];
+        this._mainAddress = [new PrivateKey(key).toAddress().toString()];
+        return this._mainAddress as string[];
     }
 
-    protected getDefaultPath(): string {
+    protected getExternalPath(): string {
         return `m/44'/2'/0'/0`;
     }
 
+    protected getChangePath(): string {
+        return `m/44'/2'/0'/1`;
+    }
+
+    protected discoverAddresses() {
+
+    }
 }
