@@ -14,6 +14,7 @@ import { Wallet } from '../wallet/Wallet';
 import BTCWallet from '../wallet/BTCWallet';
 import ETHWallet from '../wallet/ETHWallet';
 import BCHWallet from '../wallet/BCHWallet';
+import LTCWallet from '../wallet/LTCWallet';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -76,7 +77,7 @@ class Home extends React.Component<{}, HomeState> {
     private onPasswordChanged = () => {
         this.appSettings = getAppSettings(PassMan.password);
 
-        let wallet = new BCHWallet({ mnemonic: this.appSettings.mnemonic });
+        let wallet = new LTCWallet({ mnemonic: this.appSettings.mnemonic });
         console.log(wallet.address, wallet);
 
         let w2 = new ETHWallet({ mnemonic: this.appSettings.mnemonic, });
