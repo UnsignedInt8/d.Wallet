@@ -5,6 +5,9 @@ import * as assert from 'assert';
 import { toBuffer } from '../lib/Hash';
 
 export default class ETHWallet extends Wallet {
+    transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(opts: { mnemonic: string, path?: string, }) {
         super(opts);
@@ -14,18 +17,16 @@ export default class ETHWallet extends Wallet {
         return `m/44'/60'/0'/0`;
     }
 
-    private _address?: string;
-    get address() {
+    private _address?: string[];
+    get mainAddress() {
         if (this._address) return this._address;
         let hdKey = this._root.derive(this.getPathIndex(0));
         let ethPubkey = ETHUtils.privateToPublic(hdKey['privateKey'].toBuffer());
-        this._address = this.pubToAddress(ethPubkey);
-        return this._address as string;
+        this._address = [this.pubToAddress(ethPubkey)];
+        return this._address as string[];
     }
 
-    transfer(opts: { to: string | string[]; amount: number; message?: string | undefined; }) {
-        throw new Error("Method not implemented.");
-    }
+
 
     private pubToAddress(pubkey: Buffer) {
         let pubkeyBuf = toBuffer(pubkey);

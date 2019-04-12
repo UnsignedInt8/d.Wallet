@@ -14,8 +14,8 @@ export abstract class Wallet {
         this._path = opts.path || this.getDefaultPath();
     }
 
-    abstract address: string;
-    abstract transfer(opts: { to: string | string[], amount: number, message?: string });
+    abstract mainAddress: string[];
+    abstract transfer(opts: { to: { address: string, amount: number | string }[], message?: string });
     protected abstract getDefaultPath(): string;
 
     getPathIndex(index: number) {
