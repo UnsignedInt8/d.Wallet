@@ -144,6 +144,7 @@
     "ethereumjs-util": "^6.1.0",
     "ethereumjs-wallet": "^0.6.3",
     "ethjs-util": "^0.1.6",
+    "fromfrom": "^1.2.0",
     "history": "^4.9.0",
     "jquery": "^3.4.0",
     "keccak": "^2.0.0",

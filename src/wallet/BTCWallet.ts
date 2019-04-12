@@ -2,6 +2,7 @@ import { Wallet } from "./Wallet";
 import { observable, computed } from "mobx";
 import * as bitcoin from 'bitcoinjs-lib';
 import { HDPrivateKey } from "bitcore-lib";
+import { from as linq } from 'fromfrom';
 
 export default class BTCWallet extends Wallet {
 
@@ -30,8 +31,8 @@ export default class BTCWallet extends Wallet {
 
         let p2wpkh = bitcoin.payments.p2wpkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
         let p2pkh = bitcoin.payments.p2pkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
-        let p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh });
-        this._mainAddress = [p2wpkh.address!, p2pkh.address!, p2sh.address!];
+        // let p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh, network: this._network });
+        this._mainAddress = [p2wpkh.address!, p2pkh.address!,];//this.genAddress(key);
 
         return this._mainAddress as string[];
     }
@@ -65,8 +66,20 @@ export default class BTCWallet extends Wallet {
         });
     }
 
+    protected genAddress(key: HDPrivateKey) {
+        let p2wpkh = bitcoin.payments.p2wpkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
+        let p2pkh = bitcoin.payments.p2pkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
+
+        return [p2wpkh.address!, p2pkh.address!,];
+    }
+
+    async genExternalAddresses(from: number, to: number) {
+        let address = (await this.getExternalKeys(from, to)).map(key => this.genAddress(key));
+        return linq(address).flatMap(a => a).toArray();
+    }
 
     protected discoverAddresses() {
-
+        let addresses = this.genExternalAddresses(0, 10);
+        
     }
 }
