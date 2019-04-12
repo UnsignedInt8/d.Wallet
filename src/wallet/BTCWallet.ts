@@ -73,13 +73,13 @@ export default class BTCWallet extends Wallet {
         return [p2wpkh.address!, p2pkh.address!,];
     }
 
-    async genExternalAddresses(from: number, to: number) {
-        let address = (await this.getExternalKeys(from, to)).map(key => this.genAddress(key));
+    async genAddresses(from: number, to: number, external = true) {
+        let address = (await this.getKeys(from, to, external)).map(key => this.genAddress(key));
         return linq(address).flatMap(a => a).toArray();
     }
 
-    protected discoverAddresses() {
-        let addresses = this.genExternalAddresses(0, 10);
-        
+    protected async discoverAddresses() {
+        let addresses = await this.genAddresses(0, 10);
+        let changes = await this.genAddresses(0, 5, false);
     }
 }

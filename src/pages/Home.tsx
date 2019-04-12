@@ -85,7 +85,7 @@ class Home extends React.Component<{}, HomeState> {
 
         let w = new BTCWallet({ mnemonic: this.appSettings.mnemonic });
         console.log(w.mainAddress);
-        w.genExternalAddresses(0, 20).then(a => console.log(a));
+        w.genAddresses(0, 20).then(a => console.log(a));
         console.log(this.appSettings.mnemonic);
     }
 

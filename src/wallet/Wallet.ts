@@ -26,12 +26,16 @@ export abstract class Wallet {
         return `${this._path}/${index}`;
     }
 
-    getExternalKeys(from: number, to: number) {
+    getChangePathIndex(index: number) {
+        return `${this.getChangePath()}/${index}`;
+    }
+
+    getKeys(from: number, to: number, external = true) {
         return new Promise<HDPrivateKey[]>(async resolve => {
             let keys: HDPrivateKey[] = [];
 
             for (let i = from; i < to; i++) {
-                let key = this._root.derive(this.getExternalPathIndex(i));
+                let key = this._root.derive(external ? this.getExternalPathIndex(i) : this.getChangePathIndex(i));
                 keys.push(key);
                 await sleep(50);
             }

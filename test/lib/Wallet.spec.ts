@@ -20,7 +20,7 @@ describe('tests wallets', () => {
 
     it('tests thread', async () => {
         let btc = new BTCWallet({ mnemonic });
-        let keys = await btc.getExternalKeys(0, 20);
+        let keys = await btc.getKeys(0, 20);
         expect(keys).toBe([]);
     })
 });
