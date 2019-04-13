@@ -3,7 +3,7 @@ import * as Mnemonic from 'bitcore-mnemonic';
 import { HDPrivateKey } from 'bitcore-lib';
 import store from 'store';
 import sleep from 'sleep-promise';
-import { observable } from 'mobx';
+import { observable, computed, } from 'mobx';
 
 export abstract class Wallet {
 
@@ -17,7 +17,6 @@ export abstract class Wallet {
     }
 
     abstract mainAddress: string[];
-    abstract addresses: string[][];
     @observable balance: string = '';
     @observable txs: [] = [];
     abstract transfer(opts: { to: { address: string, amount: number | string }[], message?: string });
@@ -25,6 +24,13 @@ export abstract class Wallet {
     protected abstract getChangePath(): string;
     protected abstract discoverAddresses();
     protected abstract genAddress(key: HDPrivateKey): string[];
+
+    @observable protected _addresses?: string[][];
+    @computed get addresses() {
+        if (this._addresses) return this._addresses;
+        this.genAddresses(0, 10).then(value => this._addresses = value);
+        return this._addresses!;
+    }
 
     protected getExternalPathIndex(index: number) {
         return `${this._path}/${index}`;
