@@ -1,6 +1,7 @@
 import { Wallet } from "./Wallet";
 import { PrivateKey } from 'bitcore-lib-cash';
 import { HDPrivateKey } from "bitcore-lib";
+import { observable, computed } from "mobx";
 
 export default class BCHWallet extends Wallet {
     transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
@@ -21,6 +22,13 @@ export default class BCHWallet extends Wallet {
         let key = this._root.derive(this.getExternalPathIndex(0))['privateKey'].toString();
         this._mainAddress = [new PrivateKey(key).toAddress().toString().split(':')[1]];
         return this._mainAddress as string[];
+    }
+
+    @observable _addresses?: string[][];
+    @computed get addresses() {
+        if (this._addresses) return this._addresses;
+
+        return [];
     }
 
     protected discoverAddresses() {

@@ -17,6 +17,7 @@ export abstract class Wallet {
     }
 
     abstract mainAddress: string[];
+    abstract addresses: string[][];
     @observable balance: string = '';
     @observable txs: [] = [];
     abstract transfer(opts: { to: { address: string, amount: number | string }[], message?: string });

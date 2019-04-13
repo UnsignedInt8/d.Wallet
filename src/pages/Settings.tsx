@@ -17,7 +17,7 @@ const selectColor = {
         marginTop: 8,
         outline: 'none',
     })
-}
+};
 
 @observer
 export default class Settings extends React.Component<{}, {}> {

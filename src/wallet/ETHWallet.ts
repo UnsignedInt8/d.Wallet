@@ -3,6 +3,7 @@ import * as ETHUtils from 'ethereumjs-util';
 import { keccak } from "../lib/Hash";
 import * as assert from 'assert';
 import { toBuffer } from '../lib/Hash';
+import { observable, computed } from "mobx";
 
 export default class ETHWallet extends Wallet {
     transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
@@ -30,7 +31,11 @@ export default class ETHWallet extends Wallet {
         return this._mainAddress as string[];
     }
 
-
+    @observable _addresses?: string[][];
+    @computed get addresses() {
+        if (this._addresses) return this._addresses;
+        return [this.mainAddress];
+    }
 
     private pubToAddress(pubkey: Buffer) {
         let pubkeyBuf = toBuffer(pubkey);

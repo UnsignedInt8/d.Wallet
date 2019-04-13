@@ -15,6 +15,8 @@ import BTCWallet from '../wallet/BTCWallet';
 import ETHWallet from '../wallet/ETHWallet';
 import BCHWallet from '../wallet/BCHWallet';
 import LTCWallet from '../wallet/LTCWallet';
+import { WalletManager, getWalletMan } from '../wallet/WalletManager';
+import { observer } from 'mobx-react';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -49,9 +51,11 @@ interface HomeState {
     expandSettings?: boolean;
 }
 
+@observer
 class Home extends React.Component<{}, HomeState> {
 
     state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: false, expandReceiving: false, expandSettings: false };
+    walletMan!: WalletManager;
     private refersher?: NodeJS.Timer | number;
     private history = {};
     private appSettings?: AppSettings;
@@ -65,7 +69,7 @@ class Home extends React.Component<{}, HomeState> {
         PassMan.on('password', this.onPasswordChanged)
 
         if (PassMan.password) {
-            this.appSettings = getAppSettings(PassMan.password)
+            this.onPasswordChanged();
         }
     }
 
@@ -76,17 +80,7 @@ class Home extends React.Component<{}, HomeState> {
 
     private onPasswordChanged = () => {
         this.appSettings = getAppSettings(PassMan.password);
-
-        // let wallet = new LTCWallet({ mnemonic: this.appSettings.mnemonic });
-        // console.log(wallet.mainAddress, wallet);
-
-        // let w2 = new ETHWallet({ mnemonic: this.appSettings.mnemonic, });
-        // console.log(w2.mainAddress);
-
-        let w = new BTCWallet({ mnemonic: this.appSettings.mnemonic });
-        console.log(w.mainAddress);
-        w.genAddresses(0, 20).then(a => console.log(a));
-        console.log(this.appSettings.mnemonic);
+        this.walletMan = getWalletMan(this.appSettings.mnemonic);
     }
 
     private async refreshPrice() {
@@ -113,6 +107,7 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     private selectCoin(i) {
+        this.walletMan.selectWallet(i.symbol);
         this.setState(
             { selectedSymbol: i.symbol, showSymbol: false, symbolColor: i.color, currentPrice: '' },
             () => { this.setState({ showSymbol: true }); this.refreshPrice(); this.refreshHistory(); }
@@ -268,7 +263,7 @@ class Home extends React.Component<{}, HomeState> {
                     {
                         this.state.expandReceiving ?
                             <div id='receiving-page' className='expand-area'>
-                                <Receive symbol={this.state.selectedSymbol} address='bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej' onCancel={() => this.toggleReceving()} />
+                                <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.toggleReceving()} />
                             </div>
                             : undefined
                     }

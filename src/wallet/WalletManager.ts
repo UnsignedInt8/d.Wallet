@@ -10,7 +10,7 @@ import { Wallet } from './Wallet';
 
 const supportedWallets = { 'btc': BTC, 'bch': BCH, 'eth': ETH, 'ltc': LTC, 'usdt': USDT };
 
-class WalletManager {
+export class WalletManager {
 
     private wallets: { [index: string]: Wallet } = {};
 

@@ -32,7 +32,7 @@ const lang = {
     },
 
     receiving: {
-        desc: (symbol: string) => `Your ${symbol.toUpperCase()} address and QR Code:`,
+        desc: (symbol: string) => `Your ${symbol.toUpperCase()} addresses and QR Code:`,
         address: 'Address',
     },
 

@@ -7,7 +7,7 @@ const mnemonic = 'nerve shop cabbage skate predict rain model sustain patch groc
 describe('tests wallets', () => {
 
     it('tests address', () => {
-        let btc = new BTCWallet({ mnemonic, segwit: false });
+        let btc = new BTCWallet({ mnemonic, });
         expect(btc.mainAddress).toContain('1PNUBxhi6fDh3DKV374raZPuXQ5GbABBzV');
 
 

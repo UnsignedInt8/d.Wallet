@@ -1,5 +1,6 @@
 import { Wallet } from "./Wallet";
 import { PrivateKey } from 'litecore-lib';
+import { observable, computed } from "mobx";
 
 export default class LTCWallet extends Wallet {
     transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
@@ -12,6 +13,12 @@ export default class LTCWallet extends Wallet {
         let key = hdKey['privateKey'].toString();
         this._mainAddress = [new PrivateKey(key).toAddress().toString()];
         return this._mainAddress as string[];
+    }
+
+    @observable _addresses?: string[][];
+    @computed get addresses() {
+        if (this._addresses) return this._addresses;
+        return [];
     }
 
     protected getExternalPath(): string {

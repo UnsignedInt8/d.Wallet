@@ -10,9 +10,8 @@ export default class BTCWallet extends Wallet {
 
     private _network?: bitcoin.Network;
 
-    constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string, segwit?: boolean, network?: bitcoin.Network }) {
+    constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string, network?: bitcoin.Network }) {
         super(opts);
-        this._segwit = opts.segwit === undefined ? true : opts.segwit;
         this._network = opts.network;
     }
 
@@ -24,7 +23,7 @@ export default class BTCWallet extends Wallet {
         return `m/44'/0'/0'/1`;
     }
 
-    private _mainAddress?: string[];
+    protected _mainAddress?: string[];
     get mainAddress() {
         if (this._mainAddress) return this._mainAddress;
         let key = this._root.derive(super.getExternalPathIndex(0));
@@ -37,12 +36,11 @@ export default class BTCWallet extends Wallet {
         return this._mainAddress as string[];
     }
 
-    private _segwit = true;
-
-    get segwit() { return this._segwit; }
-    set segwit(value: boolean) {
-        if (this._segwit === value) return;
-        this._segwit = value;
+    @observable protected _addresses?: string[][];
+    @computed get addresses() {
+        if (this._addresses) return this._addresses;
+        this.genAddresses(0, 10).then(value => this._addresses = value);
+        return this._addresses!;
     }
 
     transfer(opts: { to: { address: string, amount: number }[]; message?: string | undefined; }) {
@@ -75,7 +73,7 @@ export default class BTCWallet extends Wallet {
 
     async genAddresses(from: number, to: number, external = true) {
         let address = (await this.getKeys(from, to, external)).map(key => this.genAddress(key));
-        return linq(address).flatMap(a => a).toArray();
+        return address;
     }
 
     protected async discoverAddresses() {

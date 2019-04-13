@@ -11,6 +11,10 @@
     padding: 39px 16px 12px 16px;
     color: white;
 
+    div#selection {
+      margin: 8px 0px 8px 0px;
+    }
+
     div#address {
       font-size: 17px;
       user-select: text;
@@ -19,6 +23,8 @@
       word-break: break-all;
       overflow-wrap: break-word;
       margin-top: 8px;
+      margin-left: 1px;
+      margin-right: 1px;
       border: 1px dashed white;
       padding: 8px 12px 8px 12px;
     }
@@ -33,8 +39,8 @@
       display: block;
       position: absolute;
       bottom: 12px;
-      left: 16px;
-      opacity: 0.25;
+      left: 12px;
+      opacity: 0.15;
       width: 96px;
     }
 
