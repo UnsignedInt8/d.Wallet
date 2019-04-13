@@ -81,6 +81,9 @@ class Home extends React.Component<{}, HomeState> {
     private onPasswordChanged = () => {
         this.appSettings = getAppSettings(PassMan.password);
         this.walletMan = getWalletMan(this.appSettings.mnemonic);
+
+        // let bch = new BCHWallet({ mnemonic: this.appSettings.mnemonic });
+        // console.log(bch.ma)
     }
 
     private async refreshPrice() {

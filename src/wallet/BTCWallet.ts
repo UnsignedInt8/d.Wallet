@@ -28,10 +28,9 @@ export default class BTCWallet extends Wallet {
         if (this._mainAddress) return this._mainAddress;
         let key = this._root.derive(super.getExternalPathIndex(0));
 
-        let p2wpkh = bitcoin.payments.p2wpkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
-        let p2pkh = bitcoin.payments.p2pkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
-        // let p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh, network: this._network });
-        this._mainAddress = [p2wpkh.address!, p2pkh.address!,];//this.genAddress(key);
+        // let p2wpkh = bitcoin.payments.p2wpkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
+        // let p2pkh = bitcoin.payments.p2pkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
+        this._mainAddress = this.genAddress(key);
 
         return this._mainAddress as string[];
     }
@@ -67,14 +66,11 @@ export default class BTCWallet extends Wallet {
     protected genAddress(key: HDPrivateKey) {
         let p2wpkh = bitcoin.payments.p2wpkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
         let p2pkh = bitcoin.payments.p2pkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
+        // let p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh, network: this._network });
 
         return [p2wpkh.address!, p2pkh.address!,];
     }
 
-    async genAddresses(from: number, to: number, external = true) {
-        let address = (await this.getKeys(from, to, external)).map(key => this.genAddress(key));
-        return address;
-    }
 
     protected async discoverAddresses() {
         let addresses = await this.genAddresses(0, 10);

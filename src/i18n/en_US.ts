@@ -34,6 +34,8 @@ const lang = {
     receiving: {
         desc: (symbol: string) => `Your ${symbol.toUpperCase()} addresses and QR Code:`,
         address: 'Address',
+        segwit: 'Segwit',
+        legacy: 'Legacy',
     },
 
     settings: {

@@ -28,6 +28,39 @@
       border: 1px dashed white;
       padding: 8px 12px 8px 12px;
     }
+
+    #address-type {
+      display: flex;
+      margin-top: 8px;
+      margin-bottom: 8px;
+
+      .radio {
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.171);
+        padding: 3px 12px 3px 12px;
+        margin-right: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.5s;
+      }
+
+      .radio:hover {
+        background: rgba(255, 255, 255, 0.5);
+        color: rgba(0, 0, 0, 0.8);
+        transition: all 0.5s;
+      }
+
+      .radio:active{
+        background: white;
+        color: black;
+        transition: all 0.5s;
+      }
+
+      .selected {
+        background: white;
+        color: black;
+      }
+    }
   }
 
   #qrcode {
@@ -46,7 +79,7 @@
 
     #qrcode-container {
       position: absolute;
-      right: 20px;
+      right: 16px;
       bottom: 12px;
 
       #title {

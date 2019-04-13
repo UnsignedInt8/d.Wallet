@@ -19,16 +19,26 @@ export default class BCHWallet extends Wallet {
     private _mainAddress?: string[];
     get mainAddress() {
         if (this._mainAddress) return this._mainAddress;
+        let key = this._root.derive(this.getExternalPathIndex(0));
+        this._mainAddress = this.genAddress(key);
+        return this._mainAddress!;
+    }
+
+    get ma() {
         let key = this._root.derive(this.getExternalPathIndex(0))['privateKey'].toString();
-        this._mainAddress = [new PrivateKey(key).toAddress().toString().split(':')[1]];
-        return this._mainAddress as string[];
+        return new PrivateKey(key).toAddress();
     }
 
     @observable _addresses?: string[][];
     @computed get addresses() {
         if (this._addresses) return this._addresses;
+        this.genAddresses(0, 10).then(v => this._addresses = v);
+        return this._addresses || [];
+    }
 
-        return [];
+    protected genAddress(key: HDPrivateKey) {
+        let privkey = key['privateKey'].toString();
+        return [new PrivateKey(privkey).toAddress().toString().split(':')[1]] as string[];
     }
 
     protected discoverAddresses() {

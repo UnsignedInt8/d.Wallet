@@ -29,6 +29,7 @@ interface Props {
 
 interface State {
     selectedIndex: number;
+    selectedType: number;
 }
 
 const coins: { [index: string]: string } = {
@@ -39,10 +40,12 @@ const coins: { [index: string]: string } = {
     'usdt': 'USDT'
 };
 
+const multiAddrTypes = ['btc', 'usdt'];
+
 @observer
 export default class Receive extends React.Component<Props, State>{
 
-    state: State = { selectedIndex: 0, };
+    state: State = { selectedIndex: 0, selectedType: 0 };
 
     private onAddressChanged(selected: any) {
         this.setState({ selectedIndex: selected.index });
@@ -53,7 +56,9 @@ export default class Receive extends React.Component<Props, State>{
         const i18n = getLang(appSettings.lang);
         const addresses = this.props.addresses ? this.props.addresses.map((value, index) => { return { index, value, label: value[0] } }) : [];
         const selectedAddress = addresses[this.state.selectedIndex] || addresses[0] || { index: 0, value: [this.props.address], label: this.props.address };
-        const qrValue = `${coins[this.props.symbol].toLowerCase().replace(' ', '')}:${selectedAddress.value[0]}`;
+
+        const address = selectedAddress.value.length > 1 ? selectedAddress.value[this.state.selectedType] : selectedAddress.value[0];
+        const qrValue = `${coins[this.props.symbol].toLowerCase().replace(' ', '')}:${address}`;
 
         return (
             <div id='receiving' className='lato-bold' >
@@ -63,15 +68,22 @@ export default class Receive extends React.Component<Props, State>{
                         <Select onChange={e => this.onAddressChanged(e)} styles={selectColor} options={addresses} isClearable={false} isSearchable={false} value={selectedAddress} defaultValue={addresses[0]} />
                     </div>
                     <div id='address'>
-                        {selectedAddress.value[0]}
+                        {address}
                     </div>
+                    {multiAddrTypes.includes(this.props.symbol) ?
+                        <div id='address-type'>
+                            <div className={`radio ${this.state.selectedType === 0 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 0 })}>{i18n.receiving.segwit}</div>
+                            <div className={`radio ${this.state.selectedType === 1 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 1 })}>{i18n.receiving.legacy}</div>
+                        </div>
+                        : undefined
+                    }
                 </div>
                 <div id='qrcode'>
                     <div id='qrcode-container'>
                         <div id='title'>
                             <span>{coins[this.props.symbol]} {i18n.receiving.address}</span>
                         </div>
-                        <QRCode value={qrValue} level='M' bgColor='transparent' fgColor='white' />
+                        <QRCode value={qrValue} level='M' bgColor='transparent' fgColor='white' size={125} />
                     </div>
                 </div>
             </div>

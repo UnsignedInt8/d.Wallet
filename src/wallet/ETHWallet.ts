@@ -6,6 +6,10 @@ import { toBuffer } from '../lib/Hash';
 import { observable, computed } from "mobx";
 
 export default class ETHWallet extends Wallet {
+    protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
+        throw new Error("Method not implemented.");
+    }
+
     transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
         throw new Error("Method not implemented.");
     }

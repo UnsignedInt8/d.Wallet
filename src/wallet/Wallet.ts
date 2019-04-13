@@ -24,6 +24,7 @@ export abstract class Wallet {
     protected abstract getExternalPath(): string;
     protected abstract getChangePath(): string;
     protected abstract discoverAddresses();
+    protected abstract genAddress(key: HDPrivateKey): string[];
 
     protected getExternalPathIndex(index: number) {
         return `${this._path}/${index}`;
@@ -45,6 +46,11 @@ export abstract class Wallet {
 
             resolve(keys);
         });
+    }
+
+    async genAddresses(from: number, to: number, external = true) {
+        let addresses = (await this.getKeys(from, to, external)).map(key => this.genAddress(key));
+        return addresses;
     }
 }
 
