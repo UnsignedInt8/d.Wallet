@@ -1,13 +1,10 @@
 import { Wallet } from "./Wallet";
 import { PrivateKey } from 'bitcore-lib-cash';
+import { HDPrivateKey } from "bitcore-lib";
 
 export default class BCHWallet extends Wallet {
     transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
         throw new Error("Method not implemented.");
-    }
-
-    constructor(opts: { mnemonic: string, path?: string, }) {
-        super(opts);
     }
 
     protected getExternalPath(): string {

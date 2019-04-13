@@ -10,7 +10,7 @@ export default class BTCWallet extends Wallet {
 
     private _network?: bitcoin.Network;
 
-    constructor(opts: { mnemonic: string, path?: string, segwit?: boolean, network?: bitcoin.Network }) {
+    constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string, segwit?: boolean, network?: bitcoin.Network }) {
         super(opts);
         this._segwit = opts.segwit === undefined ? true : opts.segwit;
         this._network = opts.network;

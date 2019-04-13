@@ -3,34 +3,36 @@ import * as Mnemonic from 'bitcore-mnemonic';
 import { HDPrivateKey } from 'bitcore-lib';
 import store from 'store';
 import sleep from 'sleep-promise';
+import { observable } from 'mobx';
 
 export abstract class Wallet {
 
     protected _root: HDPrivateKey
     protected _path: string;
 
-    constructor(opts: { mnemonic: string, path?: string }) {
-        const { mnemonic } = opts;
-        let seed = new Mnemonic(mnemonic);
-        this._root = seed.toHDPrivateKey();
+    constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string }) {
+        const { mnemonic, root } = opts;
+        this._root = root || new Mnemonic(mnemonic).toHDPrivateKey();
         this._path = opts.path || this.getExternalPath();
     }
 
     abstract mainAddress: string[];
+    @observable balance: string = '';
+    @observable txs: [] = [];
     abstract transfer(opts: { to: { address: string, amount: number | string }[], message?: string });
     protected abstract getExternalPath(): string;
     protected abstract getChangePath(): string;
     protected abstract discoverAddresses();
 
-    getExternalPathIndex(index: number) {
+    protected getExternalPathIndex(index: number) {
         return `${this._path}/${index}`;
     }
 
-    getChangePathIndex(index: number) {
+    protected getChangePathIndex(index: number) {
         return `${this.getChangePath()}/${index}`;
     }
 
-    getKeys(from: number, to: number, external = true) {
+    protected getKeys(from: number, to: number, external = true) {
         return new Promise<HDPrivateKey[]>(async resolve => {
             let keys: HDPrivateKey[] = [];
 

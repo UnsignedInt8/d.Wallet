@@ -9,10 +9,6 @@ export default class ETHWallet extends Wallet {
         throw new Error("Method not implemented.");
     }
 
-    constructor(opts: { mnemonic: string, path?: string, }) {
-        super(opts);
-    }
-
     protected getExternalPath(): string {
         return `m/44'/60'/0'/0`;
     }

@@ -18,9 +18,4 @@ describe('tests wallets', () => {
         expect(eth.mainAddress).toContain('0x4c094a9c4E494Ef7546EfD950c9C75613cbbA771'.toLowerCase());
     });
 
-    it('tests thread', async () => {
-        let btc = new BTCWallet({ mnemonic });
-        let keys = await btc.getKeys(0, 20);
-        expect(keys).toBe([]);
-    })
 });
