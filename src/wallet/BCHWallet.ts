@@ -16,6 +16,8 @@ export default class BCHWallet extends Wallet {
         return `m/44'/145'/0'/1`;
     }
 
+    get symbol() { return 'bch'; }
+
     private _mainAddress?: string[];
     get mainAddress() {
         if (this._mainAddress) return this._mainAddress;

@@ -32,9 +32,9 @@ export class WalletManager {
     }
 
     refresh() {
+        this.wallets['btc'].refresh();
         Object.getOwnPropertyNames(this.wallets).forEach(symbol => {
             // this.wallets[symbol].refresh();
-            this.wallets['btc'].refresh();
         });
     }
 }

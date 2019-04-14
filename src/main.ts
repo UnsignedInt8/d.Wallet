@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
+
 let win: BrowserWindow | null;
 let blurTimer: any;
 
@@ -20,7 +21,11 @@ const createWindow = async () => {
         await installExtensions();
     }
 
-    win = new BrowserWindow({ width: 461, height: 648, webPreferences: { nodeIntegration: true, nodeIntegrationInWorker: true, sandbox: false }, titleBarStyle: 'hidden' });
+    win = new BrowserWindow({
+        width: 461, height: 648,
+        titleBarStyle: 'hidden',
+        webPreferences: { nodeIntegration: true, nodeIntegrationInWorker: true, sandbox: false, webSecurity: false },
+    });
 
     if (process.env.NODE_ENV !== 'production') {
         win.loadURL(`http://localhost:2003`);
@@ -58,6 +63,8 @@ const createWindow = async () => {
             blurTimer = null;
         }, 10 * 1000);
     });
+
+    win.webContents.setUserAgent([`Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36`, `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Safari/605.1.15`][Date.now() % 2]);
 };
 
 app.on('ready', createWindow);

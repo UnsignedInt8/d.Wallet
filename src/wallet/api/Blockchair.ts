@@ -9,13 +9,17 @@ export default class Blockchair {
     static async fetchAddress(address: string, chain: Chain) {
         let url = `${Blockchair.host}/${chain}/dashboards/address/${address}`;
 
-        let resp = await axios.get(url);
-        if (!resp.data) return null;
+        try {
+            let resp = await axios.get(url);
+            if (!resp.data) return null;
 
-        let data = resp.data as BTCAddressObject;
-        if (data.context.code !== 200) return null;
+            let data = resp.data as BTCAddressObject;
+            if (data.context.code !== 200) return null;
 
-        return data.data[address];
+            return data.data[address];
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     static async fetchTx(hash: string, chain: Chain) {

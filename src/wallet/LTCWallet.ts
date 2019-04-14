@@ -8,6 +8,8 @@ export default class LTCWallet extends Wallet {
         throw new Error("Method not implemented.");
     }
 
+    get symbol() { return 'ltc'; }
+
     private _mainAddress?: string[];
     get mainAddress() {
         let hdKey = this._root.derive(this.getExternalPathIndex(0));

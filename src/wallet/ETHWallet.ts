@@ -25,6 +25,8 @@ export default class ETHWallet extends Wallet {
     protected scanAddresses(from: number, to: number, external = true): any {
         throw new Error('ETH dose not need discovering addresses');
     }
+    
+    get symbol() { return 'eth'; }
 
     private _mainAddress?: string[];
     get mainAddress() {

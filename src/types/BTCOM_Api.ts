@@ -55,10 +55,10 @@ export interface BTCOMAddressTx {
     total_count: number;
     page: number;
     pagesize: number;
-    list: List[];
+    list: BTCOMTx[];
 }
 
-interface List {
+export interface BTCOMTx {
     confirmations: number;
     block_height: number;
     block_hash: string;

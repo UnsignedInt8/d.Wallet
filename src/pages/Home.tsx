@@ -17,6 +17,7 @@ import BCHWallet from '../wallet/BCHWallet';
 import LTCWallet from '../wallet/LTCWallet';
 import { WalletManager, getWalletMan } from '../wallet/WalletManager';
 import { observer } from 'mobx-react';
+import Axios from 'axios';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -81,6 +82,10 @@ class Home extends React.Component<{}, HomeState> {
     private onPasswordChanged = () => {
         this.appSettings = getAppSettings(PassMan.password);
         this.walletMan = getWalletMan(this.appSettings.mnemonic);
+
+        this.walletMan.refresh();
+        // Axios.get('http://ifconfig.io/ip').then(v => console.log(v));
+        // Axios.get('https://chain.api.btc.com/v3/tx/147b181e0bd9a9ad3d8d8048b3438c37d27e946afa7d9dc7f75f13766a48b907,129a77c8f4eb9516eced323e7591ccefdafb19b5c829ec8a846a10106ba44f3a,f0f50941a8ce571768dae5693b2356fc0a7583d9567e9d95ffeeb86aa00733d4').then(r => console.log(r.data.data))
     }
 
     private async refreshPrice() {
@@ -194,8 +199,7 @@ class Home extends React.Component<{}, HomeState> {
 
     render() {
         let isDarwin = platform() === 'darwin';
-        let balance = this.walletMan ? this.walletMan.current.balance : '0';
-        console.log(balance);
+
         return (
             <div className={`home`}>
                 <div className={`home-bar ${isDarwin ? 'titlebar-padding' : ''}`}>
@@ -240,7 +244,7 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     <div className={`balance lato-bold ${this.state.selectedSymbol}`}>
-                        <Flip bottom opposite collapse when={this.state.showSymbol}><span>{balance}</span></Flip>
+                        <Flip bottom opposite collapse when={this.state.showSymbol}><span>{this.walletMan ? this.walletMan.current.balance : '0'}</span></Flip>
                         <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
                     </div>
 

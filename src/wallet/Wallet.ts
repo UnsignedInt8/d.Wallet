@@ -9,6 +9,7 @@ export abstract class Wallet {
 
     protected _root: HDPrivateKey
     protected _path: string;
+    protected _lastRefreshedTime = 0;
 
     constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string }) {
         const { mnemonic, root } = opts;
@@ -16,9 +17,10 @@ export abstract class Wallet {
         this._path = opts.path || this.getExternalPath();
     }
 
+    abstract get symbol();
     abstract mainAddress: string[];
     @observable balance: string = '0';
-    @observable txs: [] = [];
+    @observable txs: TxInfo[] = [];
     abstract transfer(opts: { to: { address: string, amount: number | string }[], message?: string });
     abstract async refresh();
     protected abstract getExternalPath(): string;
@@ -39,9 +41,6 @@ export abstract class Wallet {
         this.genAddresses(0, 5, false).then(value => this._changes = value);
         return this._changes || [];
     }
-
-    @observable protected _txs: TxInfo[] = [];
-    @computed get Txs() { return this._txs; }
 
     protected getExternalPathIndex(index: number) {
         return `${this._path}/${index}`;
