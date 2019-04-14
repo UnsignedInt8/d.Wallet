@@ -81,9 +81,6 @@ class Home extends React.Component<{}, HomeState> {
     private onPasswordChanged = () => {
         this.appSettings = getAppSettings(PassMan.password);
         this.walletMan = getWalletMan(this.appSettings.mnemonic);
-
-        // let bch = new BCHWallet({ mnemonic: this.appSettings.mnemonic });
-        // console.log(bch.ma)
     }
 
     private async refreshPrice() {
@@ -197,7 +194,8 @@ class Home extends React.Component<{}, HomeState> {
 
     render() {
         let isDarwin = platform() === 'darwin';
-
+        let balance = this.walletMan ? this.walletMan.current.balance : '0';
+        console.log(balance);
         return (
             <div className={`home`}>
                 <div className={`home-bar ${isDarwin ? 'titlebar-padding' : ''}`}>
@@ -242,7 +240,7 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     <div className={`balance lato-bold ${this.state.selectedSymbol}`}>
-                        <Flip bottom opposite collapse when={this.state.showSymbol}><span>12.897523</span></Flip>
+                        <Flip bottom opposite collapse when={this.state.showSymbol}><span>{balance}</span></Flip>
                         <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
                     </div>
 

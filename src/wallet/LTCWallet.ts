@@ -23,12 +23,14 @@ export default class LTCWallet extends Wallet {
         return `m/44'/2'/0'/1`;
     }
 
-    protected discoverAddresses() {
-
+    protected async scanAddresses(from: number, to: number, external = true) {
+        return [];
     }
 
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
         let privkey = key['privateKey'].toString();
         return [new PrivateKey(privkey).toAddress().toString()];
     }
+
+    refresh() { }
 }

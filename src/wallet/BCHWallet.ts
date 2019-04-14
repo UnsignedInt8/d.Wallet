@@ -29,8 +29,9 @@ export default class BCHWallet extends Wallet {
         return [new PrivateKey(privkey).toAddress().toString().split(':')[1]] as string[];
     }
 
-    protected discoverAddresses() {
-
+    protected async scanAddresses(from: number, to: number, external = true) {
+        return [];
     }
 
+    refresh() { }
 }

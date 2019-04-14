@@ -57,3 +57,74 @@ interface Address_Details {
     last_seen_spending: string;
     transaction_count: number;
 }
+
+export interface BTCTxObject {
+    data: ITx;
+    context: Context;
+}
+
+interface ITx {
+    [index: string]: Tx;
+}
+
+interface Tx {
+    transaction: Transaction;
+    inputs: Input[];
+    outputs: Input[];
+}
+
+interface Input {
+    block_id: number;
+    transaction_id: number;
+    index: number;
+    transaction_hash: string;
+    date: string;
+    time: string;
+    value: number;
+    value_usd: number;
+    recipient: string;
+    type: string;
+    script_hex: string;
+    is_from_coinbase: boolean;
+    is_spendable?: any;
+    is_spent: boolean;
+    spending_block_id: number;
+    spending_transaction_id: number;
+    spending_index: number;
+    spending_transaction_hash: string;
+    spending_date: string;
+    spending_time: string;
+    spending_value_usd: number;
+    spending_sequence: number;
+    spending_signature_hex: string;
+    spending_witness: string;
+    lifespan: number;
+    cdd: number;
+}
+
+interface Transaction {
+    block_id: number;
+    id: number;
+    hash: string;
+    date: string;
+    time: string;
+    size: number;
+    weight: number;
+    version: number;
+    lock_time: number;
+    is_coinbase: boolean;
+    has_witness: boolean;
+    input_count: number;
+    output_count: number;
+    input_total: number;
+    input_total_usd: number;
+    output_total: number;
+    output_total_usd: number;
+    fee: number;
+    fee_usd: number;
+    fee_per_kb: number;
+    fee_per_kb_usd: number;
+    fee_per_kwu: number;
+    fee_per_kwu_usd: number;
+    cdd_total: number;
+}

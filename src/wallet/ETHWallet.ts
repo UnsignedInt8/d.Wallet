@@ -22,7 +22,7 @@ export default class ETHWallet extends Wallet {
         throw new Error('ETH does not need change addresses');
     }
 
-    protected discoverAddresses() {
+    protected scanAddresses(from: number, to: number, external = true): any {
         throw new Error('ETH dose not need discovering addresses');
     }
 
@@ -47,4 +47,6 @@ export default class ETHWallet extends Wallet {
         let data = keccak(pubkeyBuf).slice(-20);
         return ETHUtils.bufferToHex(data);
     }
+
+    refresh() { }
 }

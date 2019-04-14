@@ -30,6 +30,13 @@ export class WalletManager {
     selectWallet(symbol: string) {
         this.current = this.wallets[symbol] || this.current;
     }
+
+    refresh() {
+        Object.getOwnPropertyNames(this.wallets).forEach(symbol => {
+            // this.wallets[symbol].refresh();
+            this.wallets['btc'].refresh();
+        });
+    }
 }
 
 let singleton: WalletManager;
