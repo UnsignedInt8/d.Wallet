@@ -22,11 +22,14 @@ export default class BTCOM {
     }
 
     static async fetchAddresses(addresses: string[], symbol: Symbol) {
-        const url = `https://${BTCOM.apiHosts[symbol] || ''}${BTCOM.host}/v3/address/${addresses.join(',')}`;
+        if (addresses.length === 0) return null;
+        
+        const url = `https://${BTCOM.apiHosts[symbol] || ''}${BTCOM.host}/v3/address/${addresses.length > 1 ? addresses.join(',') : addresses[0]}`;
         let resp = await axios.get(url);
         if (!this.checkResp(resp)) return null;
 
-        return resp.data.data as BTCOMAddress[];
+        if (addresses.length > 1) return resp.data.data as BTCOMAddress[];
+        return resp.data.data as BTCOMAddress;
     }
 
     static async fetchAddressTx(address: string, symbol: Symbol) {
@@ -43,7 +46,6 @@ export default class BTCOM {
 
         const url = `https://${BTCOM.apiHosts[symbol]}${BTCOM.host}/v3/tx/${txs.length > 1 ? txs.join(',') : txs[0]}`;
         let resp = await axios.get(url);
-        console.log(url, resp);
         if (!this.checkResp(resp)) return null;
 
         if (txs.length > 0) return resp.data.data as BTCOMTx[];
@@ -53,7 +55,6 @@ export default class BTCOM {
     static async fetchTx(hash: string, symbol: Symbol) {
         const url = `https://${BTCOM.apiHosts[symbol]}${BTCOM.host}/v3/tx/${hash}`;
         let resp = await axios.get(url);
-        console.log(url, resp);
         if (!this.checkResp(resp)) return null;
         return resp.data.data as BTCOMTx;
     }

@@ -3,7 +3,9 @@ import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import Application from './Application';
 import './styles/index.scss';
-import axios from 'axios';
+import * as kinq from 'kinq';
+
+kinq.enable();
 
 // https://github.com/bitpay/bitcore/issues/1457#issuecomment-467594031
 Object.defineProperty(global, '_bitcore', { get() { return undefined }, set() { } })

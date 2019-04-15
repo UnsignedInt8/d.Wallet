@@ -31,7 +31,7 @@ export abstract class Wallet {
     @observable protected _addresses?: string[][];
     @computed get addresses() {
         if (this._addresses) return this._addresses;
-        this.genAddresses(0, 10).then(value => this._addresses = value);
+        this.genAddresses(0, 5).then(value => this._addresses = value);
         return this._addresses || [];
     }
 
@@ -64,6 +64,12 @@ export abstract class Wallet {
         });
     }
 
+    protected shouldRefreshing() {
+        if (Date.now() - this._lastRefreshedTime < 60 * 1000) return false;
+        this._lastRefreshedTime = Date.now();
+        return true;
+    }
+
     protected save(key: string, value: any) {
         store.set(`${this['symbol']}:${key}`, value);
     }
@@ -92,4 +98,5 @@ export interface TxInfo {
     hash: string;
     blockHash: string;
     blockHeight: number;
+    amount: number;
 }

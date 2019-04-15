@@ -149,7 +149,7 @@
         "icon amount date";
 
       .hash {
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+        font-family: Lato, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         grid-area: hash;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -172,7 +172,7 @@
       .icon {
         grid-area: icon;
         text-align: center;
-        margin-top: -2px;
+        margin-top: -1px;
       }
     }
 

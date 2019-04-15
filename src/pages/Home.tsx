@@ -84,8 +84,6 @@ class Home extends React.Component<{}, HomeState> {
         this.walletMan = getWalletMan(this.appSettings.mnemonic);
 
         this.walletMan.refresh();
-        // Axios.get('http://ifconfig.io/ip').then(v => console.log(v));
-        // Axios.get('https://chain.api.btc.com/v3/tx/147b181e0bd9a9ad3d8d8048b3438c37d27e946afa7d9dc7f75f13766a48b907,129a77c8f4eb9516eced323e7591ccefdafb19b5c829ec8a846a10106ba44f3a,f0f50941a8ce571768dae5693b2356fc0a7583d9567e9d95ffeeb86aa00733d4').then(r => console.log(r.data.data))
     }
 
     private async refreshPrice() {
@@ -274,23 +272,23 @@ class Home extends React.Component<{}, HomeState> {
                     }
 
                     <div className='txs'>
-                        {txs.slice(0, 10).map(tx => {
+                        {(this.walletMan ? this.walletMan.current.txs : []).map(tx => {
                             return (
                                 <div className='tx' key={tx.hash}>
                                     <div className='icon'>
-                                        <img src={tx.outputs_value % 2 == 0 ? inIcon : outIcon} />
+                                        <img src={tx.isIncome ? inIcon : outIcon} />
                                     </div>
 
                                     <div className='hash'>
                                         {tx.hash}
                                     </div>
 
-                                    <div className={`amount ${tx.outputs_value % 2 == 0 ? 'in' : 'out'}`}>
-                                        {tx.outputs_value / 10000000}
+                                    <div className={`amount ${tx.isIncome ? 'in' : 'out'}`}>
+                                        {tx.amount / 10000000}
                                     </div>
 
                                     <div className='date'>
-                                        {new Date(tx.block_time * 1000).toLocaleString()}
+                                        {new Date(tx.timestamp * 1000).toLocaleString()}
                                     </div>
                                 </div>
                             );

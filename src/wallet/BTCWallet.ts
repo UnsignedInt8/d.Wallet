@@ -2,7 +2,6 @@ import { Wallet, TxInfo, AddressInfo } from "./Wallet";
 import { observable, computed } from "mobx";
 import * as bitcoin from 'bitcoinjs-lib';
 import { HDPrivateKey, Unit } from "bitcore-lib";
-import { from as linq } from 'fromfrom';
 import Blockchair from './api/Blockchair';
 import BTCOM from "./api/BTCOM";
 
@@ -35,9 +34,8 @@ export default class BTCWallet extends Wallet {
     }
 
     async refresh() {
-        if (Date.now() - this._lastRefreshedTime < 60 * 1000) return;
-        this._lastRefreshedTime = Date.now();
-        console.log('refreshing');
+        if (!this.shouldRefreshing()) return;
+        console.warn('refreshing');
 
         let balance = 0;
         let txs: TxInfo[] = [];
@@ -45,15 +43,15 @@ export default class BTCWallet extends Wallet {
         let info = await this.scanAddresses(0, 1, false);
 
         balance = info.reduce((prev, curr) => prev + <number>curr.balance, 0);
-        txs = txs.concat(linq(info.map(i => i.txs)).flatMap(i => i).toArray());
+        txs = txs.concat(info.map(i => i.txs).flatten(false).toArray());
 
         info = await this.scanAddresses(0, 1);
 
         balance += info.reduce((prev, curr) => prev + <number>curr.balance, 0);
-        txs = txs.concat(linq(info.map(i => i.txs)).flatMap(i => i).toArray());
+        txs = txs.concat(info.map(i => i.txs).flatten(false).toArray());
 
         this.balance = Unit.fromSatoshis(balance).toBTC().toString();
-        this.txs = txs;
+        this.txs = txs.distinct((i1, i2) => i1.hash === i2.hash).toArray();
 
         console.log(balance, txs);
         this.save('balance', this.balance);
@@ -95,11 +93,10 @@ export default class BTCWallet extends Wallet {
     }
 
     async scanAddresses(from: number, to: number, external = true) {
-        let addresses = linq(await this.genAddresses(from, to, external)).flatMap(i => i).toArray();
-        console.log(addresses);
+        let addresses = (await this.genAddresses(from, to, external)).flatten(false).toArray();
 
         let addrsInfo: AddressInfo[] = [];
-        let knownHashes: string[] = this.txs.map(t => t.hash);
+        let knownTxs: string[] = this.txs.map(t => t.hash);
 
         for (let addr of addresses) {
             let info = await Blockchair.fetchAddress(addr, 'bitcoin');
@@ -112,13 +109,12 @@ export default class BTCWallet extends Wallet {
             }
 
             // let txs = await this.scanAddressTx(addr, all);
-            let unknownHashes = info.transactions.filter(a => !knownHashes.includes(a));
-            knownHashes = knownHashes.concat(unknownHashes);
+            let unknownTxs = info.transactions.filter(a => !knownTxs.includes(a));
+            knownTxs = knownTxs.concat(unknownTxs);
 
-            console.log(addr, unknownHashes);
-            let txs = await this.getTxs(unknownHashes, addresses);
+            console.log(addr, unknownTxs);
+            let txs = await this.getTxs(unknownTxs, addresses);
 
-            console.log(this.txs);
             let addrInfo = { address: addr, balance, txs: txs };
             addrsInfo.push(addrInfo);
         }
@@ -127,22 +123,15 @@ export default class BTCWallet extends Wallet {
     }
 
     async getTxs(hashes: string[], knownAddress: string[]) {
-        // let tx = (await BTCOM.fetchTx(hashes[0], 'btc'))!;
-
-        // return [<TxInfo>{
-        //     timestamp: tx.created_at,
-        //     blockHash: tx.block_hash,
-        //     blockHeight: tx.block_height, hash: tx.hash, inputs: tx.inputs.map(i => { return { address: i.prev_addresses, value: i.prev_value } }),
-        //     outputs: tx.outputs.map(o => { return { address: o.addresses, value: o.value } }),
-        //     isIncome: false,
-        // }];
         let result = await BTCOM.fetchTxs(hashes, 'btc');
         if (!result) return [];
         let btcTxs = Array.isArray(result) ? result : [result];
 
         let txs = btcTxs.map(tx => {
-            let fromMe = tx.inputs.filter(t => t.prev_addresses.some(a => knownAddress.includes(a)));
-            let toMe = tx.outputs.filter(t => t.addresses.some(a => knownAddress.includes(a))).length > 0;
+            let inputsValue = tx.inputs.filter(t => t.prev_addresses.some(a => knownAddress.includes(a))).reduce((prev, curr) => (prev + curr.prev_value), 0);
+            let outputsValue = tx.outputs.filter(t => t.addresses.some(a => knownAddress.includes(a))).reduce((prev, curr) => prev + curr.value, 0);
+            let isIncome = outputsValue > inputsValue;
+            let amount = outputsValue - inputsValue;
 
             return <TxInfo>{
                 blockHash: tx.block_hash,
@@ -151,7 +140,8 @@ export default class BTCWallet extends Wallet {
                 timestamp: tx.created_at,
                 inputs: tx.inputs.map(i => { return { address: i.prev_addresses, value: i.prev_value } }),
                 outputs: tx.outputs.map(o => { return { address: o.addresses, value: o.value } }),
-                isIncome: fromMe ? false : toMe,
+                isIncome,
+                amount
             };
         });
 
@@ -163,7 +153,7 @@ export default class BTCWallet extends Wallet {
         let btcTx = await BTCOM.fetchAddressTx(address, 'btc');
 
         let txs: TxInfo[] = (btcTx ? btcTx.list : []).map(tx => {
-            let fromMe = tx.inputs.filter(t => linq(t.prev_addresses).some(a => knownAddress.includes(a)));
+            let fromMe = tx.inputs.filter(t => t.prev_addresses.some(a => knownAddress.includes(a)));
             let toMe = tx.outputs.filter(t => t.addresses.includes(address)).length > 0;
 
             return <TxInfo>{

@@ -29,13 +29,11 @@ export class WalletManager {
 
     selectWallet(symbol: string) {
         this.current = this.wallets[symbol] || this.current;
+        this.current.refresh();
     }
 
     refresh() {
         this.wallets['btc'].refresh();
-        Object.getOwnPropertyNames(this.wallets).forEach(symbol => {
-            // this.wallets[symbol].refresh();
-        });
     }
 }
 
