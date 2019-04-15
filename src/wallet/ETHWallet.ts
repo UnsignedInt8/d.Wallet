@@ -5,7 +5,7 @@ import * as assert from 'assert';
 import { toBuffer } from '../lib/Hash';
 import { observable, computed } from "mobx";
 import Blockchair from "./api/Blockchair";
-import { string } from "prop-types";
+import * as Units from 'ethereumjs-units';
 
 export default class ETHWallet extends Wallet {
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
@@ -32,24 +32,25 @@ export default class ETHWallet extends Wallet {
         let balance = info.address.balance;
         let txs = info.calls.map(c => {
             return <TxInfo>{
-                amount: c.value,
+                amount: BigInt(c.value).toString(),
                 blockHash: '',
                 blockHeight: c.block_id,
                 hash: c.transaction_hash,
-                inputs: [],
-                outputs: [],
+                inputs: [{ address: [c.sender], value: 0 }],
+                outputs: [{ address: [c.recipient], value: 0 }],
                 timestamp: new Date(c.time).getTime(),
                 isIncome: c.recipient.toLowerCase() === address,
             };
         });
-        
+
         return [{ address, balance, txs }];
     }
 
     get symbol() { return 'eth'; }
 
-    private _mainAddress?: string[];
+    private _mainAddress: string[] = [];
     get mainAddress() {
+        return ['0x4ddea3e2fc634061C421F1E9E9d998b7595E4277'] as string[];
         if (this._mainAddress) return this._mainAddress;
         let hdKey = this._root.derive(this.getExternalPathIndex(0));
         let ethPubkey = ETHUtils.privateToPublic(hdKey['privateKey'].toBuffer());
@@ -70,5 +71,14 @@ export default class ETHWallet extends Wallet {
         return ETHUtils.bufferToHex(data);
     }
 
-    refresh() { }
+    async refresh() {
+        let [info] = await this.scanAddresses(0, 0);
+        if (!info) return;
+
+        this.balance = Units.convert(info.balance, 'wei', 'eth');
+        this.txs = info.txs;
+
+        this.save('balance', this.balance);
+        this.save('txs', this.txs);
+    }
 }

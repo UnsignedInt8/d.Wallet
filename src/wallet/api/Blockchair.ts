@@ -37,11 +37,11 @@ export default class Blockchair {
     static async fetchETHAddress(address: string) {
         let url = `${Blockchair.host}/ethereum/dashboards/address/${address}`;
         let resp = await axios.get(url);
-
+        
         if (!resp.data) return null;
         let data = resp.data as ETHTxObject;
         if (data.context.code !== 200) return null;
 
-        return data.data[address];
+        return data.data[address.toLowerCase()];
     }
 }

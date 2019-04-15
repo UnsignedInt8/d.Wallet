@@ -12,8 +12,6 @@ export default class BTCWallet extends Wallet {
     constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string, network?: bitcoin.Network }) {
         super(opts);
         this._network = opts.network;
-        this.balance = this.load('balance') || '0';
-        this.txs = this.load('txs') || [];
     }
 
     protected getExternalPath(): string {
@@ -130,7 +128,7 @@ export default class BTCWallet extends Wallet {
             let inputsValue = tx.inputs.filter(t => t.prev_addresses.some(a => knownAddress.includes(a))).reduce((prev, curr) => (prev + curr.prev_value), 0);
             let outputsValue = tx.outputs.filter(t => t.addresses.some(a => knownAddress.includes(a))).reduce((prev, curr) => prev + curr.value, 0);
             let isIncome = outputsValue > inputsValue;
-            let amount = outputsValue - inputsValue;
+            let amount = outputsValue - inputsValue / 10000000;
 
             return <TxInfo>{
                 blockHash: tx.block_hash,
@@ -140,7 +138,7 @@ export default class BTCWallet extends Wallet {
                 inputs: tx.inputs.map(i => { return { address: i.prev_addresses, value: i.prev_value } }),
                 outputs: tx.outputs.map(o => { return { address: o.addresses, value: o.value } }),
                 isIncome,
-                amount
+                amount: `${amount}`
             };
         });
 

@@ -120,6 +120,12 @@
     justify-content: flex-end;
     align-items: baseline;
     padding-right: 16px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    .balanceNum {
+      max-width: 70vw;
+    }
   }
 
   .symbol {
@@ -133,7 +139,7 @@
   .txs {
     grid-area: txs;
     overflow-y: scroll;
-
+    
     .tx {
       display: grid;
       margin-top: 4px;
@@ -149,7 +155,7 @@
         "icon amount date";
 
       .hash {
-        font-family: Lato, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: Lato, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         grid-area: hash;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -174,6 +180,11 @@
         text-align: center;
         margin-top: -1px;
       }
+
+      // img.icon {
+      //   width: 9px;
+      //   height: 9px;
+      // }
     }
 
     .tx:hover {
@@ -205,7 +216,6 @@
     background-color: #2bdf07;
     transition: all 0.5s;
   }
-
 }
 
 .titlebar-padding {

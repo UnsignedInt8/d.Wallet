@@ -83,7 +83,7 @@ class Home extends React.Component<{}, HomeState> {
         this.appSettings = getAppSettings(PassMan.password);
         this.walletMan = getWalletMan(this.appSettings.mnemonic);
 
-        // this.walletMan.refresh();
+        this.walletMan.refresh();
     }
 
     private async refreshPrice() {
@@ -242,7 +242,7 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     <div className={`balance lato-bold ${this.state.selectedSymbol}`}>
-                        <Flip bottom opposite collapse when={this.state.showSymbol}><span>{this.walletMan ? this.walletMan.current.balance : '0'}</span></Flip>
+                        <Flip className='balanceNum' bottom opposite collapse when={this.state.showSymbol}><span>{this.walletMan ? this.walletMan.current.balance : '0'}</span></Flip>
                         <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
                     </div>
 
@@ -284,7 +284,7 @@ class Home extends React.Component<{}, HomeState> {
                                     </div>
 
                                     <div className={`amount ${tx.isIncome ? 'in' : 'out'}`}>
-                                        {tx.amount / 10000000}
+                                        {tx.amount}
                                     </div>
 
                                     <div className='date'>

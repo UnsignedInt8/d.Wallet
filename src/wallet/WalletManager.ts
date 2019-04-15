@@ -33,7 +33,7 @@ export class WalletManager {
     }
 
     refresh() {
-        this.wallets['bch'].refresh();
+        this.wallets['eth'].refresh();
     }
 }
 
