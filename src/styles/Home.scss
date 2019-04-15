@@ -109,10 +109,16 @@
     span {
       display: inline-block;
       margin-left: 12px;
+      position: sticky;
+      top: 0;
     }
   }
 
   .balance {
+    background: rgb(25, 32, 48);
+    position: -webkit-sticky;
+    position: sticky;
+    top: -1px;
     grid-area: balance;
     font-size: 48px;
     display: flex;
@@ -121,10 +127,18 @@
     padding-right: 16px;
     text-overflow: ellipsis;
     overflow: hidden;
+    transition: all 0.3s;
 
     .balanceNum {
       max-width: 70vw;
     }
+  }
+
+  .balance-stuck {
+    box-shadow: 2px 2px 12px -2px rgba(0, 0, 0, 0.75);
+    font-size: 32px;
+    transition: all 0.3s;
+    padding: 16px 12px 2px 12px;
   }
 
   .symbol {
@@ -197,7 +211,7 @@
     border-radius: 50%;
     width: 60px;
     height: 60px;
-    position: absolute;
+    position: fixed;
     right: 12px;
     bottom: 12px;
     padding-top: 5px;

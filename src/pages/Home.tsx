@@ -19,6 +19,7 @@ import { WalletManager, getWalletMan } from '../wallet/WalletManager';
 import { observer } from 'mobx-react';
 import Axios from 'axios';
 import AnimeHelper from '../lib/AnimeHelper';
+import StickyEvents from 'sticky-events';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -49,6 +50,7 @@ interface HomeState {
     expandSending: boolean;
     expandReceiving: boolean;
     expandSettings?: boolean;
+    stuck?: boolean;
 }
 
 @observer
@@ -71,6 +73,21 @@ class Home extends React.Component<{}, HomeState> {
         if (PassMan.password) {
             this.onPasswordChanged();
         }
+
+        let balanceInfo = document.querySelector('#balanceInfo')!;
+
+        let observer = new IntersectionObserver(
+            entries => {
+                let [item] = entries;
+                if (item.isIntersecting) {
+                    this.setState({ stuck: false });
+                } else {
+                    this.setState({ stuck: true });
+                }
+            }
+        );
+
+        observer.observe(document.querySelector('.price')!);
     }
 
     componentWillUnmount() {
@@ -192,7 +209,7 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
                 </div>
 
-                <div className={`home-content ${isDarwin ? 'titlebar-padding' : ''}`}>
+                <div id='home-content' className={`home-content ${isDarwin ? 'titlebar-padding' : ''}`}>
                     <div className='chart'>
                         <AreaChart width={window.innerWidth - 68} height={200} data={this.state.currentHistory} style={{ marginLeft: -0 }}>
                             <Area dataKey='price' fill='transparent' stroke={this.state.symbolColor} />
@@ -209,7 +226,7 @@ class Home extends React.Component<{}, HomeState> {
                         </span>
                     </div>
 
-                    <div className={`balance lato-bold ${this.state.selectedSymbol}`}>
+                    <div id='balanceInfo' className={`balance lato-bold ${this.state.selectedSymbol} ${this.state.stuck ? 'balance-stuck' : ''}`}>
                         <Flip className='balanceNum' bottom opposite collapse when={this.state.showSymbol}><span>{this.walletMan ? this.walletMan.current.balance : '0'}</span></Flip>
                         <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
                     </div>
