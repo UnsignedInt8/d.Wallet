@@ -106,7 +106,6 @@ export default class BTCWallet extends Wallet {
                 continue;
             }
 
-            // let txs = await this.scanAddressTx(addr, all);
             let unknownTxs = info.transactions.except(knownTxs).take(10).toArray();
             knownTxs = knownTxs.concat(unknownTxs);
 

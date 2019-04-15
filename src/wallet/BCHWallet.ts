@@ -41,7 +41,6 @@ export default class BCHWallet extends BTCWallet {
     }
 
     async getTxs(hashes: string[], knownAddresses: string[], symbol = 'bch') {
-        console.log('get bch txs');
         return await super.getTxs(hashes, knownAddresses.map(a => bchaddrjs.toLegacyAddress(a)).concat(knownAddresses), 'bch');
     }
 
