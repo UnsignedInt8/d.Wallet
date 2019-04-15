@@ -1,9 +1,12 @@
-import { Wallet } from "./Wallet";
+import { Wallet, AddressInfo, TxInfo } from "./Wallet";
 import { PrivateKey } from 'bitcore-lib-cash';
 import { HDPrivateKey } from "bitcore-lib";
 import { observable, computed } from "mobx";
+import BTCWallet from "./BTCWallet";
+import Blockchair, { Chain } from "./api/Blockchair";
+import * as bchaddrjs from 'bchaddrjs';
 
-export default class BCHWallet extends Wallet {
+export default class BCHWallet extends BTCWallet {
     transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
         throw new Error("Method not implemented.");
     }
@@ -18,7 +21,7 @@ export default class BCHWallet extends Wallet {
 
     get symbol() { return 'bch'; }
 
-    private _mainAddress?: string[];
+    protected _mainAddress?: string[];
     get mainAddress() {
         if (this._mainAddress) return this._mainAddress;
         let key = this._root.derive(this.getExternalPathIndex(0));
@@ -28,12 +31,24 @@ export default class BCHWallet extends Wallet {
 
     protected genAddress(key: HDPrivateKey) {
         let privkey = key['privateKey'].toString();
-        return [new PrivateKey(privkey).toAddress().toString().split(':')[1]] as string[];
+        let cashAddr = new PrivateKey(privkey).toAddress().toString().split(':')[1];
+        let legacy = bchaddrjs.toLegacyAddress(cashAddr);
+        return [cashAddr, legacy];
     }
 
-    protected async scanAddresses(from: number, to: number, external = true) {
-        return [];
+    async genAddresses(from: number, to: number, external = true) {
+        return new Promise<string[][]>(resolve => {
+            if (external) resolve([['qqrxa0h9jqnc7v4wmj9ysetsp3y7w9l36u8gnnjulq', 'pqpv7s5e2w6y6470qfzuaffcay0v8l8nhy0x74rsjm'],]);
+            else resolve([['qqrxa0h9jqnc7v4wmj9ysetsp3y7w9l36u8gnnjulq', 'qzl8jth497mtckku404cadsylwanm3rfxsx0g38nwl']]);
+        });
     }
 
-    refresh() { }
+    async scanAddresses(from: number, to: number, external = true, chain: Chain = 'bitcoin-cash') {
+        return await super.scanAddresses(from, to, external, chain);
+    }
+
+    async getTxs(hashes: string[], knownAddresses: string[], symbol = 'bch') {
+        console.log('get bch txs');
+        return await super.getTxs(hashes, knownAddresses.map(a => bchaddrjs.toLegacyAddress(a)).concat(knownAddresses), 'bch');
+    }
 }

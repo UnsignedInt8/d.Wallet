@@ -2,7 +2,7 @@ import { Wallet, TxInfo, AddressInfo } from "./Wallet";
 import { observable, computed } from "mobx";
 import * as bitcoin from 'bitcoinjs-lib';
 import { HDPrivateKey, Unit } from "bitcore-lib";
-import Blockchair from './api/Blockchair';
+import Blockchair, { Chain } from './api/Blockchair';
 import BTCOM from "./api/BTCOM";
 
 export default class BTCWallet extends Wallet {
@@ -13,6 +13,7 @@ export default class BTCWallet extends Wallet {
         super(opts);
         this._network = opts.network;
         this.balance = this.load('balance') || '0';
+        this.txs = this.load('txs') || [];
     }
 
     protected getExternalPath(): string {
@@ -35,7 +36,7 @@ export default class BTCWallet extends Wallet {
 
     async refresh() {
         if (!this.shouldRefreshing()) return;
-        console.warn('refreshing');
+        console.warn(`${this.symbol} refreshing`);
 
         let balance = 0;
         let txs: TxInfo[] = [];
@@ -51,10 +52,15 @@ export default class BTCWallet extends Wallet {
         txs = txs.concat(info.map(i => i.txs).flatten(false).toArray());
 
         this.balance = Unit.fromSatoshis(balance).toBTC().toString();
-        this.txs = txs.distinct((i1, i2) => i1.hash === i2.hash).toArray();
 
-        console.log(balance, txs);
+        let oldestTx = this.txs.min(tx => tx.timestamp);
+        let oldestTime = oldestTx ? oldestTx.timestamp : 0;
+        let newTxs = txs.filter(t => t.timestamp > oldestTime);
+        this.txs = newTxs.concat(this.txs).sort((a, b) => b.timestamp - a.timestamp).distinct((i1, i2) => i1.hash === i2.hash).toArray();
+
+        console.log(this.symbol, balance, txs);
         this.save('balance', this.balance);
+        this.save('txs', this.txs);
     }
 
     transfer(opts: { to: { address: string, amount: number }[]; message?: string | undefined; }) {
@@ -86,20 +92,14 @@ export default class BTCWallet extends Wallet {
         return [p2wpkh.address!, p2pkh.address!,];
     }
 
-    genAddresses(from: number, to: number, external = true): Promise<string[][]> {
-        return new Promise(resolve => {
-            resolve([['1BNFNrZSg8JjkyQJZDD3pRD8c72KnRaKy6', '1AnuEWsiBEdUR1qfgXQ7qB9kQetmKZRiKJ']])
-        });
-    }
-
-    async scanAddresses(from: number, to: number, external = true) {
+    async scanAddresses(from: number, to: number, external = true, chain: Chain = 'bitcoin') {
         let addresses = (await this.genAddresses(from, to, external)).flatten(false).toArray();
 
         let addrsInfo: AddressInfo[] = [];
         let knownTxs: string[] = this.txs.map(t => t.hash);
 
         for (let addr of addresses) {
-            let info = await Blockchair.fetchAddress(addr, 'bitcoin');
+            let info = await Blockchair.fetchAddress(addr, chain);
             if (!info) continue;
 
             let balance = info.address.balance;
@@ -109,7 +109,7 @@ export default class BTCWallet extends Wallet {
             }
 
             // let txs = await this.scanAddressTx(addr, all);
-            let unknownTxs = info.transactions.filter(a => !knownTxs.includes(a));
+            let unknownTxs = info.transactions.filter(a => !knownTxs.includes(a)).take(15).toArray();
             knownTxs = knownTxs.concat(unknownTxs);
 
             console.log(addr, unknownTxs);
@@ -122,12 +122,12 @@ export default class BTCWallet extends Wallet {
         return addrsInfo;
     }
 
-    async getTxs(hashes: string[], knownAddress: string[]) {
-        let result = await BTCOM.fetchTxs(hashes, 'btc');
+    async getTxs(hashes: string[], knownAddress: string[], symbol = 'btc') {
+        let result = await BTCOM.fetchTxs(hashes, symbol as any);
         if (!result) return [];
         let btcTxs = Array.isArray(result) ? result : [result];
 
-        let txs = btcTxs.map(tx => {
+        let txs = btcTxs.filter(i => i).map(tx => {
             let inputsValue = tx.inputs.filter(t => t.prev_addresses.some(a => knownAddress.includes(a))).reduce((prev, curr) => (prev + curr.prev_value), 0);
             let outputsValue = tx.outputs.filter(t => t.addresses.some(a => knownAddress.includes(a))).reduce((prev, curr) => prev + curr.value, 0);
             let isIncome = outputsValue > inputsValue;
@@ -146,7 +146,6 @@ export default class BTCWallet extends Wallet {
         });
 
         return txs;
-        // return [];
     }
 
     async scanAddressTx(address: string, knownAddress: string[]) {
@@ -169,4 +168,10 @@ export default class BTCWallet extends Wallet {
 
         return txs;
     }
+
+    // genAddresses(from: number, to: number, external = true): Promise<string[][]> {
+    //     return new Promise(resolve => {
+    //         resolve([['1BNFNrZSg8JjkyQJZDD3pRD8c72KnRaKy6', '1AnuEWsiBEdUR1qfgXQ7qB9kQetmKZRiKJ']])
+    //     });
+    // }
 }

@@ -83,7 +83,7 @@ class Home extends React.Component<{}, HomeState> {
         this.appSettings = getAppSettings(PassMan.password);
         this.walletMan = getWalletMan(this.appSettings.mnemonic);
 
-        this.walletMan.refresh();
+        // this.walletMan.refresh();
     }
 
     private async refreshPrice() {

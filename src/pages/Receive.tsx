@@ -77,6 +77,13 @@ export default class Receive extends React.Component<Props, State>{
                         </div>
                         : undefined
                     }
+                    {this.props.symbol === 'bch' ?
+                        <div id='address-type'>
+                            <div className={`radio ${this.state.selectedType === 0 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 0 })}>{i18n.receiving.cashAddr}</div>
+                            <div className={`radio ${this.state.selectedType === 1 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 1 })}>{i18n.receiving.legacy}</div>
+                        </div>
+                        : undefined
+                    }
                 </div>
                 <div id='qrcode'>
                     <div id='qrcode-container'>

@@ -23,7 +23,7 @@ export default class BTCOM {
 
     static async fetchAddresses(addresses: string[], symbol: Symbol) {
         if (addresses.length === 0) return null;
-        
+
         const url = `https://${BTCOM.apiHosts[symbol] || ''}${BTCOM.host}/v3/address/${addresses.length > 1 ? addresses.join(',') : addresses[0]}`;
         let resp = await axios.get(url);
         if (!this.checkResp(resp)) return null;
@@ -45,9 +45,10 @@ export default class BTCOM {
         if (txs.length === 0) return null;
 
         const url = `https://${BTCOM.apiHosts[symbol]}${BTCOM.host}/v3/tx/${txs.length > 1 ? txs.join(',') : txs[0]}`;
+        console.log(url);
         let resp = await axios.get(url);
         if (!this.checkResp(resp)) return null;
-
+        console.log(resp.data.data);
         if (txs.length > 0) return resp.data.data as BTCOMTx[];
         else return resp.data.data as BTCOMTx;
     }

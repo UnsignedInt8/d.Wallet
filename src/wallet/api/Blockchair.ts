@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { BTCAddressObject, BTCTxObject } from '../../types/BlockChair_Api';
 
-type Chain = 'bitcoin' | 'bitcoin-cash' | 'bitcoin-sv' | 'litecoin' | 'dogecoin';
+export type Chain = 'bitcoin' | 'bitcoin-cash' | 'bitcoin-sv' | 'litecoin' | 'dogecoin';
+
 export default class Blockchair {
 
     static readonly host = 'https://api.blockchair.com';
