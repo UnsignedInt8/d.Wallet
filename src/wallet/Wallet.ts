@@ -65,8 +65,8 @@ export abstract class Wallet {
     }
 
     protected shouldRefreshing() {
+        return false;
         if (Date.now() - this._lastRefreshedTime < 90 * 1000) return false;
-        console.log(this.symbol, (Date.now() - this._lastRefreshedTime) / 1000);
         this._lastRefreshedTime = Date.now();
         return true;
     }
@@ -99,5 +99,5 @@ export interface TxInfo {
     hash: string;
     blockHash: string;
     blockHeight: number;
-    amount: number;
+    amount: number | string;
 }

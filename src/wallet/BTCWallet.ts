@@ -58,7 +58,6 @@ export default class BTCWallet extends Wallet {
         let newTxs = txs.filter(t => t.timestamp > oldestTime);
         this.txs = newTxs.concat(this.txs).sort((a, b) => b.timestamp - a.timestamp).distinct((i1, i2) => i1.hash === i2.hash).toArray();
 
-        console.log(this.symbol, balance, txs);
         this.save('balance', this.balance);
         this.save('txs', this.txs);
     }
@@ -93,7 +92,8 @@ export default class BTCWallet extends Wallet {
     }
 
     async scanAddresses(from: number, to: number, external = true, chain: Chain = 'bitcoin') {
-        let addresses = (await this.genAddresses(from, to, external)).flatten(false).toArray();
+        let addrs = await this.genAddresses(from, to, external);
+        let addresses = chain === 'bitcoin-cash' ? addrs.map(a => a[0]) : addrs.flatten(false).toArray();
 
         let addrsInfo: AddressInfo[] = [];
         let knownTxs: string[] = this.txs.map(t => t.hash);
@@ -109,10 +109,9 @@ export default class BTCWallet extends Wallet {
             }
 
             // let txs = await this.scanAddressTx(addr, all);
-            let unknownTxs = info.transactions.filter(a => !knownTxs.includes(a)).take(15).toArray();
+            let unknownTxs = info.transactions.except(knownTxs).take(10).toArray();
             knownTxs = knownTxs.concat(unknownTxs);
 
-            console.log(addr, unknownTxs);
             let txs = await this.getTxs(unknownTxs, addresses);
 
             let addrInfo = { address: addr, balance, txs: txs };

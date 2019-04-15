@@ -1,9 +1,11 @@
-import { Wallet } from "./Wallet";
+import { Wallet, TxInfo } from "./Wallet";
 import * as ETHUtils from 'ethereumjs-util';
 import { keccak } from "../lib/Hash";
 import * as assert from 'assert';
 import { toBuffer } from '../lib/Hash';
 import { observable, computed } from "mobx";
+import Blockchair from "./api/Blockchair";
+import { string } from "prop-types";
 
 export default class ETHWallet extends Wallet {
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
@@ -22,10 +24,28 @@ export default class ETHWallet extends Wallet {
         throw new Error('ETH does not need change addresses');
     }
 
-    protected scanAddresses(from: number, to: number, external = true): any {
-        throw new Error('ETH dose not need discovering addresses');
+    protected async scanAddresses(from: number, to: number, external = true) {
+        let [address] = this.mainAddress;
+        let info = await Blockchair.fetchETHAddress(address);
+        if (!info) return [];
+
+        let balance = info.address.balance;
+        let txs = info.calls.map(c => {
+            return <TxInfo>{
+                amount: c.value,
+                blockHash: '',
+                blockHeight: c.block_id,
+                hash: c.transaction_hash,
+                inputs: [],
+                outputs: [],
+                timestamp: new Date(c.time).getTime(),
+                isIncome: c.recipient.toLowerCase() === address,
+            };
+        });
+        
+        return [{ address, balance, txs }];
     }
-    
+
     get symbol() { return 'eth'; }
 
     private _mainAddress?: string[];

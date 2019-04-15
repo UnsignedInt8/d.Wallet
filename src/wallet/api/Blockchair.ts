@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BTCAddressObject, BTCTxObject } from '../../types/BlockChair_Api';
+import { BTCAddressObject, BTCTxObject, ETHTxObject } from '../../types/BlockChair_Api';
 
 export type Chain = 'bitcoin' | 'bitcoin-cash' | 'bitcoin-sv' | 'litecoin' | 'dogecoin';
 
@@ -36,5 +36,12 @@ export default class Blockchair {
 
     static async fetchETHAddress(address: string) {
         let url = `${Blockchair.host}/ethereum/dashboards/address/${address}`;
+        let resp = await axios.get(url);
+
+        if (!resp.data) return null;
+        let data = resp.data as ETHTxObject;
+        if (data.context.code !== 200) return null;
+
+        return data.data[address];
     }
 }

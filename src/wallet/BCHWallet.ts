@@ -36,13 +36,6 @@ export default class BCHWallet extends BTCWallet {
         return [cashAddr, legacy];
     }
 
-    async genAddresses(from: number, to: number, external = true) {
-        return new Promise<string[][]>(resolve => {
-            if (external) resolve([['qqrxa0h9jqnc7v4wmj9ysetsp3y7w9l36u8gnnjulq', 'pqpv7s5e2w6y6470qfzuaffcay0v8l8nhy0x74rsjm'],]);
-            else resolve([['qqrxa0h9jqnc7v4wmj9ysetsp3y7w9l36u8gnnjulq', 'qzl8jth497mtckku404cadsylwanm3rfxsx0g38nwl']]);
-        });
-    }
-
     async scanAddresses(from: number, to: number, external = true, chain: Chain = 'bitcoin-cash') {
         return await super.scanAddresses(from, to, external, chain);
     }
@@ -51,4 +44,11 @@ export default class BCHWallet extends BTCWallet {
         console.log('get bch txs');
         return await super.getTxs(hashes, knownAddresses.map(a => bchaddrjs.toLegacyAddress(a)).concat(knownAddresses), 'bch');
     }
+
+    // async genAddresses(from: number, to: number, external = true) {
+    //     return new Promise<string[][]>(resolve => {
+    //         if (external) resolve([['qqrxa0h9jqnc7v4wmj9ysetsp3y7w9l36u8gnnjulq', 'pqpv7s5e2w6y6470qfzuaffcay0v8l8nhy0x74rsjm'],]);
+    //         else resolve([['qqrxa0h9jqnc7v4wmj9ysetsp3y7w9l36u8gnnjulq', 'qzl8jth497mtckku404cadsylwanm3rfxsx0g38nwl']]);
+    //     });
+    // }
 }

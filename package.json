@@ -150,7 +150,7 @@
     "jquery": "^3.4.0",
     "keccak": "^2.0.0",
     "keythereum": "^1.0.4",
-    "kinq": "github:unsignedint8/kinq",
+    "linq": "github:unsignedint8/linq",
     "litecore-lib": "^0.13.22",
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",

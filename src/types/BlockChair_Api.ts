@@ -59,15 +59,15 @@ interface Address_Details {
 }
 
 export interface BTCTxObject {
-    data: ITx;
+    data: IBTCTxData;
     context: Context;
 }
 
-interface ITx {
-    [index: string]: Tx;
+interface IBTCTxData {
+    [index: string]: BTCTx;
 }
 
-interface Tx {
+interface BTCTx {
     transaction: Transaction;
     inputs: Input[];
     outputs: Input[];
@@ -127,4 +127,53 @@ interface Transaction {
     fee_per_kwu: number;
     fee_per_kwu_usd: number;
     cdd_total: number;
+}
+
+export interface ETHTxObject {
+    data: IETHTxData;
+    context: Context;
+}
+
+interface IETHTxData {
+    [index: string]: IETHTx,
+}
+
+interface IETHTx {
+    address: ETHAddress;
+    calls: Call[];
+}
+
+interface Call {
+    block_id: number;
+    transaction_hash: string;
+    index: string;
+    time: string;
+    sender: string;
+    recipient: string;
+    value: string;
+    value_usd: number;
+    transferred: boolean;
+}
+
+interface ETHAddress {
+    type: string;
+    contract_code_hex?: any;
+    contract_created?: any;
+    contract_destroyed?: any;
+    balance: string;
+    balance_usd: number;
+    received_approximate: string;
+    received_usd: number;
+    spent_approximate: string;
+    spent_usd: number;
+    fees_approximate: string;
+    fees_usd: number;
+    receiving_call_count: number;
+    spending_call_count: number;
+    call_count: number;
+    transaction_count: number;
+    first_seen_receiving: string;
+    last_seen_receiving: string;
+    first_seen_spending: string;
+    last_seen_spending: string;
 }
