@@ -42,7 +42,7 @@ export default class Settings extends React.Component<{}, {}> {
     render() {
         return (
             <div id='settings'>
-                <div className='setting-item'>
+                <div className='setting-item' style={{ marginTop: '3.5vh' }}>
                     <div className='setting-title' onClick={_ => this.switchAutoLock(!this.appSettings.autolock)}>{this.i18n.settings.autoLock.title}</div>
                     <div className='setting-detail'>Automatically lock app after 5 minutes</div>
                     <div className='setting-switch'>
