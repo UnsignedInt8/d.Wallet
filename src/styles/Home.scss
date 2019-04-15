@@ -68,7 +68,6 @@
   grid-column: 2;
   color: white;
   height: 96.5vh;
-  // overflow: hidden;
   overflow-y: scroll;
 
   display: grid;
@@ -79,10 +78,6 @@
     "balance"
     "txs"
     "buttons";
-
-  // span {
-  //   transition: all 0.12s;
-  // }
 
   .chart {
     width: 100%;
@@ -131,11 +126,12 @@
 
     .balanceNum {
       max-width: 70vw;
+      cursor: pointer;
     }
   }
 
   .balance-stuck {
-    box-shadow: 2px 2px 12px -2px rgba(0, 0, 0, 0.75);
+    box-shadow: 2px 2px 12px -2px rgba(0, 0, 0, 0.5);
     font-size: 32px;
     transition: all 0.3s;
     padding: 16px 12px 2px 12px;
@@ -151,7 +147,6 @@
 
   .txs {
     grid-area: txs;
-    // overflow-y: scroll;
 
     .tx {
       display: grid;

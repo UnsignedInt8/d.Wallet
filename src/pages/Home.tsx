@@ -47,6 +47,7 @@ interface HomeState {
     currentChange: number;
     currentHistory?: { price: string, timestamp: number }[];
 
+    showBalance: boolean;
     expandSending: boolean;
     expandReceiving: boolean;
     expandSettings?: boolean;
@@ -56,7 +57,12 @@ interface HomeState {
 @observer
 class Home extends React.Component<{}, HomeState> {
 
-    state: HomeState = { selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color, currentPrice: '', currentChange: 0, currentHistory: [], expandSending: false, expandReceiving: false, expandSettings: false };
+    state: HomeState = {
+        selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color,
+        currentPrice: '', currentChange: 0, currentHistory: [],
+        expandSending: false, expandReceiving: false, expandSettings: false,
+        showBalance: true,
+    };
     walletMan!: WalletManager;
     private refersher?: NodeJS.Timer | number;
     private history = {};
@@ -227,7 +233,15 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     <div id='balanceInfo' className={`balance lato-bold ${this.state.selectedSymbol} ${this.state.stuck ? 'balance-stuck' : ''}`}>
-                        <Flip className='balanceNum' bottom opposite collapse when={this.state.showSymbol}><span>{this.walletMan ? this.walletMan.current.balance : '0'}</span></Flip>
+                        <Flip bottom opposite collapse when={this.state.showSymbol}>
+                            <span className='balanceNum' onClick={e => this.setState({ showBalance: !this.state.showBalance })}>
+                                {
+                                    this.state.showBalance ?
+                                        this.walletMan ? this.walletMan.current.balance : '0'
+                                        : '••••••••'
+                                }
+                            </span>
+                        </Flip>
                         <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
                     </div>
 
