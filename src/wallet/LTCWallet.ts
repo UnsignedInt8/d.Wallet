@@ -15,6 +15,7 @@ export default class LTCWallet extends BTCWallet {
 
     protected _mainAddress?: string[];
     get mainAddress() {
+        if (this._mainAddress) return this._mainAddress;
         let hdKey = this._root.derive(this.getExternalPathIndex(0));
         this._mainAddress = this.genAddress(hdKey);
         return this._mainAddress as string[];

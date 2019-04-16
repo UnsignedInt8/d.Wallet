@@ -27,14 +27,14 @@ export default class ETHWallet extends Wallet {
 
     get symbol() { return 'eth'; }
 
-    private _mainAddress: string[] = [];
+    private _mainAddress?: string[];
     get mainAddress() {
         return ['0x4ddea3e2fc634061C421F1E9E9d998b7595E4277'] as string[];
-        if (this._mainAddress) return this._mainAddress;
-        let hdKey = this._root.derive(this.getExternalPathIndex(0));
-        let ethPubkey = ETHUtils.privateToPublic(hdKey['privateKey'].toBuffer());
-        this._mainAddress = [this.pubToAddress(ethPubkey)];
-        return this._mainAddress as string[];
+        // if (this._mainAddress) return this._mainAddress;
+        // let hdKey = this._root.derive(this.getExternalPathIndex(0));
+        // let ethPubkey = ETHUtils.privateToPublic(hdKey['privateKey'].toBuffer());
+        // this._mainAddress = [this.pubToAddress(ethPubkey)];
+        // return this._mainAddress as string[];
     }
 
     @observable _addresses?: string[][];

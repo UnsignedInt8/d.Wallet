@@ -20,6 +20,7 @@ import { observer } from 'mobx-react';
 import Axios from 'axios';
 import AnimeHelper from '../lib/AnimeHelper';
 import StickyEvents from 'sticky-events';
+import OmniApi from '../wallet/api/OmniExplorer';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -74,14 +75,21 @@ class Home extends React.Component<{}, HomeState> {
         this.refreshHistory();
 
         if (PassMan.password) this.appSettings = getAppSettings(PassMan.password);
-        PassMan.on('password', this.onPasswordChanged)
+        PassMan.on('password', this.onPasswordChanged);
 
         if (PassMan.password) {
             this.onPasswordChanged();
         }
 
-        let balanceInfo = document.querySelector('#balanceInfo')!;
+        this.hookSticky();
+    }
 
+    componentWillUnmount() {
+        clearInterval(this.refersher as NodeJS.Timer);
+        PassMan.removeListener('password', this.onPasswordChanged)
+    }
+
+    private hookSticky() {
         let observer = new IntersectionObserver(
             entries => {
                 let [item] = entries;
@@ -94,11 +102,6 @@ class Home extends React.Component<{}, HomeState> {
         );
 
         observer.observe(document.querySelector('.price')!);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.refersher as NodeJS.Timer);
-        PassMan.removeListener('password', this.onPasswordChanged)
     }
 
     private onPasswordChanged = () => {
@@ -233,8 +236,8 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     <div id='balanceInfo' className={`balance lato-bold ${this.state.selectedSymbol} ${this.state.stuck ? 'balance-stuck' : ''}`}>
-                        <Flip bottom opposite collapse when={this.state.showSymbol}>
-                            <span className='balanceNum' onClick={e => this.setState({ showBalance: !this.state.showBalance })}>
+                        <Flip bottom opposite collapse when={this.state.showSymbol} className='balanceNum'>
+                            <span onClick={e => this.setState({ showBalance: !this.state.showBalance })}>
                                 {
                                     this.state.showBalance ?
                                         this.walletMan ? this.walletMan.current.balance : '0'

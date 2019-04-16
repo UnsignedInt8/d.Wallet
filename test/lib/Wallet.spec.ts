@@ -10,7 +10,6 @@ describe('tests wallets', () => {
         let btc = new BTCWallet({ mnemonic, });
         expect(btc.mainAddress).toContain('1PNUBxhi6fDh3DKV374raZPuXQ5GbABBzV');
 
-
         let btcsegwit = new BTCWallet({ mnemonic, });
         expect(btcsegwit.mainAddress).toContain('bc1q743r9kknlyjeshzmprrzglsdzz5uha5xa46wdp');
 

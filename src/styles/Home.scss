@@ -111,7 +111,6 @@
 
   .balance {
     background: rgb(25, 32, 48);
-    position: -webkit-sticky;
     position: sticky;
     top: -1px;
     grid-area: balance;
@@ -124,9 +123,12 @@
     overflow: hidden;
     transition: all 0.3s;
 
-    .balanceNum {
-      max-width: 70vw;
+    div {
+      max-width: 65vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
       cursor: pointer;
+      white-space: nowrap;
     }
   }
 
