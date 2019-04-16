@@ -21,6 +21,7 @@ import Axios from 'axios';
 import AnimeHelper from '../lib/AnimeHelper';
 import StickyEvents from 'sticky-events';
 import OmniApi from '../wallet/api/OmniExplorer';
+import CountUp from 'react-countup';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
@@ -240,7 +241,7 @@ class Home extends React.Component<{}, HomeState> {
                             <span onClick={e => this.setState({ showBalance: !this.state.showBalance })}>
                                 {
                                     this.state.showBalance ?
-                                        this.walletMan ? this.walletMan.current.balance : '0'
+                                        this.walletMan ? <CountUp end={Number.parseFloat(this.walletMan.current.balance)} duration={2} decimals={4} /> : '0'
                                         : '••••••••'
                                 }
                             </span>
