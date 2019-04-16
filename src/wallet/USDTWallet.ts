@@ -42,19 +42,19 @@ export default class USDTWallet extends BTCWallet {
                 txs,
             };
         }).filter(i => i));
-        
+
         return <AddressInfo[]>data;
     }
 
     getTxs(hashes: string[], knownAddresses: string[], symbol = 'usdt'): Promise<TxInfo[]> {
-        throw Error('');
+        throw Error('Not implemented');
     }
 
-    genAddresses(from: number, to: number, external = true): Promise<string[][]> {
-        return new Promise(resolve => {
-            if (external) resolve([['', '1FoWyxwPXuj4C6abqwhjDWdz6D4PZgYRjA']]);
-            else resolve([['', '1KYiKJEfdJtap9QX2v9BXJMpz2SfU4pgZw']]);
-        });
-    }
+    // genAddresses(from: number, to: number, external = true): Promise<string[][]> {
+    //     return new Promise(resolve => {
+    //         if (external) resolve([['', '1FoWyxwPXuj4C6abqwhjDWdz6D4PZgYRjA']]);
+    //         else resolve([['', '1KYiKJEfdJtap9QX2v9BXJMpz2SfU4pgZw']]);
+    //     });
+    // }
 
 }

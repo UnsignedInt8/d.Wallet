@@ -160,7 +160,7 @@ interface ETHAddress {
     contract_code_hex?: any;
     contract_created?: any;
     contract_destroyed?: any;
-    balance: string;
+    balance?: string;
     balance_usd: number;
     received_approximate: string;
     received_usd: number;

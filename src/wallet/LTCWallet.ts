@@ -60,10 +60,10 @@ export default class LTCWallet extends BTCWallet {
         });
     }
 
-    genAddresses(from: number, to: number, external = true): Promise<string[][]> {
-        return new Promise(resolve => {
-            if (external) resolve([['LXcyAwWM12jfiW3L4rDLnjBUMXnKA9n3P5']]);
-            else resolve([['LMWhN3fZb6S7ozamweJWWktdAp147iWWWK']]);
-        });
-    }
+    // genAddresses(from: number, to: number, external = true): Promise<string[][]> {
+    //     return new Promise(resolve => {
+    //         if (external) resolve([['LXcyAwWM12jfiW3L4rDLnjBUMXnKA9n3P5']]);
+    //         else resolve([['LMWhN3fZb6S7ozamweJWWktdAp147iWWWK']]);
+    //     });
+    // }
 }
