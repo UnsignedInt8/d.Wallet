@@ -43,7 +43,7 @@ export default class BTCWallet extends Wallet {
 
         balance = info.reduce((prev, curr) => prev + <number>curr.balance, 0);
         txs = txs.concat(info.map(i => i.txs).flatten(false).toArray());
-
+        
         info = await this.scanAddresses(0, 1);
 
         balance += info.reduce((prev, curr) => prev + <number>curr.balance, 0);
@@ -56,6 +56,7 @@ export default class BTCWallet extends Wallet {
         let newTxs = txs.filter(t => t.timestamp > oldestTime);
         this.txs = newTxs.concat(this.txs).sort((a, b) => b.timestamp - a.timestamp).distinct((i1, i2) => i1.hash === i2.hash).toArray();
 
+        console.log(this.balance, this.txs);
         this.save('balance', this.balance);
         this.save('txs', this.txs);
     }
@@ -92,7 +93,7 @@ export default class BTCWallet extends Wallet {
     async scanAddresses(from: number, to: number, external = true, chain: Chain = 'bitcoin') {
         let addrs = await this.genAddresses(from, to, external);
         let addresses = chain === 'bitcoin-cash' ? addrs.map(a => a[0]) : addrs.flatten(false).toArray();
-
+        
         let addrsInfo: AddressInfo[] = [];
         let knownTxs: string[] = this.txs.map(t => t.hash);
 
@@ -110,7 +111,7 @@ export default class BTCWallet extends Wallet {
             knownTxs = knownTxs.concat(unknownTxs);
 
             let txs = await this.getTxs(unknownTxs, addresses);
-
+            
             let addrInfo = { address: addr, balance, txs: txs };
             addrsInfo.push(addrInfo);
         }
@@ -127,7 +128,7 @@ export default class BTCWallet extends Wallet {
             let inputsValue = tx.inputs.filter(t => t.prev_addresses.some(a => knownAddress.includes(a))).reduce((prev, curr) => (prev + curr.prev_value), 0);
             let outputsValue = tx.outputs.filter(t => t.addresses.some(a => knownAddress.includes(a))).reduce((prev, curr) => prev + curr.value, 0);
             let isIncome = outputsValue > inputsValue;
-            let amount = outputsValue - inputsValue / 10000000;
+            let amount = Unit.fromSatoshis(outputsValue - inputsValue);
 
             return <TxInfo>{
                 blockHash: tx.block_hash,
@@ -137,7 +138,7 @@ export default class BTCWallet extends Wallet {
                 inputs: tx.inputs.map(i => { return { address: i.prev_addresses, value: i.prev_value } }),
                 outputs: tx.outputs.map(o => { return { address: o.addresses, value: o.value } }),
                 isIncome,
-                amount: `${amount}`
+                amount: `${amount.toBTC()}`
             };
         });
 

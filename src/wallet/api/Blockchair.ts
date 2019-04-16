@@ -25,7 +25,8 @@ export default class Blockchair {
     }
 
     static async fetchTxs(hashes: string[], chain: Chain) {
-        hashes = hashes.take(15).toArray();
+        if (hashes.length === 0) return null;
+
         let url = `${Blockchair.host}/${chain}/dashboards/transactions/${hashes.join(',')}`;
         let resp = await axios.get(url);
 

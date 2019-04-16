@@ -287,7 +287,7 @@ class Home extends React.Component<{}, HomeState> {
                                     </div>
 
                                     <div className='date'>
-                                        {new Date(tx.timestamp * 1000).toLocaleString()}
+                                        {new Date(tx.timestamp).toLocaleString()}
                                     </div>
                                 </div>
                             );

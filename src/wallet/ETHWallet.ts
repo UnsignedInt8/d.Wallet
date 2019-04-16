@@ -8,6 +8,7 @@ import Blockchair from "./api/Blockchair";
 import * as Units from 'ethereumjs-units';
 
 export default class ETHWallet extends Wallet {
+
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
         throw new Error("Method not implemented.");
     }
@@ -22,28 +23,6 @@ export default class ETHWallet extends Wallet {
 
     protected getChangePath(): string {
         throw new Error('ETH does not need change addresses');
-    }
-
-    protected async scanAddresses(from: number, to: number, external = true) {
-        let [address] = this.mainAddress;
-        let info = await Blockchair.fetchETHAddress(address);
-        if (!info) return [];
-
-        let balance = info.address.balance;
-        let txs = info.calls.map(c => {
-            return <TxInfo>{
-                amount: BigInt(c.value).toString(),
-                blockHash: '',
-                blockHeight: c.block_id,
-                hash: c.transaction_hash,
-                inputs: [{ address: [c.sender], value: 0 }],
-                outputs: [{ address: [c.recipient], value: 0 }],
-                timestamp: new Date(c.time).getTime(),
-                isIncome: c.recipient.toLowerCase() === address,
-            };
-        });
-
-        return [{ address, balance, txs }];
     }
 
     get symbol() { return 'eth'; }
@@ -72,7 +51,7 @@ export default class ETHWallet extends Wallet {
     }
 
     async refresh() {
-        let [info] = await this.scanAddresses(0, 0);
+        let [info] = await this.scanAddresses();
         if (!info) return;
 
         this.balance = Units.convert(info.balance, 'wei', 'eth');
@@ -80,5 +59,27 @@ export default class ETHWallet extends Wallet {
 
         this.save('balance', this.balance);
         this.save('txs', this.txs);
+    }
+
+    protected async scanAddresses() {
+        let [address] = this.mainAddress;
+        let info = await Blockchair.fetchETHAddress(address);
+        if (!info) return [];
+
+        let balance = info.address.balance;
+        let txs = info.calls.map(c => {
+            return <TxInfo>{
+                amount: BigInt(c.value).toString(),
+                blockHash: '',
+                blockHeight: c.block_id,
+                hash: c.transaction_hash,
+                inputs: [{ address: [c.sender], value: 0 }],
+                outputs: [{ address: [c.recipient], value: 0 }],
+                timestamp: new Date(c.time).getTime(),
+                isIncome: c.recipient.toLowerCase() === address,
+            };
+        });
+
+        return [{ address, balance, txs }];
     }
 }
