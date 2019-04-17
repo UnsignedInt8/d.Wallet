@@ -10,6 +10,7 @@ export abstract class Wallet {
     protected _root: HDPrivateKey
     protected _path: string;
     protected _lastRefreshedTime = 0;
+    private _keys = { external: [], change: [] };
 
     constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string }) {
         const { mnemonic, root } = opts;
@@ -34,15 +35,15 @@ export abstract class Wallet {
     @observable protected _addresses?: string[][];
     @computed get addresses() {
         if (this._addresses) return this._addresses;
-        this.genAddresses(0, 5).then(value => this._addresses = value);
-        return this._addresses || [];
+        this._addresses = this.genAddresses(0, 5)
+        return this._addresses;
     }
 
     @observable protected _changes?: string[][];
     @computed get changes() {
         if (this._changes) return this._changes;
-        this.genAddresses(0, 5, false).then(value => this._changes = value);
-        return this._changes || [];
+        this._changes = this.genAddresses(0, 3, false);
+        return this._changes;
     }
 
     protected getExternalPathIndex(index: number) {
@@ -54,17 +55,21 @@ export abstract class Wallet {
     }
 
     protected getKeys(from: number, to: number, external = true) {
-        return new Promise<HDPrivateKey[]>(async resolve => {
-            let keys: HDPrivateKey[] = [];
+        let keys: HDPrivateKey[] = [];
+        let cache: HDPrivateKey[] = external ? this._keys.external : this._keys.change;
 
-            for (let i = from; i < to; i++) {
-                let key = this._root.derive(external ? this.getExternalPathIndex(i) : this.getChangePathIndex(i));
-                keys.push(key);
-                await sleep(50);
-            }
+        for (let i = from; i < to; i++) {
+            if (cache[i]) {
+                keys.push(cache[i]);
+                continue;
+            };
 
-            resolve(keys);
-        });
+            let key = this._root.derive(external ? this.getExternalPathIndex(i) : this.getChangePathIndex(i));
+            keys.push(key);
+            cache[i] = key;
+        }
+
+        return keys;
     }
 
     protected shouldRefreshing() {
@@ -82,8 +87,8 @@ export abstract class Wallet {
         return store.get(`${this['symbol']}:${key}`);
     }
 
-    async genAddresses(from: number, to: number, external = true) {
-        let addresses = (await this.getKeys(from, to, external)).map(key => this.genAddress(key));
+    genAddresses(from: number, to: number, external = true) {
+        let addresses = this.getKeys(from, to, external).map(key => this.genAddress(key));
         return addresses;
     }
 }
@@ -103,4 +108,12 @@ export interface TxInfo {
     blockHash: string;
     blockHeight: number;
     amount: string;
+}
+
+
+export interface IUtxo {
+    txid: string;
+    vout: number;
+    amount: number;
+    pubkey: string;
 }

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { BTCOMAddress, BTCOMAddressTx, BTCOMTx } from '../../types/BTCOM_Api';
+import { BTCOMAddress, BTCOMAddressTx, BTCOMTx, BTCOMUnspent, BTCOMUnspentList } from '../../types/BTCOM_Api';
 import { resolvePtr } from 'dns';
 
 type Symbol = 'btc' | 'bch';
@@ -39,6 +39,15 @@ export default class BTCOM {
         if (!this.checkResp(resp)) return null;
 
         return resp.data.data as BTCOMAddressTx;
+    }
+
+    static async fetchAddressUnspent(address: string, page = 1, symbol: Symbol) {
+        const url = `https://${BTCOM.apiHosts[symbol] || ''}${BTCOM.host}/v3/address/${address}/unspent&page=${page}`;
+
+        let resp = await axios.get(url);
+        if (!this.checkResp(resp)) return null;
+
+        return resp.data.data as BTCOMUnspentList;
     }
 
     static async fetchTxs(txs: string[], symbol: Symbol) {

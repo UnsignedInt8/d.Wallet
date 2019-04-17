@@ -43,7 +43,14 @@ export interface BTCOMAddress {
     unspent_tx_count: number
 }
 
-interface Unspent {
+export interface BTCOMUnspentList {
+    total_count: number;
+    page: number;
+    pagesize: number;
+    list: BTCOMUnspent[];
+}
+
+export interface BTCOMUnspent {
     tx_hash: string
     tx_output_n: number
     tx_output_n2: number

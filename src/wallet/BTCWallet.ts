@@ -1,7 +1,7 @@
-import { Wallet, TxInfo, AddressInfo } from "./Wallet";
+import { Wallet, TxInfo, AddressInfo, IUtxo } from "./Wallet";
 import { observable, computed } from "mobx";
 import * as bitcoin from 'bitcoinjs-lib';
-import { HDPrivateKey, Unit } from "bitcore-lib";
+import { HDPrivateKey, Unit, PrivateKey, Transaction } from "bitcore-lib";
 import Blockchair, { Chain } from './api/Blockchair';
 import BTCOM from "./api/BTCOM";
 
@@ -43,7 +43,7 @@ export default class BTCWallet extends Wallet {
 
         balance = info.reduce((prev, curr) => prev + <number>curr.balance, 0);
         txs = txs.concat(info.map(i => i.txs).flatten(false).toArray());
-        
+
         info = await this.scanAddresses(0, 1);
 
         balance += info.reduce((prev, curr) => prev + <number>curr.balance, 0);
@@ -65,22 +65,55 @@ export default class BTCWallet extends Wallet {
 
     }
 
-    buildTx(args: { inputs: { txId: string, vout: number }[], outputs: { address: string, amount: number }[] }) {
-        let key = this._root.derive(this.getExternalPathIndex(0));
-        const keyPair = bitcoin.ECPair.fromPrivateKey(key['privateKey'].toBuffer());
-        const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this._network });
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {
+
+        const keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false));
+        const addresses = keys.map(key => {
+            let [segwit, legacy] = this.genAddress(key);
+            let pubkeyBuf = key.hdPublicKey.publicKey.toBuffer();
+            let keyPair = bitcoin.ECPair.fromPrivateKey(key['privateKey'].toBuffer(), { network: this._network });
+
+            const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: pubkeyBuf, network: this._network });
+            const p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh, network: this._network })
+            return { segwit, legacy, pubkey: pubkeyBuf.toString('hex'), key, keyPair, p2wpkh, };
+        });
 
         const { inputs, outputs } = args;
         const builder = new bitcoin.TransactionBuilder(this._network);
 
-        inputs.forEach(i => {
-            builder.addInput(i.txId, i.vout, undefined, p2wpkh.output);
+        inputs.forEach((v, i) => {
+            let [target] = addresses.filter(a => v.pubkey === a.pubkey || v.pubkey === a.legacy || v.pubkey === a.segwit);
+            if (!target) return;
+            let { p2wpkh } = target;
+
+            builder.addInput(v.txid, v.vout, undefined, p2wpkh.output);
         });
 
         outputs.forEach(o => {
             builder.addOutput(o.address, o.amount);
         });
+
+        let txSize = builder.buildIncomplete().byteLength() + 20;
+
+        let totalFee = txSize * (args.satoshiPerByte + 1);
+        let totalIn = inputs.sum(i => i.amount);
+        let totalOut = outputs.sum(o => o.amount);
+        let changeAmount = totalIn - totalOut - totalFee;
+
+        let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex!];
+        builder.addOutput(changeAddr, changeAmount);
+
+        inputs.forEach((v, i) => {
+            let target = addresses.filter(a => v.pubkey === a.pubkey || v.pubkey === a.legacy || v.pubkey === a.segwit)[0];
+            if (!target) return;
+            let { keyPair, } = target;
+
+            builder.sign(i, keyPair, undefined, undefined, v.amount);
+        });
+
+        return { tx: builder.build(), change: { address: changeAddr, amount: changeAmount }, fee: totalFee };
     }
+
 
     protected genAddress(key: HDPrivateKey) {
         let p2wpkh = bitcoin.payments.p2wpkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
@@ -93,7 +126,7 @@ export default class BTCWallet extends Wallet {
     async scanAddresses(from: number, to: number, external = true, chain: Chain = 'bitcoin') {
         let addrs = await this.genAddresses(from, to, external);
         let addresses = chain === 'bitcoin-cash' ? addrs.map(a => a[0]) : addrs.flatten(false).toArray();
-        
+
         let addrsInfo: AddressInfo[] = [];
         let knownTxs: string[] = this.txs.map(t => t.hash);
 
@@ -111,7 +144,7 @@ export default class BTCWallet extends Wallet {
             knownTxs = knownTxs.concat(unknownTxs);
 
             let txs = await this.getTxs(unknownTxs, addresses);
-            
+
             let addrInfo = { address: addr, balance, txs: txs };
             addrsInfo.push(addrInfo);
         }
