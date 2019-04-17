@@ -86,7 +86,15 @@ export default class BTCWallet extends Wallet {
             if (!target) return;
             let { p2wpkh } = target;
 
-            builder.addInput(v.txid, v.vout, undefined, p2wpkh.output);
+            switch (v.type) {
+                case 'p2wpkh':
+                    builder.addInput(v.txid, v.vout, undefined, p2wpkh.output);
+                    break;
+                default:
+                    builder.addInput(v.txid, v.vout);
+                    break;
+            }
+
         });
 
         outputs.forEach(o => {

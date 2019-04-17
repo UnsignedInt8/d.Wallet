@@ -9,6 +9,7 @@ linq.enable();
 const mnemonic = 'nerve shop cabbage skate predict rain model sustain patch grocery solution release';
 
 describe('tests wallets', () => {
+    let btc = new BTCWallet({ mnemonic, network: bitcoin.networks.regtest });
 
     it('tests address', () => {
         let btc = new BTCWallet({ mnemonic, });
@@ -19,6 +20,9 @@ describe('tests wallets', () => {
 
         let eth = new ETHWallet({ mnemonic, });
         expect(eth.mainAddress).toContain('0x4c094a9c4E494Ef7546EfD950c9C75613cbbA771'.toLowerCase());
+
+        let btctest = new BTCWallet({ mnemonic, network: bitcoin.networks.regtest });
+        expect(btctest.mainAddress[1]).toBe('n3tRV1ngugewpKo6kg3EQUcEPPfyafUXgW');
     });
 
     it('test pubkey to address', () => {
@@ -32,11 +36,9 @@ describe('tests wallets', () => {
     });
 
 
-    it('builds raw tx', () => {
-
-        let btc = new BTCWallet({ mnemonic, network: bitcoin.networks.regtest });
+    it('builds p2wpkh input tx', () => {
         let { tx: sendTx, change, fee } = btc.buildTx({
-            inputs: [{ txid: 'f8c34d7fffbce87831c2fc38b4f3fbaa5fc3ba3bbabce1322f0405656805e605', vout: 1, amount: 50100000000, pubkey: 'bcrt1q743r9kknlyjeshzmprrzglsdzz5uha5x46cspm' }],
+            inputs: [{ type: 'p2wpkh', txid: 'f8c34d7fffbce87831c2fc38b4f3fbaa5fc3ba3bbabce1322f0405656805e605', vout: 1, amount: 50100000000, pubkey: 'bcrt1q743r9kknlyjeshzmprrzglsdzz5uha5x46cspm' }],
             outputs: [{ address: '2N2S7vggiwYHVsjZLxsKPdyUwS6AbYYjKFH', amount: 5000 }],
             satoshiPerByte: 50,
             changeIndex: 1,
@@ -47,8 +49,19 @@ describe('tests wallets', () => {
 
         let hex = sendTx.toHex();
         expect(hex).toBe('0200000000010105e605686505042f32e1bcba3bbac35faafbf3b438fcc23178e8bcff7f4dc3f80100000000ffffffff02881300000000000017a91464c8a5b4bb1383a5fefb034fcade577c7d48eaf187f32c31aa0b00000016001460050470523c3a9cc151e45dbf1c9254f840b8c9024730440220318fc0d34b286c0700b6bef20ee8856d0e42259f5d3d1854aa307f70888c2d4c02205ccb19b36cd4885d172f6f14a0d4df95386ae45909acdc897f39c76ecdd2c07f01210309f0c6b887e593f171312976f515b851d0ce2cd083a6a8bb812c7266bc8a236600000000');
+    });
 
-        console.log(change, fee);
+    it('builds p2pkh input tx', () => {
+        let { tx, change, fee } = btc.buildTx({
+            inputs: [{ type: 'p2sh', txid: '8261550ab9265e3dbf843ae7f425284050dc05fa084dde3a8bcc3afb40190475', vout: 0, amount: 500000000, pubkey: 'n3tRV1ngugewpKo6kg3EQUcEPPfyafUXgW' }],
+            outputs: [{ address: '2N2S7vggiwYHVsjZLxsKPdyUwS6AbYYjKFH', amount: 5000 }],
+            satoshiPerByte: 30,
+            changeIndex: 0,
+        });
+
+        let hash = tx.getId();
+        let hex = tx.toHex();
+
         console.log(hash);
         console.log(hex);
     })
