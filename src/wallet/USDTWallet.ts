@@ -7,10 +7,6 @@ import { resolve } from "dns";
 export default class USDTWallet extends BTCWallet {
     get symbol() { return 'usdt' };
 
-    transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
-        throw new Error("Method not implemented.");
-    }
-
     async scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]> {
         let addresses = (await this.genAddresses(from, to, external)).map(a => a[1]);
 

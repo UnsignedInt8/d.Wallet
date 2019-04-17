@@ -61,8 +61,8 @@ export default class BTCWallet extends Wallet {
         this.save('txs', this.txs);
     }
 
-    transfer(opts: { to: { address: string, amount: number }[]; message?: string | undefined; }) {
-
+    async transfer(opts: { to: { address: string, amount: number }[]; message?: string | undefined; }) {
+        // BTCOM.fetchAddressUnspent()
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {

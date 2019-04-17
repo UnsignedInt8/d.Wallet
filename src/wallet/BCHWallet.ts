@@ -7,10 +7,7 @@ import Blockchair, { Chain } from "./api/Blockchair";
 import * as bchaddrjs from 'bchaddrjs';
 
 export default class BCHWallet extends BTCWallet {
-    transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
-        throw new Error("Method not implemented.");
-    }
-
+    
     protected getExternalPath(): string {
         return `m/44'/145'/0'/0`;
     }

@@ -7,10 +7,6 @@ import Blockchair from "./api/Blockchair";
 
 export default class LTCWallet extends BTCWallet {
 
-    transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
-        throw new Error("Method not implemented.");
-    }
-
     get symbol() { return 'ltc'; }
 
     protected _mainAddress?: string[];

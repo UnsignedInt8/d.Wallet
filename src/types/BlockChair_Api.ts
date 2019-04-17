@@ -68,7 +68,7 @@ interface IBTCTxData {
 }
 
 interface BTCTx {
-    transaction: Transaction;
+    transaction: BTCTransaction;
     inputs: Input[];
     outputs: Input[];
 }
@@ -102,7 +102,7 @@ interface Input {
     cdd: number;
 }
 
-interface Transaction {
+export interface BTCTransaction {
     block_id: number;
     id: number;
     hash: string;

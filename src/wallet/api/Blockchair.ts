@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BTCAddressObject, BTCTxObject, ETHTxObject } from '../../types/BlockChair_Api';
+import { BTCAddressObject, BTCTxObject, ETHTxObject, BTCTransaction } from '../../types/BlockChair_Api';
 import { TxInfo } from '../Wallet';
 
 export type Chain = 'bitcoin' | 'bitcoin-cash' | 'bitcoin-sv' | 'litecoin' | 'dogecoin';
@@ -47,5 +47,14 @@ export default class Blockchair {
         if (data.context.code !== 200) return null;
 
         return data.data[address.toLowerCase()];
+    }
+
+    static async fetchUtxos(address: string, chain: Chain) {
+        let url = `${Blockchair.host}/${chain}/outputs?q=is_spent(false),recipient(${address})`;
+        let resp = await axios.get(url);
+
+        if (!resp.data) return null;
+        let data = resp.data.data as BTCTransaction[] || [];
+        return data;
     }
 }
