@@ -116,5 +116,5 @@ export interface IUtxo {
     vout: number;
     amount: number;
     pubkey: string;
-    type: 'p2ms' | 'p2pk' | 'p2pkh' | 'p2wpkh' | 'p2sh' | 'p2wsh';
+    type: string | 'p2ms' | 'p2pk' | 'p2pkh' | 'p2wpkh' | 'p2sh' | 'p2wsh';
 }

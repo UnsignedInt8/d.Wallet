@@ -75,7 +75,8 @@ export default class BTCWallet extends Wallet {
 
             const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: pubkeyBuf, network: this._network });
             const p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh, network: this._network })
-            return { segwit, legacy, pubkey: pubkeyBuf.toString('hex'), key, keyPair, p2wpkh, };
+
+            return { segwit, legacy, pubkey: pubkeyBuf.toString('hex'), key, keyPair, p2wpkh, p2sh };
         });
 
         const { inputs, outputs } = args;
@@ -88,8 +89,17 @@ export default class BTCWallet extends Wallet {
 
             switch (v.type) {
                 case 'p2wpkh':
+                case 'witness_v0_keyhash':
+                case 'P2WPKH_V0':
                     builder.addInput(v.txid, v.vout, undefined, p2wpkh.output);
                     break;
+
+                case 'p2wsh':
+                case 'witness_v0_scripthash':
+                case 'P2WSH_V0':
+                    builder.addInput(v.txid, v.vout);
+                    break;
+
                 default:
                     builder.addInput(v.txid, v.vout);
                     break;
@@ -114,9 +124,25 @@ export default class BTCWallet extends Wallet {
         inputs.forEach((v, i) => {
             let target = addresses.filter(a => v.pubkey === a.pubkey || v.pubkey === a.legacy || v.pubkey === a.segwit)[0];
             if (!target) return;
-            let { keyPair, } = target;
+            let { keyPair, p2sh } = target;
 
-            builder.sign(i, keyPair, undefined, undefined, v.amount);
+            switch (v.type) {
+                case 'p2wpkh':
+                case 'witness_v0_keyhash':
+                case 'P2WPKH_V0':
+                    builder.sign(i, keyPair, undefined, undefined, v.amount);
+                    break;
+
+                case 'p2wsh':
+                case 'witness_v0_scripthash':
+                case 'P2WSH_V0':
+                    builder.sign(i, keyPair, p2sh.redeem!.output, undefined, v.amount);
+                    break;
+
+                default:
+                    builder.sign(i, keyPair);
+                    break;
+            }
         });
 
         return { tx: builder.build(), change: { address: changeAddr, amount: changeAmount }, fee: totalFee };
