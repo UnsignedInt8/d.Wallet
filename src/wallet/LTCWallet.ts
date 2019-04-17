@@ -8,6 +8,7 @@ import Blockchair from "./api/Blockchair";
 export default class LTCWallet extends BTCWallet {
 
     get symbol() { return 'ltc'; }
+    get chain() { return 'litecoin'; }
 
     protected _mainAddress?: string[];
     get mainAddress() {

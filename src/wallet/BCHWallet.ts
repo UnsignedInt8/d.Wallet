@@ -7,7 +7,7 @@ import Blockchair, { Chain } from "./api/Blockchair";
 import * as bchaddrjs from 'bchaddrjs';
 
 export default class BCHWallet extends BTCWallet {
-    
+
     protected getExternalPath(): string {
         return `m/44'/145'/0'/0`;
     }
@@ -17,6 +17,7 @@ export default class BCHWallet extends BTCWallet {
     }
 
     get symbol() { return 'bch'; }
+    get chain() { return 'bitcoin-cash'; };
 
     protected _mainAddress?: string[];
     get mainAddress() {

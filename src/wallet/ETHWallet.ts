@@ -26,6 +26,7 @@ export default class ETHWallet extends Wallet {
     }
 
     get symbol() { return 'eth'; }
+    get chain() { return 'ethereum'; }
 
     private _mainAddress?: string[];
     get mainAddress() {

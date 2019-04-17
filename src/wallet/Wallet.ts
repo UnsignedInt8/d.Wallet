@@ -21,7 +21,8 @@ export abstract class Wallet {
         this.txs = this.load('txs') || [];
     }
 
-    abstract get symbol();
+    abstract get symbol(): string;
+    abstract get chain(): string;
     abstract mainAddress: string[];
     @observable balance: string = '0';
     @observable txs: TxInfo[] = [];

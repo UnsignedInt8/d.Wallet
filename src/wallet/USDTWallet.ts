@@ -5,7 +5,9 @@ import { Unit } from 'bitcore-lib';
 import { resolve } from "dns";
 
 export default class USDTWallet extends BTCWallet {
+    
     get symbol() { return 'usdt' };
+    get chain() { return 'bitcoin'; }
 
     async scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]> {
         let addresses = (await this.genAddresses(from, to, external)).map(a => a[1]);

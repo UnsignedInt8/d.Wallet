@@ -23,6 +23,7 @@ export default class BTCWallet extends Wallet {
     }
 
     get symbol() { return 'btc'; }
+    get chain() { return 'bitcoin'; }
 
     protected _mainAddress?: string[];
     get mainAddress() {
