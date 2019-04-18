@@ -50,8 +50,8 @@ export default class BCHWallet extends BTCWallet {
         let totalAmount = opts.to.sum(t => t.amount);
         let utxos = (await this.fetchUtxos(totalAmount, this.chain)).map(t => {
             return <IUtxo>{
-                amount: t.value,
-                recipient: t.recipient,
+                satoshis: t.value,
+                address: t.recipient,
                 script: t.script_hex,
                 txid: t.transaction_hash,
                 type: t.type,
@@ -70,17 +70,15 @@ export default class BCHWallet extends BTCWallet {
         let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false)).map(key => key['privateKey']);
         let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
 
-        let tx = new BCHTransaction();
-        tx.from(args.inputs);
-        tx.change(changeAddr);
-        tx.feePerKb((args.satoshiPerByte + 1) * 1000);
+        let utxos = args.inputs.map(i => new BCHTransaction.UnspentOutput(i));
+        let tx = new BCHTransaction().feePerKb((args.satoshiPerByte + 1) * 1000).from(utxos).change(changeAddr);;
 
         args.outputs.forEach(o => {
             tx.to(o.address, o.amount);
         });
 
         tx.sign(keys as any);
-        return { tx, change: { address: changeAddr, amount: tx.getFee() }, fee: 0 };
+        return { tx, change: { address: changeAddr, amount: tx.getFee() }, fee: tx.getFee() };
     }
 
     // async genAddresses(from: number, to: number, external = true) {

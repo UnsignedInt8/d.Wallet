@@ -66,8 +66,8 @@ export default class BTCWallet extends Wallet {
         let totalAmount = opts.to.sum(t => t.amount);
         let utxos = (await this.fetchUtxos(totalAmount, this.chain as Chain)).map(t => {
             return <IUtxo>{
-                recipient: t.recipient,
-                amount: t.value,
+                address: t.recipient,
+                satoshis: t.value,
                 txid: t.transaction_hash,
                 type: t.type,
                 vout: t.index,
@@ -104,7 +104,7 @@ export default class BTCWallet extends Wallet {
         const builder = new bitcoin.TransactionBuilder(this._network);
 
         inputs.forEach((v, i) => {
-            let [target] = addresses.filter(a => v.recipient === a.pubkey || v.recipient === a.legacy || v.recipient === a.segwit);
+            let [target] = addresses.filter(a => v.address === a.pubkey || v.address === a.legacy || v.address === a.segwit);
             if (!target) return;
             let { p2wpkh } = target;
 
@@ -135,7 +135,7 @@ export default class BTCWallet extends Wallet {
         let txSize = builder.buildIncomplete().byteLength() + 20;
 
         let totalFee = txSize * (args.satoshiPerByte + 1);
-        let totalIn = inputs.sum(i => i.amount);
+        let totalIn = inputs.sum(i => i.satoshis);
         let totalOut = outputs.sum(o => o.amount);
         let changeAmount = totalIn - totalOut - totalFee;
 
@@ -143,7 +143,7 @@ export default class BTCWallet extends Wallet {
         builder.addOutput(changeAddr, changeAmount);
 
         inputs.forEach((v, i) => {
-            let target = addresses.filter(a => v.recipient === a.pubkey || v.recipient === a.legacy || v.recipient === a.segwit)[0];
+            let target = addresses.filter(a => v.address === a.pubkey || v.address === a.legacy || v.address === a.segwit)[0];
             if (!target) return;
             let { keyPair, p2sh } = target;
 
@@ -151,13 +151,13 @@ export default class BTCWallet extends Wallet {
                 case 'p2wpkh':
                 case 'witness_v0_keyhash':
                 case 'P2WPKH_V0':
-                    builder.sign(i, keyPair, undefined, undefined, v.amount);
+                    builder.sign(i, keyPair, undefined, undefined, v.satoshis);
                     break;
 
                 case 'p2wsh':
                 case 'witness_v0_scripthash':
                 case 'P2WSH_V0':
-                    builder.sign(i, keyPair, p2sh.redeem!.output, undefined, v.amount);
+                    builder.sign(i, keyPair, p2sh.redeem!.output, undefined, v.satoshis);
                     break;
 
                 default:

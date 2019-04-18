@@ -1,7 +1,8 @@
 import BTCWallet from "../../src/wallet/BTCWallet";
 import ETHWallet from "../../src/wallet/ETHWallet";
 import * as bitcoin from "bitcoinjs-lib";
-import { Transaction, HDPrivateKey, PublicKey, Networks } from "bitcore-lib";
+import { Transaction, HDPrivateKey, PublicKey, } from "bitcore-lib";
+import { Networks } from 'bitcore-lib-cash';
 import * as Mnemonic from 'bitcore-mnemonic';
 import * as linq from 'linq';
 import BCHWallet from "../../src/wallet/BCHWallet";
@@ -39,7 +40,7 @@ describe('tests wallets', () => {
 
     it('builds p2wpkh input tx', () => {
         let { tx: sendTx, change, fee } = btc.buildTx({
-            inputs: [{ type: 'p2wpkh', txid: 'f8c34d7fffbce87831c2fc38b4f3fbaa5fc3ba3bbabce1322f0405656805e605', vout: 1, amount: 50100000000, recipient: 'bcrt1q743r9kknlyjeshzmprrzglsdzz5uha5x46cspm' }],
+            inputs: [{ type: 'p2wpkh', txid: 'f8c34d7fffbce87831c2fc38b4f3fbaa5fc3ba3bbabce1322f0405656805e605', vout: 1, satoshis: 50100000000, address: 'bcrt1q743r9kknlyjeshzmprrzglsdzz5uha5x46cspm' }],
             outputs: [{ address: '2N2S7vggiwYHVsjZLxsKPdyUwS6AbYYjKFH', amount: 5000 }],
             satoshiPerByte: 50,
             changeIndex: 1,
@@ -55,7 +56,7 @@ describe('tests wallets', () => {
 
     it('builds p2pkh input tx', () => {
         let { tx, change, fee } = btc.buildTx({
-            inputs: [{ type: 'p2sh', txid: '8261550ab9265e3dbf843ae7f425284050dc05fa084dde3a8bcc3afb40190475', vout: 0, amount: 500000000, recipient: 'n3tRV1ngugewpKo6kg3EQUcEPPfyafUXgW' }],
+            inputs: [{ type: 'p2sh', txid: '8261550ab9265e3dbf843ae7f425284050dc05fa084dde3a8bcc3afb40190475', vout: 0, satoshis: 500000000, address: 'n3tRV1ngugewpKo6kg3EQUcEPPfyafUXgW' }],
             outputs: [{ address: '2N2S7vggiwYHVsjZLxsKPdyUwS6AbYYjKFH', amount: 5000 }],
             satoshiPerByte: 30,
             changeIndex: 0,
@@ -71,15 +72,28 @@ describe('tests wallets', () => {
     });
 
     it('builds bch tx', () => {
-        let bch = new BCHWallet({ mnemonic, network: Networks.testnet });
+        let bch = new BCHWallet({ mnemonic, network: Networks.regtest });
         console.log(bch.mainAddress);
 
         let { tx, change, fee } = bch.buildTx({
-            inputs: [{ type: 'pubkeyhash', txid: '45b49a9cd29152c96f22377120ed10322a50e39bec2fa3f8a3eb0570e8225dcc', vout: 0, amount: 1000000000, recipient: 'myMvmbvQF5Fw3SgxQd7KMc4AY13NmCX3jx', script: '76a914c3bd3f578fc943041db83a214c83678e8cd3428f88ac' }],
-            outputs: [{ address: '2Mtg7TtLHx8y5GWnBRsVbgT2ZJg8oWdhESp', amount: 5000 }],
+            inputs: [{
+                type: 'pubkeyhash',
+                txid: 'f18ff5c589154698bd514a24468cd8dbcf23318ee615e3321b51b0eed1742cb0',
+                vout: 1,
+                satoshis: 1000000000,
+                address: 'qrpm606h3ly5xpqahqazznyrv78ge56z3u9mjha5kd',
+                script: '76a914c3bd3f578fc943041db83a214c83678e8cd3428f88ac'
+            }],
+            outputs: [{ address: 'qp065lffke6wq3dup8jnegsx28st43qg3qpctr6w9s', amount: 5000 }],
             satoshiPerByte: 30,
+            changeIndex: 0,
         });
 
-        console.log(tx, change, fee);
+        let hex = tx.serialize();
+        let id = tx.id;
+
+        expect(hex).toBe('0100000001b02c74d1eeb0511b32e315e68e3123cfdbd88c46244a51bd98461589c5f58ff1010000006a473044022065fe0b86fd394e80da4d89d9b5878c3968c942b96b7427522eacb9d94f449b6402207827545f6e9bb376affb142d9e557e648f14bbe3c26bedcf677b49b7e91ef2fd412103eb63fdcd9c5dc4ec348c787f008325884693f637901219f61b5673e9c7e1920effffffff0288130000000000001976a9145faa7d29b674e045bc09e53ca20651e0bac4088888acbd9a9a3b000000001976a91415c52fa6f60884974e33f573366b85a39251966788ac00000000');
+        expect(id).toBe('65bfcf5a7d09f638cff099f5b34cead9739580b51ea88222ddeacec6c17f0d6d');
+
     });
 });

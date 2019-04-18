@@ -132,8 +132,8 @@ export interface TxInfo {
 export interface IUtxo {
     txid: string;
     vout: number;
-    amount: number;
-    recipient: string;
+    satoshis: number;
+    address: string;
     type: string | 'p2ms' | 'p2pk' | 'p2pkh' | 'p2wpkh' | 'p2sh' | 'p2wsh';
     script?: string;
 }
