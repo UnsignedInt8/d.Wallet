@@ -8,6 +8,9 @@ import Blockchair, { Chain } from "./api/Blockchair";
 import * as Units from 'ethereumjs-units';
 
 export default class ETHWallet extends Wallet {
+    buildTx(args: { inputs: import("./Wallet").IUtxo[]; outputs: { address: string; amount: number; }[]; satoshiPerByte: number; changeIndex?: number | undefined; }): { tx: import("bitcoinjs-lib").Transaction | import("bitcore-lib").Transaction; change: { address: string; amount: number; }; fee: number; } {
+        throw new Error("Method not implemented.");
+    }
 
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
         throw new Error("Method not implemented.");
@@ -42,6 +45,8 @@ export default class ETHWallet extends Wallet {
         if (this._addresses) return this._addresses;
         return [this.mainAddress];
     }
+
+    get changes() { return []; }
 
     private pubToAddress(pubkey: Buffer) {
         let pubkeyBuf = toBuffer(pubkey);

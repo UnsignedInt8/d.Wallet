@@ -63,9 +63,8 @@ export default class BTCWallet extends Wallet {
     }
 
     async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
-        let addrs = [this.addresses[0], ...this.changes, ...this.addresses.slice(1)].flatten(false).toArray();
         let totalAmount = opts.to.sum(t => t.amount);
-        let utxos = (await this.fetchUtxos(addrs, totalAmount, this.chain as Chain)).map(t => {
+        let utxos = (await this.fetchUtxos(totalAmount, this.chain as Chain)).map(t => {
             return <IUtxo>{
                 recipient: t.recipient,
                 amount: t.value,

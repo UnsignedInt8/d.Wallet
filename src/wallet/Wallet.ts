@@ -1,11 +1,12 @@
 import * as bip39 from 'bip39';
 import * as Mnemonic from 'bitcore-mnemonic';
-import { HDPrivateKey } from 'bitcore-lib';
+import { HDPrivateKey, Transaction } from 'bitcore-lib';
 import * as store from 'store';
 import sleep from 'sleep-promise';
 import { observable, computed, } from 'mobx';
 import Blockchair, { Chain } from './api/Blockchair';
 import { BTCUtxo } from '../types/BlockChair_Api';
+import * as bitcoin from 'bitcoinjs-lib';
 
 export abstract class Wallet {
 
@@ -34,6 +35,11 @@ export abstract class Wallet {
     protected abstract getChangePath(): string;
     protected abstract scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]>;
     protected abstract genAddress(key: HDPrivateKey): string[];
+    abstract buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }): {
+        tx: bitcoin.Transaction | Transaction,
+        change: { address: string, amount: number },
+        fee: number,
+    };
 
     @observable protected _addresses?: string[][];
     @computed get addresses() {
@@ -95,7 +101,8 @@ export abstract class Wallet {
         return addresses;
     }
 
-    protected async fetchUtxos(addresses: string[], amount: number, chain: Chain) {
+    protected async fetchUtxos(amount: number, chain: Chain) {
+        let addresses = [this.addresses[0], ...this.changes, ...this.addresses.slice(1)].flatten(false).toArray();
         let utxos: BTCUtxo[] = [];
 
         for (let addr of addresses) {
@@ -132,4 +139,5 @@ export interface IUtxo {
     amount: number;
     recipient: string;
     type: string | 'p2ms' | 'p2pk' | 'p2pkh' | 'p2wpkh' | 'p2sh' | 'p2wsh';
+    script?: string;
 }

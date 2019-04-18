@@ -57,6 +57,10 @@ export default class LTCWallet extends BTCWallet {
         });
     }
 
+    async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
+        return { hex: '', id: '', change: { address: '', amount: 0 }, fee: 0 }
+    }
+
     // genAddresses(from: number, to: number, external = true): Promise<string[][]> {
     //     return new Promise(resolve => {
     //         if (external) resolve([['LXcyAwWM12jfiW3L4rDLnjBUMXnKA9n3P5']]);

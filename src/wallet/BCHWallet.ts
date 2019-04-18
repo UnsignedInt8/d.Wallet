@@ -1,5 +1,5 @@
-import { Wallet, AddressInfo, TxInfo } from "./Wallet";
-import { PrivateKey } from 'bitcore-lib-cash';
+import { Wallet, AddressInfo, TxInfo, IUtxo } from "./Wallet";
+import { PrivateKey, Transaction } from 'bitcore-lib-cash';
 import { HDPrivateKey } from "bitcore-lib";
 import { observable, computed } from "mobx";
 import BTCWallet from "./BTCWallet";
@@ -40,6 +40,14 @@ export default class BCHWallet extends BTCWallet {
 
     async getTxs(hashes: string[], knownAddresses: string[], symbol = 'bch') {
         return await super.getTxs(hashes, knownAddresses.map(a => bchaddrjs.toLegacyAddress(a)).concat(knownAddresses), 'bch');
+    }
+
+    async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
+        return { hex: '', id: '', change: { address: '', amount: 0 }, fee: 0 }
+    }
+
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {
+        return { tx: <any>{}, change: { address: '', amount: 0 }, fee: 0 }
     }
 
     // async genAddresses(from: number, to: number, external = true) {
