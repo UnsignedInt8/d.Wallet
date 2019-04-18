@@ -7,6 +7,7 @@ import { observable, computed, } from 'mobx';
 import Blockchair, { Chain } from './api/Blockchair';
 import { BTCUtxo } from '../types/BlockChair_Api';
 import * as bitcoin from 'bitcoinjs-lib';
+import * as bchaddrjs from 'bchaddrjs';
 
 export abstract class Wallet {
 
@@ -99,6 +100,11 @@ export abstract class Wallet {
 
     protected async fetchUtxos(amount: number, chain: Chain) {
         let addresses = [this.addresses[0], ...this.changes, ...this.addresses.slice(1)].flatten(false).toArray();
+
+        if (chain === 'bitcoin-cash') {
+            addresses = addresses.filter(a => !bchaddrjs.isLegacyAddress(a));
+        }
+
         let utxos: BTCUtxo[] = [];
 
         for (let addr of addresses) {
