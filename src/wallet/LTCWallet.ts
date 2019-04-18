@@ -62,11 +62,13 @@ export default class LTCWallet extends BTCWallet {
         let utxos = await this.fetchUtxos(totalAmount, this.chain);
         if (utxos.length === 0) return;
 
-
-        return { hex: '', id: '', change: { address: '', amount: 0 }, fee: 0 }
+        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte, message: opts.message });
+        let hex = tx.serialize() as string;
+        
+        return { hex, id: tx.id as string, change, fee };
     }
 
-    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, message?: string }) {
         let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false));
         let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
 
@@ -74,10 +76,13 @@ export default class LTCWallet extends BTCWallet {
         let tx = new LTCTransaction().from(utxos).change(changeAddr).feePerKb((args.satoshiPerByte + 1) * 1000);
 
         args.outputs.forEach(o => {
+            tx.to(o.address, o.amount);
+        });
 
-        })
+        tx.sign(keys);
 
-        return { tx: <any>{}, change: { address: changeAddr, amount: 0 }, fee: 0 };
+        let fee = tx.getFee();
+        return { tx, change: { address: changeAddr, amount: fee }, fee };
     }
 
     // genAddresses(from: number, to: number, external = true): Promise<string[][]> {
