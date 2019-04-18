@@ -1,6 +1,6 @@
 import { Wallet, AddressInfo, TxInfo, IUtxo } from "./Wallet";
-import { PrivateKey as BCHPrivateKey, Transaction } from 'bitcore-lib-cash';
-import { HDPrivateKey, Networks } from "bitcore-lib";
+import { PrivateKey as BCHPrivateKey, Transaction as BCHTransaction } from 'bitcore-lib-cash';
+import { HDPrivateKey, Networks, Transaction } from "bitcore-lib";
 import { observable, computed } from "mobx";
 import BTCWallet from "./BTCWallet";
 import Blockchair, { Chain } from "./api/Blockchair";
@@ -70,8 +70,16 @@ export default class BCHWallet extends BTCWallet {
         let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false)).map(key => key['privateKey']);
         let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
 
-        let tx = new Transaction().from(args.inputs).change(changeAddr).feePerKb((args.satoshiPerByte + 1) * 1000).sign(keys);
+        let tx = new BCHTransaction();
+        tx.from(args.inputs);
+        tx.change(changeAddr);
+        tx.feePerKb((args.satoshiPerByte + 1) * 1000);
 
+        args.outputs.forEach(o => {
+            tx.to(o.address, o.amount);
+        });
+
+        tx.sign(keys as any);
         return { tx, change: { address: changeAddr, amount: tx.getFee() }, fee: 0 };
     }
 

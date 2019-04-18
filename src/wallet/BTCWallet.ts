@@ -1,4 +1,4 @@
-import { Wallet, TxInfo, AddressInfo, IUtxo } from "./Wallet";
+import { Wallet, TxInfo, AddressInfo, IUtxo, IBuildingTx } from "./Wallet";
 import { observable, computed } from "mobx";
 import * as bitcoin from 'bitcoinjs-lib';
 import { HDPrivateKey, Unit, PrivateKey, Transaction, Networks } from "bitcore-lib";
@@ -77,6 +77,7 @@ export default class BTCWallet extends Wallet {
         if (utxos.length === 0) return;
 
         let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte });
+        tx = tx as bitcoin.Transaction;
 
         return { hex: tx.toHex(), id: tx.getId(), change, fee };
     }
@@ -85,7 +86,7 @@ export default class BTCWallet extends Wallet {
 
     }
 
-    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }): IBuildingTx {
 
         const keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false));
         const addresses = keys.map(key => {

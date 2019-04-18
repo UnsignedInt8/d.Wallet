@@ -44,6 +44,7 @@ describe('tests wallets', () => {
             satoshiPerByte: 50,
             changeIndex: 1,
         });
+        sendTx = sendTx as bitcoin.Transaction;
 
         let hash = sendTx.getId();
         expect(hash).toBe('efa9011ea4c5c1408f5affdb5a607b16306b1a32af8a63fc874659f40982fea4');
@@ -59,6 +60,7 @@ describe('tests wallets', () => {
             satoshiPerByte: 30,
             changeIndex: 0,
         });
+        tx = tx as bitcoin.Transaction;
 
         let hash = tx.getId();
         let hex = tx.toHex();
@@ -72,12 +74,12 @@ describe('tests wallets', () => {
         let bch = new BCHWallet({ mnemonic, network: Networks.testnet });
         console.log(bch.mainAddress);
 
-        // let { tx, change, fee } = bch.buildTx({
-        //     inputs: [{ type: 'pubkeyhash', txid: '00fa7b33622daeac719959179bb5f3fd8f4bf8ff347db60336567f380a55946c', vout: 0, amount: 1250531057, recipient: bch.mainAddress[0] }],
-        //     outputs: [{ address: 'qrcuqadqrzp2uztjl9wn5sthepkg22majyxw4gmv6p', amount: 5000 }],
-        //     satoshiPerByte: 30,
-        // });
+        let { tx, change, fee } = bch.buildTx({
+            inputs: [{ type: 'pubkeyhash', txid: '45b49a9cd29152c96f22377120ed10322a50e39bec2fa3f8a3eb0570e8225dcc', vout: 0, amount: 1000000000, recipient: 'myMvmbvQF5Fw3SgxQd7KMc4AY13NmCX3jx', script: '76a914c3bd3f578fc943041db83a214c83678e8cd3428f88ac' }],
+            outputs: [{ address: '2Mtg7TtLHx8y5GWnBRsVbgT2ZJg8oWdhESp', amount: 5000 }],
+            satoshiPerByte: 30,
+        });
 
-        // console.log(tx, change, fee);
+        console.log(tx, change, fee);
     });
 });
