@@ -1,9 +1,10 @@
 import BTCWallet from "../../src/wallet/BTCWallet";
 import ETHWallet from "../../src/wallet/ETHWallet";
 import * as bitcoin from "bitcoinjs-lib";
-import { Transaction, HDPrivateKey, PublicKey } from "bitcore-lib";
+import { Transaction, HDPrivateKey, PublicKey, Networks } from "bitcore-lib";
 import * as Mnemonic from 'bitcore-mnemonic';
 import * as linq from 'linq';
+import BCHWallet from "../../src/wallet/BCHWallet";
 linq.enable();
 
 const mnemonic = 'nerve shop cabbage skate predict rain model sustain patch grocery solution release';
@@ -64,7 +65,19 @@ describe('tests wallets', () => {
 
         expect(hash).toBe('326416ab86ef62737ad934f700eec1d7743e9c303d0d95f2457770928dcf8a8c');
         expect(hex).toBe('020000000175041940fb3acc8b3ade4d08fa05dc50402825f4e73a84bf3d5e26b90a556182000000006a473044022018f9b91a42430fe963f1cd7f5b84425667b7faa3210c7bf088a29a293245d61902201f15cc4b0aad9aab14015f176c16ff90708265cdda320f761b6da91757cfc16301210309f0c6b887e593f171312976f515b851d0ce2cd083a6a8bb812c7266bc8a2366ffffffff02881300000000000017a91464c8a5b4bb1383a5fefb034fcade577c7d48eaf187ff44cd1d00000000160014edafd95fec3d557b4dc993dd2ce88a0fc793abd700000000');
-        
+
     });
 
+    it('builds bch tx', () => {
+        let bch = new BCHWallet({ mnemonic, network: Networks.testnet });
+        console.log(bch.mainAddress);
+
+        // let { tx, change, fee } = bch.buildTx({
+        //     inputs: [{ type: 'pubkeyhash', txid: '00fa7b33622daeac719959179bb5f3fd8f4bf8ff347db60336567f380a55946c', vout: 0, amount: 1250531057, recipient: bch.mainAddress[0] }],
+        //     outputs: [{ address: 'qrcuqadqrzp2uztjl9wn5sthepkg22majyxw4gmv6p', amount: 5000 }],
+        //     satoshiPerByte: 30,
+        // });
+
+        // console.log(tx, change, fee);
+    });
 });

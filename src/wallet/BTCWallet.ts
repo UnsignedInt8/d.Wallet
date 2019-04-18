@@ -1,17 +1,17 @@
 import { Wallet, TxInfo, AddressInfo, IUtxo } from "./Wallet";
 import { observable, computed } from "mobx";
 import * as bitcoin from 'bitcoinjs-lib';
-import { HDPrivateKey, Unit, PrivateKey, Transaction } from "bitcore-lib";
+import { HDPrivateKey, Unit, PrivateKey, Transaction, Networks } from "bitcore-lib";
 import Blockchair, { Chain } from './api/Blockchair';
 import BTCOM from "./api/BTCOM";
 
 export default class BTCWallet extends Wallet {
 
-    private _network?: bitcoin.Network;
+    protected _network?: bitcoin.Network;
 
-    constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string, network?: bitcoin.Network }) {
+    constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string, network?: bitcoin.Network | Networks.Network }) {
         super(opts);
-        this._network = opts.network;
+        this._network = opts.network as bitcoin.Network;
     }
 
     protected getExternalPath(): string {
@@ -73,6 +73,8 @@ export default class BTCWallet extends Wallet {
                 vout: t.index,
             };
         });
+
+        if (utxos.length === 0) return;
 
         let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte });
 
@@ -136,7 +138,7 @@ export default class BTCWallet extends Wallet {
         let totalOut = outputs.sum(o => o.amount);
         let changeAmount = totalIn - totalOut - totalFee;
 
-        let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex!];
+        let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
         builder.addOutput(changeAddr, changeAmount);
 
         inputs.forEach((v, i) => {

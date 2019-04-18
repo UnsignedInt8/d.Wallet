@@ -1,12 +1,16 @@
 import { Wallet, AddressInfo, TxInfo, IUtxo } from "./Wallet";
-import { PrivateKey, Transaction } from 'bitcore-lib-cash';
-import { HDPrivateKey } from "bitcore-lib";
+import { PrivateKey as BCHPrivateKey, Transaction } from 'bitcore-lib-cash';
+import { HDPrivateKey, Networks } from "bitcore-lib";
 import { observable, computed } from "mobx";
 import BTCWallet from "./BTCWallet";
 import Blockchair, { Chain } from "./api/Blockchair";
 import * as bchaddrjs from 'bchaddrjs';
 
 export default class BCHWallet extends BTCWallet {
+
+    constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string, network?: Networks.Network }) {
+        super(opts);
+    }
 
     protected getExternalPath(): string {
         return `m/44'/145'/0'/0`;
@@ -29,7 +33,7 @@ export default class BCHWallet extends BTCWallet {
 
     protected genAddress(key: HDPrivateKey) {
         let privkey = key['privateKey'].toString();
-        let cashAddr = new PrivateKey(privkey).toAddress().toString().split(':')[1];
+        let cashAddr = new BCHPrivateKey(privkey).toAddress(this._network).toString().split(':')[1];
         let legacy = bchaddrjs.toLegacyAddress(cashAddr);
         return [cashAddr, legacy];
     }
@@ -43,11 +47,32 @@ export default class BCHWallet extends BTCWallet {
     }
 
     async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
-        return { hex: '', id: '', change: { address: '', amount: 0 }, fee: 0 }
+        let totalAmount = opts.to.sum(t => t.amount);
+        let utxos = (await this.fetchUtxos(totalAmount, this.chain)).map(t => {
+            return <IUtxo>{
+                amount: t.value,
+                recipient: t.recipient,
+                script: t.script_hex,
+                txid: t.transaction_hash,
+                type: t.type,
+                vout: t.index,
+            };
+        });
+
+        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte });
+        let hex = tx.serialize() as string;
+        let id = tx.id as string;
+
+        return { hex, id, change, fee };
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {
-        return { tx: <any>{}, change: { address: '', amount: 0 }, fee: 0 }
+        let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false)).map(key => key['privateKey']);
+        let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
+
+        let tx = new Transaction().from(args.inputs).change(changeAddr).feePerKb((args.satoshiPerByte + 1) * 1000).sign(keys);
+
+        return { tx, change: { address: changeAddr, amount: tx.getFee() }, fee: 0 };
     }
 
     // async genAddresses(from: number, to: number, external = true) {
