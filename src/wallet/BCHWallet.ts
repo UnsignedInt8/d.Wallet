@@ -48,16 +48,8 @@ export default class BCHWallet extends BTCWallet {
 
     async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
         let totalAmount = opts.to.sum(t => t.amount);
-        let utxos = (await this.fetchUtxos(totalAmount, this.chain)).map(t => {
-            return <IUtxo>{
-                satoshis: t.value,
-                address: t.recipient,
-                script: t.script_hex,
-                txid: t.transaction_hash,
-                type: t.type,
-                vout: t.index,
-            };
-        });
+        let utxos = await this.fetchUtxos(totalAmount, this.chain);
+        if (utxos.length === 0) return;
 
         let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte });
         let hex = tx.serialize() as string;

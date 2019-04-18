@@ -107,7 +107,16 @@ export abstract class Wallet {
             if (utxos.sum(t => t.value) > amount) break;
         }
 
-        return utxos;
+        return utxos.map(t => {
+            return <IUtxo>{
+                satoshis: t.value,
+                address: t.recipient,
+                script: t.script_hex,
+                txid: t.transaction_hash,
+                type: t.type,
+                vout: t.index,
+            }
+        });
     }
 }
 

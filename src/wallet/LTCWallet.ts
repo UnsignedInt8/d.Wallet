@@ -1,5 +1,5 @@
-import { Wallet, TxInfo } from "./Wallet";
-import { PrivateKey } from 'litecore-lib';
+import { Wallet, TxInfo, IUtxo } from "./Wallet";
+import { PrivateKey, Transaction as LTCTransaction } from 'litecore-lib';
 import { observable, computed } from "mobx";
 import { Unit } from 'bitcore-lib';
 import BTCWallet from "./BTCWallet";
@@ -28,7 +28,7 @@ export default class LTCWallet extends BTCWallet {
 
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
         let privkey = key['privateKey'].toString();
-        return [new PrivateKey(privkey).toAddress().toString()];
+        return [new PrivateKey(privkey).toAddress(this._network).toString()];
     }
 
     scanAddresses(from: number, to: number, external = true, chain = 'litecoin') {
@@ -58,7 +58,26 @@ export default class LTCWallet extends BTCWallet {
     }
 
     async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
+        let totalAmount = opts.to.sum(t => t.amount);
+        let utxos = await this.fetchUtxos(totalAmount, this.chain);
+        if (utxos.length === 0) return;
+
+
         return { hex: '', id: '', change: { address: '', amount: 0 }, fee: 0 }
+    }
+
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {
+        let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false));
+        let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
+
+        let utxos = args.inputs.map(i => new LTCTransaction.UnspentOutput(i));
+        let tx = new LTCTransaction().from(utxos).change(changeAddr).feePerKb((args.satoshiPerByte + 1) * 1000);
+
+        args.outputs.forEach(o => {
+
+        })
+
+        return { tx: <any>{}, change: { address: changeAddr, amount: 0 }, fee: 0 };
     }
 
     // genAddresses(from: number, to: number, external = true): Promise<string[][]> {
