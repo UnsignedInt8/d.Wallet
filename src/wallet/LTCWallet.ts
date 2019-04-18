@@ -3,12 +3,12 @@ import { PrivateKey } from 'litecore-lib';
 import { observable, computed } from "mobx";
 import { Unit } from 'bitcore-lib';
 import BTCWallet from "./BTCWallet";
-import Blockchair from "./api/Blockchair";
+import Blockchair, { Chain } from "./api/Blockchair";
 
 export default class LTCWallet extends BTCWallet {
 
     get symbol() { return 'ltc'; }
-    get chain() { return 'litecoin'; }
+    get chain(): Chain { return 'litecoin'; }
 
     protected _mainAddress?: string[];
     get mainAddress() {

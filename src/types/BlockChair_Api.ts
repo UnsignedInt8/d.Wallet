@@ -102,7 +102,7 @@ interface Input {
     cdd: number;
 }
 
-export interface BTCTransaction {
+interface BTCTransaction {
     block_id: number;
     id: number;
     hash: string;
@@ -128,6 +128,35 @@ export interface BTCTransaction {
     fee_per_kwu_usd: number;
     cdd_total: number;
 }
+
+export interface BTCUtxo {
+    block_id: number;
+    transaction_id: number;
+    index: number;
+    transaction_hash: string;
+    date: string;
+    time: string;
+    value: number;
+    value_usd: number;
+    recipient: string;
+    type: string;
+    script_hex: string;
+    is_from_coinbase: boolean;
+    is_spendable?: any;
+    is_spent: boolean;
+    spending_block_id?: any;
+    spending_transaction_id?: any;
+    spending_index?: any;
+    spending_transaction_hash?: any;
+    spending_date?: any;
+    spending_time?: any;
+    spending_value_usd?: any;
+    spending_sequence?: any;
+    spending_signature_hex?: any;
+    spending_witness?: any;
+    lifespan?: any;
+    cdd?: any;
+  }
 
 export interface ETHTxObject {
     data: IETHTxData;

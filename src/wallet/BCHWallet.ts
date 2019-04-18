@@ -17,7 +17,7 @@ export default class BCHWallet extends BTCWallet {
     }
 
     get symbol() { return 'bch'; }
-    get chain() { return 'bitcoin-cash'; };
+    get chain(): Chain { return 'bitcoin-cash'; };
 
     protected _mainAddress?: string[];
     get mainAddress() {

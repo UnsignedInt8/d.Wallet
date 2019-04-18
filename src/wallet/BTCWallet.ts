@@ -23,7 +23,7 @@ export default class BTCWallet extends Wallet {
     }
 
     get symbol() { return 'btc'; }
-    get chain() { return 'bitcoin'; }
+    get chain(): Chain { return 'bitcoin'; }
 
     protected _mainAddress?: string[];
     get mainAddress() {
@@ -62,8 +62,26 @@ export default class BTCWallet extends Wallet {
         this.save('txs', this.txs);
     }
 
-    async transfer(opts: { to: { address: string, amount: number }[]; message?: string | undefined; }) {
-        // BTCOM.fetchAddressUnspent()
+    async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
+        let addrs = [this.addresses[0], ...this.changes, ...this.addresses.slice(1)].flatten(false).toArray();
+        let totalAmount = opts.to.sum(t => t.amount);
+        let utxos = (await this.fetchUtxos(addrs, totalAmount, this.chain as Chain)).map(t => {
+            return <IUtxo>{
+                recipient: t.recipient,
+                amount: t.value,
+                txid: t.transaction_hash,
+                type: t.type,
+                vout: t.index,
+            };
+        });
+
+        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte });
+
+        return { hex: tx.toHex(), id: tx.getId(), change, fee };
+    }
+
+    async transfer(hex: string) {
+
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {
@@ -84,7 +102,7 @@ export default class BTCWallet extends Wallet {
         const builder = new bitcoin.TransactionBuilder(this._network);
 
         inputs.forEach((v, i) => {
-            let [target] = addresses.filter(a => v.pubkey === a.pubkey || v.pubkey === a.legacy || v.pubkey === a.segwit);
+            let [target] = addresses.filter(a => v.recipient === a.pubkey || v.recipient === a.legacy || v.recipient === a.segwit);
             if (!target) return;
             let { p2wpkh } = target;
 
@@ -123,7 +141,7 @@ export default class BTCWallet extends Wallet {
         builder.addOutput(changeAddr, changeAmount);
 
         inputs.forEach((v, i) => {
-            let target = addresses.filter(a => v.pubkey === a.pubkey || v.pubkey === a.legacy || v.pubkey === a.segwit)[0];
+            let target = addresses.filter(a => v.recipient === a.pubkey || v.recipient === a.legacy || v.recipient === a.segwit)[0];
             if (!target) return;
             let { keyPair, p2sh } = target;
 

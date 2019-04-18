@@ -4,6 +4,8 @@ import { HDPrivateKey } from 'bitcore-lib';
 import * as store from 'store';
 import sleep from 'sleep-promise';
 import { observable, computed, } from 'mobx';
+import Blockchair, { Chain } from './api/Blockchair';
+import { BTCUtxo } from '../types/BlockChair_Api';
 
 export abstract class Wallet {
 
@@ -22,11 +24,11 @@ export abstract class Wallet {
     }
 
     abstract get symbol(): string;
-    abstract get chain(): string;
+    abstract get chain(): Chain;
     abstract mainAddress: string[];
     @observable balance: string = '0';
     @observable txs: TxInfo[] = [];
-    abstract transfer(opts: { to: { address: string, amount: number | string }[], message?: string });
+    abstract genTx(opts: { to: { address: string, amount: number | string }[], message?: string });
     abstract async refresh();
     protected abstract getExternalPath(): string;
     protected abstract getChangePath(): string;
@@ -92,6 +94,18 @@ export abstract class Wallet {
         let addresses = this.getKeys(from, to, external).map(key => this.genAddress(key));
         return addresses;
     }
+
+    protected async fetchUtxos(addresses: string[], amount: number, chain: Chain) {
+        let utxos: BTCUtxo[] = [];
+
+        for (let addr of addresses) {
+            let txs = await Blockchair.fetchUtxos(addr, chain) || [];
+            utxos = utxos.concat(txs);
+            if (utxos.sum(t => t.value) > amount) break;
+        }
+
+        return utxos;
+    }
 }
 
 export interface AddressInfo {
@@ -116,6 +130,6 @@ export interface IUtxo {
     txid: string;
     vout: number;
     amount: number;
-    pubkey: string;
+    recipient: string;
     type: string | 'p2ms' | 'p2pk' | 'p2pkh' | 'p2wpkh' | 'p2sh' | 'p2wsh';
 }

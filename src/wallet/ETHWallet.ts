@@ -4,7 +4,7 @@ import { keccak } from "../lib/Hash";
 import * as assert from 'assert';
 import { toBuffer } from '../lib/Hash';
 import { observable, computed } from "mobx";
-import Blockchair from "./api/Blockchair";
+import Blockchair, { Chain } from "./api/Blockchair";
 import * as Units from 'ethereumjs-units';
 
 export default class ETHWallet extends Wallet {
@@ -13,7 +13,7 @@ export default class ETHWallet extends Wallet {
         throw new Error("Method not implemented.");
     }
 
-    transfer(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
+    genTx(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }) {
         throw new Error("Method not implemented.");
     }
 
@@ -26,7 +26,7 @@ export default class ETHWallet extends Wallet {
     }
 
     get symbol() { return 'eth'; }
-    get chain() { return 'ethereum'; }
+    get chain(): Chain { return 'ethereum'; }
 
     private _mainAddress?: string[];
     get mainAddress() {

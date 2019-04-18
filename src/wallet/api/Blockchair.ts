@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { BTCAddressObject, BTCTxObject, ETHTxObject, BTCTransaction } from '../../types/BlockChair_Api';
+import { BTCAddressObject, BTCTxObject, ETHTxObject, BTCUtxo } from '../../types/BlockChair_Api';
 import { TxInfo } from '../Wallet';
 
-export type Chain = 'bitcoin' | 'bitcoin-cash' | 'bitcoin-sv' | 'litecoin' | 'dogecoin';
+export type Chain = 'bitcoin' | 'bitcoin-cash' | 'bitcoin-sv' | 'litecoin' | 'dogecoin' | 'ethereum';
 
 export default class Blockchair {
 
@@ -54,7 +54,7 @@ export default class Blockchair {
         let resp = await axios.get(url);
 
         if (!resp.data) return null;
-        let data = resp.data.data as BTCTransaction[] || [];
+        let data = resp.data.data as BTCUtxo[] || [];
         return data;
     }
 }

@@ -38,7 +38,7 @@ describe('tests wallets', () => {
 
     it('builds p2wpkh input tx', () => {
         let { tx: sendTx, change, fee } = btc.buildTx({
-            inputs: [{ type: 'p2wpkh', txid: 'f8c34d7fffbce87831c2fc38b4f3fbaa5fc3ba3bbabce1322f0405656805e605', vout: 1, amount: 50100000000, pubkey: 'bcrt1q743r9kknlyjeshzmprrzglsdzz5uha5x46cspm' }],
+            inputs: [{ type: 'p2wpkh', txid: 'f8c34d7fffbce87831c2fc38b4f3fbaa5fc3ba3bbabce1322f0405656805e605', vout: 1, amount: 50100000000, recipient: 'bcrt1q743r9kknlyjeshzmprrzglsdzz5uha5x46cspm' }],
             outputs: [{ address: '2N2S7vggiwYHVsjZLxsKPdyUwS6AbYYjKFH', amount: 5000 }],
             satoshiPerByte: 50,
             changeIndex: 1,
@@ -53,7 +53,7 @@ describe('tests wallets', () => {
 
     it('builds p2pkh input tx', () => {
         let { tx, change, fee } = btc.buildTx({
-            inputs: [{ type: 'p2sh', txid: '8261550ab9265e3dbf843ae7f425284050dc05fa084dde3a8bcc3afb40190475', vout: 0, amount: 500000000, pubkey: 'n3tRV1ngugewpKo6kg3EQUcEPPfyafUXgW' }],
+            inputs: [{ type: 'p2sh', txid: '8261550ab9265e3dbf843ae7f425284050dc05fa084dde3a8bcc3afb40190475', vout: 0, amount: 500000000, recipient: 'n3tRV1ngugewpKo6kg3EQUcEPPfyafUXgW' }],
             outputs: [{ address: '2N2S7vggiwYHVsjZLxsKPdyUwS6AbYYjKFH', amount: 5000 }],
             satoshiPerByte: 30,
             changeIndex: 0,
