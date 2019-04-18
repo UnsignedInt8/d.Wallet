@@ -63,7 +63,7 @@ export default class BCHWallet extends BTCWallet {
         let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
 
         let utxos = args.inputs.map(i => new BCHTransaction.UnspentOutput(i));
-        let tx = new BCHTransaction().feePerKb((args.satoshiPerByte + 1) * 1000).from(utxos).change(changeAddr);;
+        let tx = new BCHTransaction().from(utxos).change(changeAddr).feePerKb((args.satoshiPerByte + 1) * 1000);
 
         args.outputs.forEach(o => {
             tx.to(o.address, o.amount);
