@@ -60,10 +60,11 @@ export default class USDTWallet extends BTCWallet {
     }
 
     async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
-        let amount = opts.to.sum(t => t.amount);
-        let utxos = await this.fetchUtxos(amount, 'bitcoin');
-        return { hex: ' tx.toHex()', id: ' tx.getId()', change: <any>{}, fee: 0 };
+        
+        let utxos = await this.fetchUtxos(10000, 'bitcoin');
+        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte }) as { tx: bitcoin.Transaction, change: any, fee: number };
 
+        return { hex: tx.toHex(), id: tx.getId(), change, fee };
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }): IBuildingTx {
