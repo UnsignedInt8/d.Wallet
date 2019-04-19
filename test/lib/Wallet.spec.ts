@@ -2,19 +2,20 @@ import BTCWallet from "../../src/wallet/BTCWallet";
 import ETHWallet from "../../src/wallet/ETHWallet";
 import * as bitcoin from "bitcoinjs-lib";
 import { Transaction, HDPrivateKey, PublicKey, } from "bitcore-lib";
-import { Networks } from 'bitcore-lib-cash';
+import { Networks as BCHNetworks } from 'bitcore-lib-cash';
+import { Networks as LTCNetworks } from 'litecore-lib';
 import * as Mnemonic from 'bitcore-mnemonic';
 import * as linq from 'linq';
 import BCHWallet from "../../src/wallet/BCHWallet";
+import LTCWallet from "../../src/wallet/LTCWallet";
 linq.enable();
 
 const mnemonic = 'nerve shop cabbage skate predict rain model sustain patch grocery solution release';
 
 describe('tests wallets', () => {
     let btc = new BTCWallet({ mnemonic, network: bitcoin.networks.regtest });
-    let bch = new BCHWallet({ mnemonic, network: Networks.regtest });
-
-    // console.log(btc.addresses);
+    let bch = new BCHWallet({ mnemonic, network: BCHNetworks.regtest });
+    let ltc = new LTCWallet({ mnemonic, network: LTCNetworks.testnet });
 
     it('tests address', () => {
         let btc = new BTCWallet({ mnemonic, });
@@ -140,5 +141,27 @@ describe('tests wallets', () => {
 
         expect(hex).toBe('01000000023e17d7e45a48d44a6e406bbfb03df8c461b0eaa2b86ac0f512f681c708f2880a010000006b483045022100da7131760628a3ed8e3a7f7e9343cb5e9dec8e6311c1c61fd4e284be9a42a34e02200dfb3d22326fc86458375fe5ef276343cd4b9dba452f41a44738c67f2a716f6e412103eb63fdcd9c5dc4ec348c787f008325884693f637901219f61b5673e9c7e1920efffffffffc58b0ce665c7cbfd7bcfc97b98a025e5819ff78c1c3630523d220a5f732b068010000006b4830450221008095cc4ba60de30cff1ea96e376a13a9dd461988c0d4105ccc8b44cc9fa2121302202ba47359d221ea365f83648aad25cf2217a6b07b349ae11c2f3ddb8f3dc64174412103eb63fdcd9c5dc4ec348c787f008325884693f637901219f61b5673e9c7e1920effffffff03b80b0000000000001976a9144e4f30b07a5e6556d4e2622c2decbbb36d5cd4b088ac88130000000000001976a914dab7cdecc67278de9220afd7231b761aa682c80588acdc713577000000001976a9141c6da11480942d7a8e5fc9187cf08213023c013488ac00000000');
         expect(id).toBe('e93d30ecd38108f33ca5d797533735ef4ed49d6945044fe7824a8ff56f24bd01');
+    });
+
+    it('builds ltc tx', () => {
+        let { tx, change, fee } = ltc.buildTx({
+            inputs: [
+                { address: 'mmgUBQj9ygCiTVMA4AYkzhHeYiSNCTqUH2', txid: 'b8d6f21a208b7a37d21b8d9a162b9655fe2ec43dd02a90142d67c3306b6c3072', satoshis: 1000000000, vout: 1, script: '76a914439d720a8349a6f7c0507fd8f23dbca452d637b188ac', type: 'p2pkh' },
+                { address: 'mpvdhgCbkdcmaBKNcDQcS5wkU4d3LXPeQu', txid: '61140fc42b9a238baebc71535e8690ac3a30338d50fdc79c5aa7ef9bccbc855d', satoshis: 1000000000, vout: 1, script: '76a9146733983fb1b61d0b12ffacae12afe41cffe485b788ac', type: 'p2pkh' },
+            ],
+            outputs: [
+                { address: 'QSCxP4SJeYj8Auh9TVrixrY8SsCEm6ssDB', amount: 20000 },
+                { address: 'QjNqdxVes4uVvTwxjuRaVJyMoRv8MuvhED', amount: 4000 },
+            ],
+            changeIndex: 1,
+            satoshiPerByte: 20,
+        });
+
+        let hex = tx.serialize();
+        let id = tx.id;
+
+        expect(hex).toBe('010000000272306c6b30c3672d14902ad03dc42efe55962b169a8d1bd2377a8b201af2d6b8010000006b483045022100c021710e28bdcd08cad5c956159c04cd3e3bc073abba04cda713c3a0edf1ffc502207ada16e88b9f6d3cd2c9b058c958822b43c29679b0c45f82b4d5ea465d77ae440121020d8fcbd4bfbd30fa31663e538a54a40412b3c4a374a26fc56163a84f085c41acffffffff5d85bccc9befa75a9cc7fd508d33303aac90865e5371bcae8b239a2bc40f1461010000006a473044022010e3d8d208602d59136b02fd68b4f09adfa58907bc635343b045345ca594a47e0220457d9200599f136467f395caa3e9edac0d452a70f6422beb21df63f7be7bf464012103a4b847c1da8a22e2b385565bb9189ddbcac64cb918485ebed92357e54e1b523fffffffff03204e00000000000017a9143d75beb22f78f781c81ba5a9bbb1e144436f5f8887a00f00000000000017a914f9ce69f8e233b89a7f47422b2ebe378fa3da7c588738e43477000000001976a9145a80c54cf9e2dfb45d84a4a3b7366ab5c489c72e88ac00000000');
+        expect(id).toBe('fd0f77cf1cd419e7710a1f7ca094c4e48aa9c2fc632e5c2059ebdeb10528228f');
+
     });
 });

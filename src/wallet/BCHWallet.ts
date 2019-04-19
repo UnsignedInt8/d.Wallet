@@ -59,7 +59,7 @@ export default class BCHWallet extends BTCWallet {
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {
-        let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false)).map(key => key['privateKey']);
+        let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false)).map(key => key['privateKey'].toString()).map(privkey => new BCHPrivateKey(privkey));
         let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
 
         let utxos = args.inputs.map(i => new BCHTransaction.UnspentOutput(i));

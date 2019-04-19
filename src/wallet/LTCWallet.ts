@@ -64,12 +64,12 @@ export default class LTCWallet extends BTCWallet {
 
         let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte, message: opts.message });
         let hex = tx.serialize() as string;
-        
+
         return { hex, id: tx.id as string, change, fee };
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, message?: string }) {
-        let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false));
+        let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false)).map(key => key['privateKey'].toString()).map(privkey => new PrivateKey(privkey));
         let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
 
         let utxos = args.inputs.map(i => new LTCTransaction.UnspentOutput(i));
