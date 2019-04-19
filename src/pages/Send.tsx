@@ -17,9 +17,9 @@ const pen = require('../assets/chat.svg');
 const mining = require('../assets/mining.svg');
 
 const coinProps = {
-    default: { feeUnit: 'Sat/B', maxTo: 10 },
-    eth: { feeUnit: 'Gwei', maxTo: 1 },
-    usdt: { feeUnit: 'Sat/B', maxTo: 1 },
+    default: { feeUnit: 'Sat/B', maxTo: 10, desc: 'Satoshi/Byte' },
+    eth: { feeUnit: 'Gwei', maxTo: 1, desc: 'Gwei' },
+    usdt: { feeUnit: 'Sat/B', maxTo: 1, desc: 'Satoshi/Byte' },
 }
 
 export default class Send extends React.Component<PageProps, PageState>{
@@ -47,7 +47,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                             <div key={i} className='compose'>
                                 <input type="text" placeholder={`${this.props.symbol.toUpperCase()} Address`} />
                                 <input type="number" placeholder='Amount' />
-                                <input type="text" placeholder='Message' maxLength={140} />
+                                <input className='message-input' type="text" placeholder='Message' maxLength={140} />
 
                                 <img className='send' src={sendIcon} />
                                 <img className='calc' src={calc} />
@@ -57,9 +57,9 @@ export default class Send extends React.Component<PageProps, PageState>{
                     })}
 
                     <div className='mining'>
-                        <input className='mining' type="number" placeholder={`${this.props.symbol.toUpperCase()} Fees`} />
+                        <input className='mining' type="number" defaultValue={'3'} placeholder={`${this.props.symbol.toUpperCase()} Fees`} />
                         <img className='mining' src={mining} />
-                        <span>{`${coin.feeUnit}`}</span>
+                        <span title={`${coin.desc}`}>{`${coin.feeUnit}`}</span>
                     </div>
 
                     <div className='plus-container'>

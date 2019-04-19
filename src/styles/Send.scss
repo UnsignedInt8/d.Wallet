@@ -16,6 +16,10 @@
     padding-top: 10px;
     min-height: 80vh;
     overflow: scroll;
+
+    .message-input {
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+    }
   }
 
   input {

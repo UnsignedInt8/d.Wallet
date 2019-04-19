@@ -60,14 +60,14 @@ export default class USDTWallet extends BTCWallet {
     }
 
     async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
-        
+
         let utxos = await this.fetchUtxos(10000, 'bitcoin');
-        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte }) as { tx: bitcoin.Transaction, change: any, fee: number };
+        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte, msg: opts.message }) as { tx: bitcoin.Transaction, change: any, fee: number };
 
         return { hex: tx.toHex(), id: tx.getId(), change, fee };
     }
 
-    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }): IBuildingTx {
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, msg?: string }): IBuildingTx {
         assert(args.outputs.length === 1);
 
         let { inputs, outputs, satoshiPerByte } = args;
@@ -99,6 +99,12 @@ export default class USDTWallet extends BTCWallet {
         const omniOutput = bitcoin.payments.embed({ data }).output!; // NEW** Payments API
         builder.addOutput(o.address, dust); // dust value, should be first
         builder.addOutput(omniOutput, 0);
+
+        if (args.msg) {
+            let msg = Buffer.from(args.msg, 'utf8');
+            let msgOutput = bitcoin.payments.embed({ data: [msg] }).output!;
+            builder.addOutput(msgOutput, 0);
+        }
 
         let txSize = builder.buildIncomplete().byteLength() + 20;
         let totalFee = txSize * (args.satoshiPerByte + 1);
