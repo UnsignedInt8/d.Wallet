@@ -1,8 +1,9 @@
 import BTCWallet from "./BTCWallet";
-import { TxInfo, AddressInfo } from "./Wallet";
+import { TxInfo, AddressInfo, IUtxo, IBuildingTx } from "./Wallet";
 import OmniApi from "./api/OmniExplorer";
 import { Chain } from "./api/Blockchair";
-import { HDPrivateKey, PrivateKey } from "bitcore-lib";
+import { HDPrivateKey, PrivateKey, Transaction } from "bitcore-lib";
+import * as bitcoin from 'bitcoinjs-lib';
 
 export default class USDTWallet extends BTCWallet {
 
@@ -10,9 +11,11 @@ export default class USDTWallet extends BTCWallet {
     get chain(): Chain { return 'bitcoin'; }
 
     genAddress(key: HDPrivateKey) {
-        let addr = key['privateKey'].toAddress(this._network).toString();
+        let addr = key['privateKey'].toAddress(this._network).toString() as string;
         return [addr];
     }
+
+    get changes() { return [this.mainAddress]; }
 
     async scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]> {
         let addresses = (await this.genAddresses(from, to, external)).map(a => a[1]);
@@ -51,6 +54,61 @@ export default class USDTWallet extends BTCWallet {
 
     getTxs(hashes: string[], knownAddresses: string[], symbol = 'usdt'): Promise<TxInfo[]> {
         throw Error('Not implemented');
+    }
+
+    async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
+        let amount = opts.to.sum(t => t.amount);
+        let utxos = await this.fetchUtxos(amount, 'bitcoin');
+        return { hex: ' tx.toHex()', id: ' tx.getId()', change: <any>{}, fee: 0 };
+
+    }
+
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }): IBuildingTx {
+        let { inputs, outputs, satoshiPerByte } = args;
+        let builder = new bitcoin.TransactionBuilder(this._network);
+        let changeAddr = this.mainAddress[0];
+        let addresses = this.getKeys(0, 5).concat(this.getKeys(0, 3, false)).map(key => {
+            let [addr] = this.genAddress(key);
+            let pubkeyBuf = key.hdPublicKey.publicKey.toBuffer();
+            let keyPair = bitcoin.ECPair.fromPrivateKey(key['privateKey'].toBuffer(), { network: this._network });
+            const p2pkh = bitcoin.payments.p2pkh({ pubkey: pubkeyBuf, network: this._network });
+
+            return { addr, keyPair, p2pkh, }
+        });
+
+        inputs.forEach(i => {
+            builder.addInput(i.txid, i.vout);
+        });
+
+        let [o] = outputs;
+        const dust = 546;
+        const simple_send = [
+            "6f6d6e69", // omni
+            "0000",     // version
+            "00000000001f", // 31 for Tether
+            (o.amount * 100_000_000).toString(16).padStart(16, '0'), // amount = 10 * 100 000 000 in HEX
+        ].join('');
+
+        const data = [Buffer.from(simple_send, "hex")];
+        const omniOutput = bitcoin.payments.embed({ data }).output!; // NEW** Payments API
+        builder.addOutput(o.address, dust); // dust value, should be first
+        builder.addOutput(omniOutput, 0);
+
+        let txSize = builder.buildIncomplete().byteLength() + 20;
+        let totalFee = txSize * (args.satoshiPerByte + 1);
+        let totalUnspent = inputs.sum(i => i.satoshis);
+        let changeValue = totalUnspent - dust - totalFee;
+        builder.addOutput(changeAddr, changeValue);
+
+        inputs.forEach((v, i) => {
+            let [target] = addresses.filter(a => a.addr === v.address);
+            if (!target) return;
+            let { keyPair } = target;
+
+            builder.sign(i, keyPair);
+        });
+
+        return { tx: builder.build(), change: { address: changeAddr, amount: changeValue }, fee: totalFee };
     }
 
     // genAddresses(from: number, to: number, external = true): Promise<string[][]> {

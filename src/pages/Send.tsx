@@ -19,6 +19,7 @@ const mining = require('../assets/mining.svg');
 const coinProps = {
     default: { feeUnit: 'Sat/B', maxTo: 10 },
     eth: { feeUnit: 'Gwei', maxTo: 1 },
+    usdt: { feeUnit: 'Sat/B', maxTo: 1 },
 }
 
 export default class Send extends React.Component<PageProps, PageState>{

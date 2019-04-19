@@ -82,7 +82,8 @@ export default class LTCWallet extends BTCWallet {
         tx.sign(keys);
 
         let fee = tx.getFee();
-        return { tx, change: { address: changeAddr, amount: fee }, fee };
+        let changeAmount = args.inputs.sum(i => i.satoshis) - fee - args.outputs.sum(o => o.amount);
+        return { tx, change: { address: changeAddr, amount: changeAmount }, fee };
     }
 
     // genAddresses(from: number, to: number, external = true): Promise<string[][]> {

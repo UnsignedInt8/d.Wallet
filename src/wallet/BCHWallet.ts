@@ -70,7 +70,10 @@ export default class BCHWallet extends BTCWallet {
         });
 
         tx.sign(keys as any);
-        return { tx, change: { address: changeAddr, amount: tx.getFee() }, fee: tx.getFee() };
+
+        let fee = tx.getFee();
+        let changeAmount = args.inputs.sum(i => i.satoshis) - tx.getFee() - args.outputs.sum(o => o.amount);
+        return { tx, change: { address: changeAddr, amount: changeAmount }, fee };
     }
 
     // async genAddresses(from: number, to: number, external = true) {
