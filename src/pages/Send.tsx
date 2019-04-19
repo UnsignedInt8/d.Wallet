@@ -25,17 +25,6 @@ export default class Send extends React.Component<PageProps, PageState>{
 
     state: PageState = { toNums: 1 };
 
-    private onCancel() {
-        anime({
-            targets: '#sending-page',
-            translateY: window.innerHeight,
-            easing: 'easeOutQuint',
-            duration: 600,
-
-            complete: () => this.props.onCancel(),
-        });
-    }
-
     private addReceiver() {
         let coin = coinProps[this.props.symbol] || coinProps.default;
         this.setState({ toNums: Math.min(this.state.toNums + 1, coin.maxTo) });
@@ -92,7 +81,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                 </div>
 
                 <div className='buttons'>
-                    <button className='cancel' onClick={e => this.onCancel()}>Cancel</button>
+                    <button className='cancel' onClick={e => this.props.onCancel()}>Cancel</button>
                     <button className='confirm'>Send</button>
                 </div>
             </div>

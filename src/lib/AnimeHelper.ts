@@ -6,6 +6,7 @@ export default class AnimeHelper {
         anime({
             targets,
             translateY: [from, to],
+            opacity: [to, from],
             easing: 'easeOutQuint',
             duration: 600,
             complete

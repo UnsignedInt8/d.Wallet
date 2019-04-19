@@ -23,6 +23,8 @@ import StickyEvents from 'sticky-events';
 import OmniApi from '../wallet/api/OmniExplorer';
 import CountUp from 'react-countup';
 
+type Pages = 'sending' | 'receiving' | 'settings';
+
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
 const bch = require('../assets/bch.svg');
@@ -50,9 +52,7 @@ interface HomeState {
     currentHistory?: { price: string, timestamp: number }[];
 
     showBalance: boolean;
-    expandSending: boolean;
-    expandReceiving: boolean;
-    expandSettings?: boolean;
+    expandPage?: Pages;
     stuck?: boolean;
 }
 
@@ -62,7 +62,6 @@ class Home extends React.Component<{}, HomeState> {
     state: HomeState = {
         selectedSymbol: 'btc', showSymbol: true, symbolColor: symbols[0].color,
         currentPrice: '', currentChange: 0, currentHistory: [],
-        expandSending: false, expandReceiving: false, expandSettings: false,
         showBalance: true,
     };
     walletMan!: WalletManager;
@@ -143,51 +142,39 @@ class Home extends React.Component<{}, HomeState> {
         );
     }
 
-    private toggleSending() {
-        this.setState(prev => ({ expandSending: !prev.expandSending, expandReceiving: false }), () => {
-            if (this.state.expandSending) {
-                AnimeHelper.expandPage('#sending-page', window.innerHeight, 0);
-            } else {
-                AnimeHelper.expandPage('#sending-page', 0, window.innerHeight);
+    private togglePage(page: Pages) {
+        if (this.state.expandPage && this.state.expandPage !== page) {
+            this.closePage(() => this.togglePage(page));
+            return;
+        };
 
-                anime({
-                    targets: '#open-sending',
-                    scale: [0, 1],
-                    opacity: [0, 5],
-                    duration: 200,
-                    easing: 'spring(1, 80, 2, 4)',
-                });
-            }
-        });
-    }
-
-    private toggleReceving() {
-        if (this.state.expandReceiving) {
-            AnimeHelper.expandPage('#receiving-page', 0, window.innerHeight,
-                () => this.setState({ expandReceiving: false, expandSending: false }));
+        if (this.state.expandPage === page) {
+            this.closePage();
             return;
         }
 
-        if (this.state.expandSettings) return;
-
-        this.setState(prev => ({ expandReceiving: !prev.expandReceiving, expandSending: false }), () => {
-            if (this.state.expandReceiving) {
-                AnimeHelper.expandPage('#receiving-page', window.innerHeight, 0);
-            }
+        this.setState({ expandPage: page }, () => {
+            AnimeHelper.expandPage('#expanding-page', window.innerHeight, 0);
         });
     }
 
-    private toggleSettings() {
-        if (this.state.expandSettings) {
-            AnimeHelper.expandPage('#settings-page', 0, window.innerHeight, () => this.setState({ expandSettings: false }));
-            return;
-        }
+    private closePage(cb?: () => void) {
+        if (!this.state.expandPage) return;
 
-        this.setState(prev => ({ expandSettings: !prev.expandSettings, expandReceiving: false }), () => {
-            if (this.state.expandSettings) {
-                AnimeHelper.expandPage('#settings-page', window.innerHeight, 0);
-            }
+        AnimeHelper.expandPage('#expanding-page', 0, window.innerHeight, () => {
+            this.setState({ expandPage: undefined });
+            if (cb) cb();
         });
+
+        if (this.state.expandPage === 'sending') {
+            anime({
+                targets: '#open-sending',
+                scale: [0, 1],
+                opacity: [0, 5],
+                duration: 200,
+                easing: 'spring(1, 80, 2, 4)',
+            });
+        }
     }
 
     render() {
@@ -210,10 +197,10 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     <div className='icons'>
-                        <div className='icon' onClick={_ => this.toggleReceving()}>
+                        <div className='icon' onClick={_ => this.togglePage('receiving')}>
                             <img src={qrcode} />
                         </div>
-                        <div className='icon' onClick={_ => this.toggleSettings()}>
+                        <div className='icon' onClick={_ => this.togglePage('settings')}>
                             <img src={settings} />
                         </div>
                     </div>
@@ -249,13 +236,23 @@ class Home extends React.Component<{}, HomeState> {
                         <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
                     </div>
 
-                    {this.state.expandSending ?
+                    {this.state.expandPage ?
+                        <div id='expanding-page' className='expand-area'>
+                            {this.state.expandPage === 'sending' ? <Send onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
+                            {this.state.expandPage === 'settings' ? <Settings /> : undefined}
+                            {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}
+                        </div>
+                        : undefined
+                    }
+
+                    <button id='open-sending' className='send' title='Send' onClick={e => this.togglePage('sending')}>
+                        <img src={send} alt="Send" />
+                    </button>
+
+                    {/* {this.state.expandSending ?
                         <div id='sending-page' className='expand-area'>
                             <Send onCancel={() => this.toggleSending()} symbol={this.state.selectedSymbol} />
                         </div> :
-                        <button id='open-sending' className='send' title='Send' onClick={e => this.toggleSending()}>
-                            <img src={send} alt="Send" />
-                        </button>
                     }
 
                     {
@@ -272,7 +269,7 @@ class Home extends React.Component<{}, HomeState> {
                                 <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.toggleReceving()} />
                             </div>
                             : undefined
-                    }
+                    } */}
 
                     <div className='txs'>
                         {(this.walletMan ? this.walletMan.current.txs : []).map(tx => {
