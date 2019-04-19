@@ -1,5 +1,5 @@
 .sending {
-  background: #1988f7;
+  background: #2d87e0;
   padding-top: 3.5vh;
 
   width: 100%;
@@ -18,16 +18,16 @@
     overflow: scroll;
 
     .message-input {
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
     }
   }
 
   input {
     margin: 8px 12px 0px 12px;
-
+    font-family: Lato, sans-serif;
     display: block;
     color: #badeff;
-    font-size: 18px;
+    font-size: 17px;
     padding-left: 42px;
     padding-top: 12px;
     padding-bottom: 11px;

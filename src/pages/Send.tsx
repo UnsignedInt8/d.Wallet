@@ -46,7 +46,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                         return (
                             <div key={i} className='compose'>
                                 <input type="text" placeholder={`${this.props.symbol.toUpperCase()} Address`} />
-                                <input type="number" placeholder='Amount' />
+                                <input type="number" placeholder='Amount' max={100_000_000} min={0.0000001} />
                                 <input className='message-input' type="text" placeholder='Message' maxLength={140} />
 
                                 <img className='send' src={sendIcon} />
@@ -57,7 +57,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                     })}
 
                     <div className='mining'>
-                        <input className='mining' type="number" defaultValue={'3'} placeholder={`${this.props.symbol.toUpperCase()} Fees`} />
+                        <input className='mining' type="number" defaultValue={'3'} max={100_000_000} min={1} placeholder={`${this.props.symbol.toUpperCase()} Fees`} />
                         <img className='mining' src={mining} />
                         <span title={`${coin.desc}`}>{`${coin.feeUnit}`}</span>
                     </div>
