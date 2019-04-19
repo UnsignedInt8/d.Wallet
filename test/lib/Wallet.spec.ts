@@ -8,6 +8,7 @@ import * as Mnemonic from 'bitcore-mnemonic';
 import * as linq from 'linq';
 import BCHWallet from "../../src/wallet/BCHWallet";
 import LTCWallet from "../../src/wallet/LTCWallet";
+import USDTWallet from "../../src/wallet/USDTWallet";
 linq.enable();
 
 const mnemonic = 'nerve shop cabbage skate predict rain model sustain patch grocery solution release';
@@ -16,6 +17,9 @@ describe('tests wallets', () => {
     let btc = new BTCWallet({ mnemonic, network: bitcoin.networks.regtest });
     let bch = new BCHWallet({ mnemonic, network: BCHNetworks.regtest });
     let ltc = new LTCWallet({ mnemonic, network: LTCNetworks.testnet });
+    let usdt = new USDTWallet({ mnemonic, network: bitcoin.networks.regtest });
+
+    console.log(usdt.addresses, usdt.changes);
 
     it('tests address', () => {
         let btc = new BTCWallet({ mnemonic, });
@@ -42,7 +46,7 @@ describe('tests wallets', () => {
     });
 
 
-    it('builds p2wpkh input tx', () => {
+    it('builds a p2wpkh input tx', () => {
         let { tx: sendTx, change, fee } = btc.buildTx({
             inputs: [{ type: 'p2wpkh', txid: 'f8c34d7fffbce87831c2fc38b4f3fbaa5fc3ba3bbabce1322f0405656805e605', vout: 1, satoshis: 50100000000, address: 'bcrt1q743r9kknlyjeshzmprrzglsdzz5uha5x46cspm' }],
             outputs: [{ address: '2N2S7vggiwYHVsjZLxsKPdyUwS6AbYYjKFH', amount: 5000 }],
@@ -58,7 +62,7 @@ describe('tests wallets', () => {
         expect(hex).toBe('0200000000010105e605686505042f32e1bcba3bbac35faafbf3b438fcc23178e8bcff7f4dc3f80100000000ffffffff02881300000000000017a91464c8a5b4bb1383a5fefb034fcade577c7d48eaf187f32c31aa0b00000016001460050470523c3a9cc151e45dbf1c9254f840b8c9024730440220318fc0d34b286c0700b6bef20ee8856d0e42259f5d3d1854aa307f70888c2d4c02205ccb19b36cd4885d172f6f14a0d4df95386ae45909acdc897f39c76ecdd2c07f01210309f0c6b887e593f171312976f515b851d0ce2cd083a6a8bb812c7266bc8a236600000000');
     });
 
-    it('builds p2pkh input tx', () => {
+    it('builds a p2pkh input tx', () => {
         let { tx, change, fee } = btc.buildTx({
             inputs: [{ type: 'p2sh', txid: '8261550ab9265e3dbf843ae7f425284050dc05fa084dde3a8bcc3afb40190475', vout: 0, satoshis: 500000000, address: 'n3tRV1ngugewpKo6kg3EQUcEPPfyafUXgW' }],
             outputs: [{ address: '2N2S7vggiwYHVsjZLxsKPdyUwS6AbYYjKFH', amount: 5000 }],
@@ -75,7 +79,7 @@ describe('tests wallets', () => {
 
     });
 
-    it('builds multiple inputs(p2wpkh, p2pkh)/outputs tx', () => {
+    it('builds a multiple inputs(p2wpkh, p2pkh)/outputs tx', () => {
         let { tx, change, fee } = btc.buildTx({
             inputs: [
                 { txid: '562bf7ba9d8e06c4edf94800aac34f69eaf33280925b5ee4bed062b3c63f730e', vout: 1, type: 'p2wpkh', satoshis: 1000000000, address: 'bcrt1q743r9kknlyjeshzmprrzglsdzz5uha5x46cspm', },
@@ -99,7 +103,7 @@ describe('tests wallets', () => {
         expect(id).toBe('c0a3dd807c1d956f3e6e3b315cb95f2494c6aa32e9d621f8ae3e810a046b04de');
     });
 
-    it('builds bch tx', () => {
+    it('builds a bch tx', () => {
         let { tx, change, fee } = bch.buildTx({
             inputs: [{
                 type: 'pubkeyhash',
@@ -122,7 +126,7 @@ describe('tests wallets', () => {
 
     });
 
-    it('builds mutliple bch inputs/outputs tx', () => {
+    it('builds a mutliple bch inputs/outputs tx', () => {
         let { tx, change, fee } = bch.buildTx({
             inputs: [
                 { type: 'pubkeyhash', txid: '0a88f208c781f612f5c06ab8a2eab061c4f83db0bf6b406e4ad4485ae4d7173e', vout: 1, satoshis: 1000000000, address: 'qrpm606h3ly5xpqahqazznyrv78ge56z3u9mjha5kd', script: '76a914c3bd3f578fc943041db83a214c83678e8cd3428f88ac' },
@@ -143,7 +147,7 @@ describe('tests wallets', () => {
         expect(id).toBe('e93d30ecd38108f33ca5d797533735ef4ed49d6945044fe7824a8ff56f24bd01');
     });
 
-    it('builds ltc tx', () => {
+    it('builds a ltc tx', () => {
         let { tx, change, fee } = ltc.buildTx({
             inputs: [
                 { address: 'mmgUBQj9ygCiTVMA4AYkzhHeYiSNCTqUH2', txid: 'b8d6f21a208b7a37d21b8d9a162b9655fe2ec43dd02a90142d67c3306b6c3072', satoshis: 1000000000, vout: 1, script: '76a914439d720a8349a6f7c0507fd8f23dbca452d637b188ac', type: 'p2pkh' },
@@ -164,4 +168,23 @@ describe('tests wallets', () => {
         expect(id).toBe('fd0f77cf1cd419e7710a1f7ca094c4e48aa9c2fc632e5c2059ebdeb10528228f');
 
     });
+
+    it('builds an usdt tx', () => {
+        let { tx } = usdt.buildTx({
+            inputs: [
+                { address: 'n3U5HdfLqRKQ1XaqYCz1i6p59UGGUETNCu', txid: '4c124daf558e076703d9cf8dd16d6ea7b3116875771b5053820aef63fd4edb3c', vout: 0, satoshis: 100000000, script: '76a914f0c75b4a4ecfff52c5b41f1530763e29d908231088ac', type: 'p2pkh' },
+                { address: 'mh8f6Laby1hkYNw2PbktfGSA4j3iMoGhyC', txid: 'c9869db44099ff4a6706865ff558fa1daa7570418f2541c27acdfb7038beefca', vout: 0, satoshis: 100000000, script: '76a91411b8bdac15e8e09a376470372003c1786d05cb8688ac', type: 'p2pkh' }
+            ],
+            outputs: [
+                { address: 'mpGfB5dFd8ixCroj5jyY1Skreyibmbd47E', amount: 20 } // SENDING 20 USDT
+            ],
+            satoshiPerByte: 10,
+        });
+
+        tx = tx as bitcoin.Transaction;
+        let hex = tx.toHex();
+        let id = tx.getId();
+        expect(hex).toBe('02000000023cdb4efd63ef0a8253501b77756811b3a76e6dd18dcfd90367078e55af4d124c000000006b483045022100d60381d5c8443ccbf5cdc69641d75946ae48d6bf1df4150cf472877b19219d3e0220709c8c3cc7259be2484ce0c5c7cd23d695ecb56f2c86de7ae63535467dfa64c2012103b744fd6c566de7f214cf702c76bb60295ca62d9d9c581b76f744038767da84c8ffffffffcaefbe3870fbcd7ac241258f417075aa1dfa58f55f8606674aff9940b49d86c9000000006a473044022071b3fc9bcbb3b88a0b8c794aae293ef01717b7bb650a995bf545f53f40b75a5702204abbf08969433eefeb8fc40863df9763cf115a9467ec850a9f8bfee69e1c34880121020eb6e389f7b06bb284c504437da174c56044d4083fcfa949145ca3adfce23d15ffffffff0322020000000000001976a91460050470523c3a9cc151e45dbf1c9254f840b8c988ac0000000000000000166a146f6d6e69000000000000001f000000007735940043b8eb0b000000001976a914f56232dad3f925985c5b08c6247e0d10a9cbf68688ac00000000');
+        expect(id).toBe('0ebd93b05f636ef283624e5954ce7be46233db1433c7bccb27e2a4e4c0b3edce');
+    })
 });

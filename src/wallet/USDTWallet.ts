@@ -1,9 +1,12 @@
+// https://github.com/bitcoinjs/bitcoinjs-lib/issues/1176
+
 import BTCWallet from "./BTCWallet";
 import { TxInfo, AddressInfo, IUtxo, IBuildingTx } from "./Wallet";
 import OmniApi from "./api/OmniExplorer";
 import { Chain } from "./api/Blockchair";
 import { HDPrivateKey, PrivateKey, Transaction } from "bitcore-lib";
 import * as bitcoin from 'bitcoinjs-lib';
+import * as assert from 'assert';
 
 export default class USDTWallet extends BTCWallet {
 
@@ -11,8 +14,8 @@ export default class USDTWallet extends BTCWallet {
     get chain(): Chain { return 'bitcoin'; }
 
     genAddress(key: HDPrivateKey) {
-        let addr = key['privateKey'].toAddress(this._network).toString() as string;
-        return [addr];
+        let p2pkh = bitcoin.payments.p2pkh({ pubkey: key.hdPublicKey.publicKey.toBuffer(), network: this._network });
+        return [p2pkh.address!];
     }
 
     get changes() { return [this.mainAddress]; }
@@ -64,6 +67,8 @@ export default class USDTWallet extends BTCWallet {
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }): IBuildingTx {
+        assert(args.outputs.length === 1);
+
         let { inputs, outputs, satoshiPerByte } = args;
         let builder = new bitcoin.TransactionBuilder(this._network);
         let changeAddr = this.mainAddress[0];
@@ -73,7 +78,7 @@ export default class USDTWallet extends BTCWallet {
             let keyPair = bitcoin.ECPair.fromPrivateKey(key['privateKey'].toBuffer(), { network: this._network });
             const p2pkh = bitcoin.payments.p2pkh({ pubkey: pubkeyBuf, network: this._network });
 
-            return { addr, keyPair, p2pkh, }
+            return { addr, keyPair, p2pkh, };
         });
 
         inputs.forEach(i => {
