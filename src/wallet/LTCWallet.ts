@@ -1,6 +1,6 @@
 import { Wallet, TxInfo, IUtxo } from "./Wallet";
 import { PrivateKey, Transaction as LTCTransaction } from 'litecore-lib';
-import { observable, computed } from "mobx";
+import { Transaction } from 'bitcore-lib';
 import { Unit } from 'bitcore-lib';
 import BTCWallet from "./BTCWallet";
 import Blockchair, { Chain } from "./api/Blockchair";
@@ -62,24 +62,29 @@ export default class LTCWallet extends BTCWallet {
         let utxos = await this.fetchUtxos(totalAmount, this.chain);
         if (utxos.length === 0) return;
 
-        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte, message: opts.message });
+        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte, msg: opts.message });
         let hex = tx.serialize() as string;
 
         return { hex, id: tx.id as string, change, fee };
     }
 
-    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, message?: string }) {
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, msg?: string }) {
         let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false)).map(key => key['privateKey'].toString()).map(privkey => new PrivateKey(privkey));
         let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
 
         let utxos = args.inputs.map(i => new LTCTransaction.UnspentOutput(i));
-        let tx = new LTCTransaction().from(utxos).change(changeAddr).feePerKb((args.satoshiPerByte + 1) * 1000);
+        let tx: Transaction = new LTCTransaction().from(utxos).change(changeAddr).feePerKb((args.satoshiPerByte + 1) * 1000);
 
         args.outputs.forEach(o => {
             tx.to(o.address, o.amount);
         });
 
-        tx.sign(keys);
+        if (args.msg) {
+            let data = Buffer.from(args.msg, 'utf8');
+            tx.addData(data);
+        }
+
+        tx.sign(<any>keys);
 
         let fee = tx.getFee();
         let changeAmount = args.inputs.sum(i => i.satoshis) - fee - args.outputs.sum(o => o.amount);

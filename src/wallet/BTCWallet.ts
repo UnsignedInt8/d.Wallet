@@ -62,12 +62,12 @@ export default class BTCWallet extends Wallet {
         this.save('txs', this.txs);
     }
 
-    async genTx(opts: { to: { address: string, amount: number }[]; message?: string | undefined; satoshiPerByte: number }) {
+    async genTx(opts: { to: { address: string, amount: number }[]; message?: string; satoshiPerByte: number }) {
         let totalAmount = opts.to.sum(t => t.amount);
         let utxos = await this.fetchUtxos(totalAmount, this.chain);
         if (utxos.length === 0) return;
 
-        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte });
+        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte, msg: opts.message });
         tx = tx as bitcoin.Transaction;
 
         return { hex: tx.toHex(), id: tx.getId(), change, fee };
@@ -77,7 +77,7 @@ export default class BTCWallet extends Wallet {
 
     }
 
-    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }): IBuildingTx {
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, msg?: string }): IBuildingTx {
 
         const keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false));
         const addresses = keys.map(key => {
@@ -122,6 +122,12 @@ export default class BTCWallet extends Wallet {
         outputs.forEach(o => {
             builder.addOutput(o.address, o.amount);
         });
+
+        if (args.msg) {
+            let msg = Buffer.from(args.msg, 'utf8');
+            let msgOutput = bitcoin.payments.embed({ data: [msg] }).output!;
+            builder.addOutput(msgOutput, 0);
+        }
 
         let txSize = builder.buildIncomplete().byteLength() + 20;
 

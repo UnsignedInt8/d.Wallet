@@ -1,6 +1,6 @@
 import { Wallet, AddressInfo, TxInfo, IUtxo } from "./Wallet";
 import { PrivateKey as BCHPrivateKey, Transaction as BCHTransaction } from 'bitcore-lib-cash';
-import { HDPrivateKey, Networks, Transaction } from "bitcore-lib";
+import { HDPrivateKey, Networks, Transaction, } from "bitcore-lib";
 import { observable, computed } from "mobx";
 import BTCWallet from "./BTCWallet";
 import Blockchair, { Chain } from "./api/Blockchair";
@@ -51,23 +51,28 @@ export default class BCHWallet extends BTCWallet {
         let utxos = await this.fetchUtxos(totalAmount, this.chain);
         if (utxos.length === 0) return;
 
-        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte });
+        let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte, msg: opts.message });
         let hex = tx.serialize() as string;
         let id = tx.id as string;
 
         return { hex, id, change, fee };
     }
 
-    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }) {
+    buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, msg?: string }) {
         let keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false)).map(key => key['privateKey'].toString()).map(privkey => new BCHPrivateKey(privkey));
         let [changeAddr] = this.changes[args.changeIndex === undefined ? Date.now() % this.changes.length : args.changeIndex];
 
         let utxos = args.inputs.map(i => new BCHTransaction.UnspentOutput(i));
-        let tx = new BCHTransaction().from(utxos).change(changeAddr).feePerKb((args.satoshiPerByte + 1) * 1000);
+        let tx: Transaction = new BCHTransaction().from(utxos).change(changeAddr).feePerKb((args.satoshiPerByte + 1) * 1000);
 
         args.outputs.forEach(o => {
             tx.to(o.address, o.amount);
         });
+
+        if (args.msg) {
+            let msg = Buffer.from(args.msg, 'utf8');
+            tx.addData(msg);
+        }
 
         tx.sign(keys as any);
 
