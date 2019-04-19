@@ -2,11 +2,17 @@ import BTCWallet from "./BTCWallet";
 import { TxInfo, AddressInfo } from "./Wallet";
 import OmniApi from "./api/OmniExplorer";
 import { Chain } from "./api/Blockchair";
+import { HDPrivateKey, PrivateKey } from "bitcore-lib";
 
 export default class USDTWallet extends BTCWallet {
 
     get symbol() { return 'usdt' };
     get chain(): Chain { return 'bitcoin'; }
+
+    genAddress(key: HDPrivateKey) {
+        let addr = key['privateKey'].toAddress(this._network).toString();
+        return [addr];
+    }
 
     async scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]> {
         let addresses = (await this.genAddresses(from, to, external)).map(a => a[1]);

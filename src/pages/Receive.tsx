@@ -40,7 +40,7 @@ const coins: { [index: string]: string } = {
     'usdt': 'USDT'
 };
 
-const multiAddrTypes = ['btc', 'usdt'];
+const multiAddrTypes = ['btc'];
 
 @observer
 export default class Receive extends React.Component<Props, State>{
@@ -70,7 +70,7 @@ export default class Receive extends React.Component<Props, State>{
                     <div id='address'>
                         {address}
                     </div>
-                    {multiAddrTypes.includes(this.props.symbol) ?
+                    {this.props.symbol === 'btc' ?
                         <div id='address-type'>
                             <div className={`radio ${this.state.selectedType === 0 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 0 })}>{i18n.receiving.segwit}</div>
                             <div className={`radio ${this.state.selectedType === 1 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 1 })}>{i18n.receiving.legacy}</div>
