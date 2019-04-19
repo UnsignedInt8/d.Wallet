@@ -50,7 +50,7 @@ export default class BTCWallet extends Wallet {
         balance += info.reduce((prev, curr) => prev + <number>curr.balance, 0);
         txs = txs.concat(info.map(i => i.txs).flatten(false).toArray());
 
-        this.balance = Unit.fromSatoshis(balance).toBTC().toString();
+        this.balance = Unit.fromSatoshis(balance).toBTC();
 
         let oldestTx = this.txs.min(tx => tx.timestamp);
         let oldestTime = oldestTx ? oldestTx.timestamp : 0;

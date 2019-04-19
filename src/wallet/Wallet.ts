@@ -28,7 +28,7 @@ export abstract class Wallet {
     abstract get symbol(): string;
     abstract get chain(): Chain;
     abstract mainAddress: string[];
-    @observable balance: string = '0';
+    @observable balance = 0;
     @observable txs: TxInfo[] = [];
     abstract genTx(opts: { to: { address: string, amount: number | string }[], message?: string }): Promise<{ hex: string, id: string, change: { address: string, amount: number }, fee: number } | undefined>;
     abstract async refresh();

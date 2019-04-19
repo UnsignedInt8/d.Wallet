@@ -22,7 +22,7 @@ const createWindow = async () => {
     }
 
     win = new BrowserWindow({
-        width: 461, height: 648,
+        width: 500, height: 648,
         titleBarStyle: 'hidden',
         webPreferences: { nodeIntegration: true, nodeIntegrationInWorker: true, sandbox: false, webSecurity: false },
     });

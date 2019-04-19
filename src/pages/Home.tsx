@@ -228,7 +228,7 @@ class Home extends React.Component<{}, HomeState> {
                             <span onClick={e => this.setState({ showBalance: !this.state.showBalance })}>
                                 {
                                     this.state.showBalance ?
-                                        this.walletMan ? <CountUp end={Number.parseFloat(this.walletMan.current.balance)} duration={2} decimals={4} /> : '0'
+                                        this.walletMan ? <CountUp end={this.walletMan.current.balance} duration={1.5} decimals={4} /> : '0'
                                         : '••••••••'
                                 }
                             </span>
