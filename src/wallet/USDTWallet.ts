@@ -7,6 +7,7 @@ import { Chain } from "./api/Blockchair";
 import { HDPrivateKey, PrivateKey, Transaction } from "bitcore-lib";
 import * as bitcoin from 'bitcoinjs-lib';
 import * as assert from 'assert';
+import { observable, computed } from "mobx";
 
 export default class USDTWallet extends BTCWallet {
 
@@ -19,6 +20,13 @@ export default class USDTWallet extends BTCWallet {
     }
 
     get changes() { return [this.mainAddress]; }
+    @observable _addresses?: string[][];
+    @computed get addresses() {
+        if (this._addresses) return this._addresses;
+        this._addresses = [this.mainAddress];
+        return this._addresses;
+    }
+
 
     async scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]> {
         let addresses = (await this.genAddresses(from, to, external)).map(a => a[1]);
