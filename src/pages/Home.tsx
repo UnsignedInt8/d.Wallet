@@ -249,28 +249,6 @@ class Home extends React.Component<{}, HomeState> {
                         <img src={send} alt="Send" />
                     </button>
 
-                    {/* {this.state.expandSending ?
-                        <div id='sending-page' className='expand-area'>
-                            <Send onCancel={() => this.toggleSending()} symbol={this.state.selectedSymbol} />
-                        </div> :
-                    }
-
-                    {
-                        this.state.expandSettings ?
-                            <div id='settings-page' className='expand-area'>
-                                <Settings />
-                            </div>
-                            : undefined
-                    }
-
-                    {
-                        this.state.expandReceiving ?
-                            <div id='receiving-page' className='expand-area'>
-                                <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.toggleReceving()} />
-                            </div>
-                            : undefined
-                    } */}
-
                     <div className='txs'>
                         {(this.walletMan ? this.walletMan.current.txs : []).map(tx => {
                             return (

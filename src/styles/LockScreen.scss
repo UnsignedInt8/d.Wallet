@@ -40,17 +40,5 @@
       top: 20%;
     }
 
-    p {
-      text-align: center;
-      margin: 20px 0 60px;
-      font-size: 1.25em;
-      &.success {
-        color: #73af55;
-      }
-      &.error {
-        color: #d06079;
-      }
-    }
-
   }
 }

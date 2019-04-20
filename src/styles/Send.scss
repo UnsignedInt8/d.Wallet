@@ -176,6 +176,12 @@
     background: rgba(0, 0, 0, 0.459);
   }
 
+  #payment-details.validatingPassword {
+    color: white;
+    background: rgb(154, 205, 50);
+    transition: all 0.5s;
+  }
+
   #payment-details {
     position: absolute;
     bottom: 0;
@@ -184,13 +190,14 @@
     max-height: 85vh;
     background: rgb(245, 245, 243);
     color: rgb(37, 37, 37);
+    transition: all 0.5s;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     grid-template-rows: 36px auto 120px;
     grid-template-areas:
-      title
-      content
-      actions;
+      "title"
+      "content"
+      "actions";
 
     #payment-title {
       grid-area: title;
@@ -300,20 +307,26 @@
 
     #payment-validation {
       grid-area: content;
-      position: relative;
-      height: 100px;
+      position: absolute;
+      top: 52px;
+      right: 0;
+      bottom: 12px;
+      left: 0;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      transform: translateX(100%);
 
       #validation {
         width: 72px;
         height: 72px;
-        position: absolute;        
+        top: 10%;
+        position: absolute;
       }
     }
 
-    .payment-actions {
+    #payment-actions {
       grid-area: actions;
       padding: 0px 22px 0px 8px;
 

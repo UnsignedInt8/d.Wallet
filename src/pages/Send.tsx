@@ -4,7 +4,9 @@ import anime from 'animejs';
 import { getLang } from '../i18n';
 import { getAppSettings } from '../data/AppSettings';
 import PassMan from '../data/PasswordManager';
-import Validation from '../components/Validation';
+import { Validation, Password } from '../components';
+import { Flip, Fade } from 'react-reveal';
+
 const crypto = require('crypto');
 
 interface PageProps {
@@ -15,8 +17,11 @@ interface PageProps {
 interface PageState {
     toNums: number;
     prepareToSend?: boolean;
+    validatingPassword?: boolean;
+    validPassword?: boolean;
 }
 
+const cancelWhite = require('../assets/cancel-white.svg');
 const cancelIcon = require('../assets/cancel.svg');
 const sendIcon = require('../assets/send2.svg');
 const calc = require('../assets/calculator.svg');
@@ -31,7 +36,7 @@ const coinProps = {
 
 export default class Send extends React.Component<PageProps, PageState>{
 
-    state: PageState = { toNums: 1, prepareToSend: true };
+    state: PageState = { toNums: 1, prepareToSend: true, };
     appSettings = getAppSettings(PassMan.password);
     i18n = getLang(this.appSettings.lang);
 
@@ -45,7 +50,28 @@ export default class Send extends React.Component<PageProps, PageState>{
     }
 
     private jumpToPassword() {
+        anime({
+            targets: '#payment-content, #payment-actions',
+            translateX: [0, -window.innerWidth],
+            opacity: 0,
+            duration: 600,
+            easing: 'linear',
+        });
 
+        anime({
+            targets: '#payment-validation',
+            translateX: [-window.innerWidth, 0],
+            duration: 600,
+            easing: 'linear',
+            complete: () => this.setState({ validatingPassword: true }),
+        });
+
+        this.setState({ validatingPassword: false });
+    }
+
+    private onPasswordChange(value: string) {
+        if (!PassMan.verify(value)) return;
+        this.setState({ validPassword: true });
     }
 
     render() {
@@ -106,12 +132,12 @@ export default class Send extends React.Component<PageProps, PageState>{
                 }
 
                 {this.state.prepareToSend ?
-                    <div id='payment-details'>
+                    <div id='payment-details' className={this.state.validatingPassword ? 'validatingPassword' : undefined}>
                         <div id='payment-title'>
-                            Transaction Details
+                            <Flip bottom opposite cascade when={this.state.validatingPassword}>{this.state.validatingPassword ? 'Validate Password' : 'Transaction Details'}</Flip>
                         </div>
 
-                        <img id='close-payment' src={cancelIcon} />
+                        <img id='close-payment' src={this.state.validatingPassword ? cancelWhite : cancelIcon} />
 
                         <div id='payment-content'>
 
@@ -130,7 +156,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                                 </div>
                                 <div className='content'>
                                     {
-                                        new Array(1).fill(0).map((v, i) => {
+                                        new Array(4).fill(0).map((v, i) => {
                                             return (
                                                 <div key={i} >
                                                     {'0x' + crypto.randomBytes(16).toString('hex')}
@@ -147,7 +173,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                                 </div>
                                 <div className='content'>
                                     {
-                                        new Array(1).fill(0).map((v, i) => {
+                                        new Array(4).fill(0).map((v, i) => {
                                             return (
                                                 <div key={i} className='toInfo'>
                                                     <div className='to'>{'0x' + crypto.randomBytes(16).toString('hex')}</div>
@@ -180,11 +206,12 @@ export default class Send extends React.Component<PageProps, PageState>{
                         </div>
 
                         <div id='payment-validation'>
-                            <Validation id='validation' color='#2d87e0' />
+                            {this.state.validPassword ? <Validation id='validation' /> : undefined}
+                            <Password onChange={v => this.onPasswordChange(v)} />
                         </div>
 
-                        <div className='payment-actions'>
-                            <button>{this.i18n.buttons.next}</button>
+                        <div id='payment-actions'>
+                            <button onClick={_ => this.jumpToPassword()}>{this.i18n.buttons.next}</button>
                         </div>
                     </div>
                     : undefined

@@ -58,7 +58,7 @@ export default class LockScreen extends React.Component<Props, State> {
                         {i18n.lockScreen.title}
                     </div>
 
-                    <Password onChange={value => this.onPasswordChange(value)} />
+                    <Password onChange={value => this.onPasswordChange(value)} style={{ marginTop: 8 }} />
                 </div>
             </div>
         );
