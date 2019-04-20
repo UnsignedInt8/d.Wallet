@@ -1,8 +1,9 @@
 const createKeccakHash = require('keccak')
 const crypto = require('crypto');
-import rlp = require('rlp')
+const rlp = require('rlp')
 import BN from 'bn.js';
 import * as ethjsUtil from 'ethjs-util';
+
 
 /**
  * Creates Keccak hash of the input
@@ -40,7 +41,7 @@ export const sha256 = function (a: Buffer): Buffer {
  * Creates SHA-3 hash of the RLP encoded version of the input.
  * @param a The input data
  */
-export const rlphash = function (a: rlp.Input): Buffer {
+export const rlphash = function (a: any): Buffer {
     return keccak(rlp.encode(a))
 }
 

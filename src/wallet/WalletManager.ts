@@ -12,7 +12,7 @@ const supportedWallets = { 'btc': BTC, 'bch': BCH, 'eth': ETH, 'ltc': LTC, 'usdt
 
 export class WalletManager {
 
-    private wallets: { [index: string]: Wallet } = {};
+    wallets: { [index: string]: Wallet } = {};
 
     constructor(mnemonic: string) {
         let seed = new Mnemonic(mnemonic);

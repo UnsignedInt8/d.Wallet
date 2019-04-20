@@ -6,6 +6,9 @@ import { getAppSettings } from '../data/AppSettings';
 import PassMan from '../data/PasswordManager';
 import { Validation, Password } from '../components';
 import { Flip, Fade } from 'react-reveal';
+import AnimeHelper from '../lib/AnimeHelper';
+import * as jquery from 'jquery';
+import { getWalletMan } from '../wallet/WalletManager';
 
 const crypto = require('crypto');
 
@@ -39,6 +42,7 @@ export default class Send extends React.Component<PageProps, PageState>{
     state: PageState = { toNums: 1, prepareToSend: true, };
     appSettings = getAppSettings(PassMan.password);
     i18n = getLang(this.appSettings.lang);
+    walletMan = getWalletMan(this.appSettings.mnemonic);
 
     private addReceiver() {
         let coin = coinProps[this.props.symbol] || coinProps.default;
@@ -69,6 +73,42 @@ export default class Send extends React.Component<PageProps, PageState>{
         this.setState({ validatingPassword: false });
     }
 
+    private openPayment() {
+        this.setState({ prepareToSend: true }, () => {
+            AnimeHelper.expandPage('#payment-details', window.innerHeight * 0.8, 0);
+        });
+    }
+
+    private closePayment() {
+        let height = jquery('#payment-details').height();
+
+        anime({
+            targets: '#payment-shadow',
+            opacity: 0,
+            duration: 500,
+        });
+
+        anime({
+            targets: '#payment-details',
+            translateY: [0, height],
+            easing: 'linear',
+            duration: 1000,
+            complete: () => this.setState({ prepareToSend: false, validatingPassword: undefined, validPassword: false })
+        });
+    }
+
+    private buildTx() {
+        let wallet = this.walletMan.wallets[this.props.symbol];
+        // await wallet.genTx({ to: [], message})
+    }
+
+    private onAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
+        let amount = Number.parseFloat(e.target.value);
+        if (amount > 2100_000_000 || amount < 0) {
+            e.target.value = '1';
+        }
+    }
+
     private onPasswordChange(value: string) {
         if (!PassMan.verify(value)) return;
         this.setState({ validPassword: true });
@@ -85,18 +125,21 @@ export default class Send extends React.Component<PageProps, PageState>{
                         return (
                             <div key={i} className='compose'>
                                 <input type="text" placeholder={`${this.props.symbol.toUpperCase()} Address`} />
-                                <input type="number" placeholder='Amount' max={100_000_000} min={0.0000001} />
-                                <input className='message-input' type="text" placeholder='Message' maxLength={140} />
+                                <input className={this.state.toNums > 1 && coin.maxTo > 1 ? 'input_bottom_border' : undefined} type="number" placeholder='Amount' max={100_000_000} min={0.0000001} onChange={e => this.onAmountChange(e)} />
 
                                 <img className='send' src={sendIcon} />
                                 <img className='calc' src={calc} />
-                                <img className='pen' src={pen} />
                             </div>
                         );
                     })}
 
+                    <div className='message'>
+                        <input className='message-input' type="text" placeholder='Message' maxLength={140} />
+                        <img className='pen' src={pen} />
+                    </div>
+
                     <div className='mining'>
-                        <input className='mining' type="number" defaultValue={'3'} max={100_000_000} min={1} placeholder={`${this.props.symbol.toUpperCase()} Fees`} />
+                        <input className='mining' type="number" defaultValue={'3'} max={100_000_000} min={1} placeholder={`${this.props.symbol.toUpperCase()} Fees`} onChange={e => this.onAmountChange(e)} />
                         <img className='mining' src={mining} />
                         <span title={`${coin.desc}`}>{`${coin.feeUnit}`}</span>
                     </div>
@@ -122,7 +165,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                 <div className='buttons'>
                     <button className='cancel' onClick={e => this.props.onCancel()}>{this.i18n.buttons.cancel}</button>
-                    <button className='confirm'>{this.i18n.buttons.ok}</button>
+                    <button className='confirm' onClick={e => this.buildTx()}>{this.i18n.buttons.ok}</button>
                 </div>
 
 
@@ -137,7 +180,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                             <Flip bottom opposite cascade when={this.state.validatingPassword}>{this.state.validatingPassword ? 'Validate Password' : 'Transaction Details'}</Flip>
                         </div>
 
-                        <img id='close-payment' src={this.state.validatingPassword ? cancelWhite : cancelIcon} />
+                        <img id='close-payment' src={this.state.validatingPassword ? cancelWhite : cancelIcon} onClick={_ => this.closePayment()} />
 
                         <div id='payment-content'>
 
@@ -207,7 +250,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                         <div id='payment-validation'>
                             {this.state.validPassword ? <Validation id='validation' /> : undefined}
-                            <Password onChange={v => this.onPasswordChange(v)} />
+                            <Password onChange={v => this.onPasswordChange(v)} inputStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', color: 'white' }} />
                         </div>
 
                         <div id='payment-actions'>

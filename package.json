@@ -1,7 +1,7 @@
 {
-  "name": "mainstream",
-  "version": "0.0.1",
-  "description": "",
+  "name": "d.wallet",
+  "version": "0.1.0",
+  "description": "A Decentralized Cryptocurrency Wallet",
   "main": "./dist/main.js",
   "scripts": {
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
@@ -49,7 +49,7 @@
     }
   },
   "build": {
-    "productName": "ProductName",
+    "productName": "d.Wallet",
     "appId": "org.your.productname",
     "mac": {
       "category": "your.app.category.type"

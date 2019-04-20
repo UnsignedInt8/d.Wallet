@@ -17,7 +17,7 @@
     min-height: 80vh;
     overflow: scroll;
 
-    .message-input {
+    .input_bottom_border {
       border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
     }
   }
@@ -64,16 +64,25 @@
     img.calc {
       top: 74px;
     }
-
-    img.pen {
-      top: 127px;
-    }
   }
 
   .plus-container {
     padding: 4px;
     display: flex;
     justify-content: flex-end;
+  }
+
+  div.message {
+    display: grid;
+    position: relative;
+
+    img.pen {
+      position: absolute;
+      left: 26px;
+      width: 16px;
+      height: 16px;
+      top: 23px;
+    }
   }
 
   div.mining {
