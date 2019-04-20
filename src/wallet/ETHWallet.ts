@@ -8,10 +8,10 @@ import Blockchair, { Chain } from "./api/Blockchair";
 import * as Units from 'ethereumjs-units';
 
 export default class ETHWallet extends Wallet {
-    genTx(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }): Promise<{ hex: string; id: string; change: { address: string; amount: number; }; fee: number; } | undefined> {
+    genTx(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }): Promise<{ hex: string; id: string; change: { address: string; amount: number; }; msg?: string, fee: number; from: string[], to: any[] } | undefined> {
         throw new Error("Method not implemented.");
     }
-    
+
     buildTx(args: { inputs: import("./Wallet").IUtxo[]; outputs: { address: string; amount: number; }[]; satoshiPerByte: number; changeIndex?: number | undefined; }): { tx: import("bitcoinjs-lib").Transaction | import("bitcore-lib").Transaction; change: { address: string; amount: number; }; fee: number; } {
         throw new Error("Method not implemented.");
     }

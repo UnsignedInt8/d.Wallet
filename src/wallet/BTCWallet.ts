@@ -69,8 +69,9 @@ export default class BTCWallet extends Wallet {
 
         let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte, msg: opts.message });
         tx = tx as bitcoin.Transaction;
+        let from = utxos.map(u => u.address).distinct().toArray();
 
-        return { hex: tx.toHex(), id: tx.getId(), change, fee };
+        return { hex: tx.toHex(), id: tx.getId(), change, fee, from, to: opts.to, msg: opts.message };
     }
 
     async transfer(hex: string) {
