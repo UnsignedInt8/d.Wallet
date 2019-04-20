@@ -2,6 +2,8 @@ const lang = {
     buttons: {
         cancel: 'Cancel',
         ok: 'OK',
+        next: 'Next',
+        send: 'Send',
     },
 
     welcome: {

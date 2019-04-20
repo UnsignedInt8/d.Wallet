@@ -1,7 +1,7 @@
 .sending {
   background: #2d87e0;
   padding-top: 3.5vh;
-
+  position: relative;
   width: 100%;
   height: 96.5vh;
 
@@ -164,6 +164,149 @@
     button:active {
       background: rgb(230, 230, 230) !important;
       color: black;
+    }
+  }
+
+  #payment-shadow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.459);
+  }
+
+  #payment-details {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    max-height: 85vh;
+    background: rgb(245, 245, 243);
+    color: rgb(37, 37, 37);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    grid-template-rows: auto 120px;
+
+    #payment-title {
+      margin-bottom: 16px;
+      font-size: 19px;
+      text-transform: uppercase;
+      font-family: "Questrial", Helvetica, "Segoe UI", sans-serif;
+    }
+
+    .payment-content {
+      grid-row: 1;
+      padding: 16px 16px 0px 16px;
+      overflow-y: scroll;
+      position: relative;
+
+      #close-payment {
+        display: block;
+        position: absolute;
+        top: 19px;
+        right: 16px;
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+      }
+
+      #close-payment:hover {
+        transform: rotate(180deg);
+        transition: all 0.4s ease-in-out 0s;
+      }
+
+      .payment-details-item {
+        display: grid;
+        padding-bottom: 8px;
+        margin-bottom: 12px;
+        grid-template-columns: 72px auto;
+        grid-template-areas: "title content";
+        border-bottom: 1px dashed rgba(201, 201, 201, 0.5);
+        font-family: Helvetica, sans-serif;
+
+        div {
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+
+        .title {
+          grid-area: title;
+          color: rgb(150, 150, 150);
+          font-size: 14px;
+          display: flex;
+          align-items: baseline;
+        }
+
+        .content {
+          grid-area: content;
+          font-weight: 100;
+
+          .toInfo {
+            display: grid;
+            grid-template-columns: 15fr 3fr;
+            grid-template-areas: "address amount";
+            font-family: Helvetica, sans-serif;
+
+            .to {
+              grid-area: address;
+              text-overflow: ellipsis;
+              word-wrap: none;
+              word-break: normal;
+              overflow: hidden;
+              white-space: nowrap;
+            }
+
+            .amount {
+              grid-area: amount;
+              font-size: 15px;
+              word-wrap: none;
+              word-break: normal;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
+              text-align: end;
+            }
+          }
+        }
+
+        .amount-title {
+          display: flex;
+          align-items: flex-end;
+          padding-bottom: 2px;
+        }
+
+        .amount {
+          font-size: 24px;
+          text-transform: uppercase;
+          font-family: Lato, sans-serif;
+
+          .symbol {
+            font-size: 15px;
+            display: inline-block;
+            margin-left: 0px;
+          }
+        }
+      }
+    }
+
+    .payment-actions {
+      grid-row: 2;
+      padding: 0px 22px 0px 8px;
+
+      button {
+        height: 36px;
+      }
+
+      button:hover {
+        background: rgba(2, 163, 238, 0.644);
+        color: rgba(255, 255, 255, 0.904);
+      }
+
+      button:active {
+        background: black;
+        color: white;
+      }
     }
   }
 

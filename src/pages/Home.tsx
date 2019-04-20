@@ -23,7 +23,7 @@ import StickyEvents from 'sticky-events';
 import OmniApi from '../wallet/api/OmniExplorer';
 import CountUp from 'react-countup';
 
-type Pages = 'sending' | 'receiving' | 'settings';
+type Pages = 'sending' | 'receiving' | 'settings' | 'transaction';
 
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');

@@ -82,6 +82,20 @@ button {
   margin: 8px;
   cursor: pointer;
   -webkit-app-region: no-drag;
+
+  transition: all 0.5s;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  color: rgba(0, 0, 0, 0.555);
+  transition: all 0.5s;
+}
+
+button:active {
+  background-color: white;
+  color: black;
+  transition: all 0.5s;
 }
 
 input {
