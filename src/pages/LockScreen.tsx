@@ -5,6 +5,7 @@ import { getLang } from '../i18n';
 import * as jquery from 'jquery';
 import PassMan from '../data/PasswordManager';
 import { getAppSettings } from '../data/AppSettings';
+import { Validation, Password } from '../components';
 
 const lock = require('../assets/padlock.svg');
 const i18n = getLang();
@@ -27,18 +28,18 @@ export default class LockScreen extends React.Component<Props, State> {
         jquery('input').focus();
     }
 
-    private onPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
+    private onPasswordChange(e: string) {
         if (this.state.validated) return;
 
-        let validated = PassMan.verify(e.target.value);
+        let validated = PassMan.verify(e);
         this.setState({ validated });
 
         if (!validated) return;
         if (!PassMan.password) {
-            PassMan.password = e.target.value;
+            PassMan.password = e;
             getAppSettings(PassMan.password);
         }
-        
+
         setTimeout(() => this.props.onValidationPass(), 1500);
     }
 
@@ -49,22 +50,15 @@ export default class LockScreen extends React.Component<Props, State> {
                 <div id='security'>
                     {
                         this.state.validated ?
-                            <div id='validation'>
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                                    <circle className="path circle" fill="none" stroke="#fff" strokeWidth="5" strokeMiterlimit="10" cx="65.1" cy="65.1" r="62.1" />
-                                    <polyline className="path check" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
-                                </svg>
-                            </div> : undefined
+                            <Validation id='validation' />
+                            : undefined
                     }
 
                     <div className='questrial' style={{ fontSize: 20 }}>
                         {i18n.lockScreen.title}
                     </div>
 
-                    <div id='password'>
-                        <input type="password" maxLength={32} onChange={e => this.onPasswordChange(e)} />
-                        <img src={lock} />
-                    </div>
+                    <Password onChange={value => this.onPasswordChange(value)} />
                 </div>
             </div>
         );

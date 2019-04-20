@@ -186,35 +186,43 @@
     color: rgb(37, 37, 37);
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
-    grid-template-rows: auto 120px;
+    grid-template-rows: 36px auto 120px;
+    grid-template-areas:
+      title
+      content
+      actions;
 
     #payment-title {
-      margin-bottom: 16px;
+      grid-area: title;
+      padding: 16px 16px 0px 16px;
       font-size: 19px;
       text-transform: uppercase;
       font-family: "Questrial", Helvetica, "Segoe UI", sans-serif;
     }
 
-    .payment-content {
-      grid-row: 1;
+    #close-payment {
+      grid-area: title;
+      display: block;
+      position: absolute;
+      top: 19px;
+      right: 16px;
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+      transform: rotate(0deg);
+      transition: all 0.4s ease-in-out;
+    }
+
+    #close-payment:hover {
+      transform: rotate(180deg);
+      transition: all 0.4s ease-in-out 0s;
+    }
+
+    #payment-content {
+      grid-area: content;
       padding: 16px 16px 0px 16px;
       overflow-y: scroll;
       position: relative;
-
-      #close-payment {
-        display: block;
-        position: absolute;
-        top: 19px;
-        right: 16px;
-        width: 14px;
-        height: 14px;
-        cursor: pointer;
-      }
-
-      #close-payment:hover {
-        transform: rotate(180deg);
-        transition: all 0.4s ease-in-out 0s;
-      }
 
       .payment-details-item {
         display: grid;
@@ -290,8 +298,23 @@
       }
     }
 
+    #payment-validation {
+      grid-area: content;
+      position: relative;
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      #validation {
+        width: 72px;
+        height: 72px;
+        position: absolute;        
+      }
+    }
+
     .payment-actions {
-      grid-row: 2;
+      grid-area: actions;
       padding: 0px 22px 0px 8px;
 
       button {

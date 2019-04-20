@@ -4,6 +4,7 @@ import anime from 'animejs';
 import { getLang } from '../i18n';
 import { getAppSettings } from '../data/AppSettings';
 import PassMan from '../data/PasswordManager';
+import Validation from '../components/Validation';
 const crypto = require('crypto');
 
 interface PageProps {
@@ -106,12 +107,13 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                 {this.state.prepareToSend ?
                     <div id='payment-details'>
-                        <div className='payment-content'>
-                            <div id='payment-title'>
-                                Transaction Details
-                            </div>
+                        <div id='payment-title'>
+                            Transaction Details
+                        </div>
 
-                            <img id='close-payment' src={cancelIcon} />
+                        <img id='close-payment' src={cancelIcon} />
+
+                        <div id='payment-content'>
 
                             <div className='payment-details-item'>
                                 <div className='title amount-title'>
@@ -159,6 +161,15 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                             <div className='payment-details-item'>
                                 <div className='title'>
+                                    Message:
+                                </div>
+                                <div className='content'>
+                                    Hello World
+                                </div>
+                            </div>
+
+                            <div className='payment-details-item'>
+                                <div className='title'>
                                     Fee:
                                 </div>
                                 <div className='content'>
@@ -166,6 +177,10 @@ export default class Send extends React.Component<PageProps, PageState>{
                                 </div>
                             </div>
 
+                        </div>
+
+                        <div id='payment-validation'>
+                            <Validation id='validation' color='#2d87e0' />
                         </div>
 
                         <div className='payment-actions'>
