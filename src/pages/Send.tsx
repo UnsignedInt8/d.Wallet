@@ -9,6 +9,7 @@ import { Flip, Fade } from 'react-reveal';
 import AnimeHelper from '../lib/AnimeHelper';
 import * as jquery from 'jquery';
 import { getWalletMan } from '../wallet/WalletManager';
+import sleep from 'sleep-promise';
 
 const crypto = require('crypto');
 
@@ -22,6 +23,7 @@ interface PageState {
     prepareToSend?: boolean;
     validatingPassword?: boolean;
     validPassword?: boolean;
+    isBuildingTx?: boolean;
 }
 
 const cancelWhite = require('../assets/cancel-white.svg');
@@ -39,10 +41,12 @@ const coinProps = {
 
 export default class Send extends React.Component<PageProps, PageState>{
 
-    state: PageState = { toNums: 1, prepareToSend: true, };
+    state: PageState = { toNums: 1, prepareToSend: false, isBuildingTx: false };
     appSettings = getAppSettings(PassMan.password);
     i18n = getLang(this.appSettings.lang);
     walletMan = getWalletMan(this.appSettings.mnemonic);
+
+    get shouldLockSymbol() { return this.state.toNums > 1 };
 
     private addReceiver() {
         let coin = coinProps[this.props.symbol] || coinProps.default;
@@ -75,31 +79,51 @@ export default class Send extends React.Component<PageProps, PageState>{
 
     private openPayment() {
         this.setState({ prepareToSend: true }, () => {
-            AnimeHelper.expandPage('#payment-details', window.innerHeight * 0.8, 0);
+            let height = jquery('#payment-details').height();
+
+            anime({
+                targets: '#payment-details',
+                translateY: [height, 0],
+                duration: 100,
+            });
         });
     }
 
     private closePayment() {
         let height = jquery('#payment-details').height();
 
-        anime({
-            targets: '#payment-shadow',
-            opacity: 0,
-            duration: 500,
-        });
+        // anime({
+        //     targets: '#payment-shadow',
+        //     opacity: 0,
+        //     duration: 500,
+        // });
 
         anime({
             targets: '#payment-details',
             translateY: [0, height],
-            easing: 'linear',
-            duration: 1000,
+            easing: 'easeInQuad',
+            duration: 600,
             complete: () => this.setState({ prepareToSend: false, validatingPassword: undefined, validPassword: false })
         });
     }
 
-    private buildTx() {
+    private async buildTx() {
+        let addresses = jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[];
+        let amounts = jquery('.input-amount').map((i, el) => Number.parseFloat(jquery(el).val()) || 0).get() as number[];
+
+        let to = addresses.zip(amounts).select(i => { return { address: i[0], amount: i[1] } }).where(i => i.address.length > 0).toArray();
+        if (to.length === 0) return;
+
+        let message = jquery('message-input').val() as string || undefined;
+
+        this.setState({ isBuildingTx: true });
         let wallet = this.walletMan.wallets[this.props.symbol];
-        // await wallet.genTx({ to: [], message})
+        // await wallet.genTx({ to, message });
+        await sleep(1000);
+
+        this.setState({ isBuildingTx: false });
+
+        this.openPayment();
     }
 
     private onAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -124,8 +148,8 @@ export default class Send extends React.Component<PageProps, PageState>{
                     {new Array(Math.min(this.state.toNums, coin.maxTo)).fill(Date.now()).map((v, i) => {
                         return (
                             <div key={i} className='compose'>
-                                <input type="text" placeholder={`${this.props.symbol.toUpperCase()} Address`} />
-                                <input className={this.state.toNums > 1 && coin.maxTo > 1 ? 'input_bottom_border' : undefined} type="number" placeholder='Amount' max={100_000_000} min={0.0000001} onChange={e => this.onAmountChange(e)} />
+                                <input className='input-address' type="text" placeholder={`${this.props.symbol.toUpperCase()} Address`} />
+                                <input className={`input-amount ${this.state.toNums > 1 && coin.maxTo > 1 ? 'input_bottom_border' : undefined}`} type="number" placeholder='Amount' max={100_000_000} min={0.0000001} onChange={e => this.onAmountChange(e)} />
 
                                 <img className='send' src={sendIcon} />
                                 <img className='calc' src={calc} />
@@ -169,8 +193,13 @@ export default class Send extends React.Component<PageProps, PageState>{
                 </div>
 
 
-                {this.state.prepareToSend ?
-                    <div id='payment-shadow'></div>
+                {(this.state.prepareToSend || this.state.isBuildingTx) ?
+                    <div id='payment-shadow'>
+                        {this.state.isBuildingTx ?
+                            <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Building transaction, wait a moment please...</div>
+                            : undefined
+                        }
+                    </div>
                     : undefined
                 }
 
@@ -216,7 +245,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                                 </div>
                                 <div className='content'>
                                     {
-                                        new Array(4).fill(0).map((v, i) => {
+                                        new Array(1).fill(0).map((v, i) => {
                                             return (
                                                 <div key={i} className='toInfo'>
                                                     <div className='to'>{'0x' + crypto.randomBytes(16).toString('hex')}</div>
