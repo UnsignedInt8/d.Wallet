@@ -31,15 +31,19 @@
     outline: none;
     border-radius: 6px;
     border: none;
-    margin: 12px 12px 0px 12px;
+    margin: 8px 12px 0px 12px;
     padding: 12px 12px 12px 42px;
+  }
+
+  #eth-message::placeholder {
+    color: rgba(255, 255, 255, 0.2);
   }
 
   img#write {
     width: 15px;
     height: 15px;
     position: absolute;
-    top: 27px;
+    top: 24px;
     left: 24px;
   }
 
@@ -47,7 +51,7 @@
     margin: 8px 12px 0px 12px;
     font-family: Lato, sans-serif;
     display: block;
-    color: #badeff;
+    color: white; //#badeff;
     font-size: 17px;
     padding-left: 42px;
     padding-top: 12px;

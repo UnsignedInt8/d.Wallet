@@ -1,9 +1,9 @@
 #transaction {
-  background: rgb(255, 255, 255);
+  background: rgb(20, 209, 121);
   height: 100%;
 
   display: grid;
-  grid-template-rows: auto 64px;
+  grid-template-rows: auto 54px;
   grid-template-areas:
     "content"
     "buttons";
@@ -12,7 +12,12 @@
       grid-area: content;
   }
 
-  #close {
+  #tx-buttons {
       grid-area: buttons;
+      padding: 0px 22px 0px 8px;
+
+      button {
+          height: 36px;
+      }
   }
 }

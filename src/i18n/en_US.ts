@@ -4,6 +4,7 @@ const lang = {
         ok: 'OK',
         next: 'Next',
         send: 'Send',
+        close: 'Close',
     },
 
     welcome: {

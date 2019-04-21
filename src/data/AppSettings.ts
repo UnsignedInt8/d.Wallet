@@ -1,5 +1,6 @@
 import PersistenceHelper from '../lib/PersistenceHelper';
 import { observable, computed } from 'mobx';
+import { getLang } from '../i18n';
 
 export class AppSettings {
     private helper: PersistenceHelper;
@@ -41,6 +42,10 @@ export class AppSettings {
         if (value === this._lang) return;
         this._lang = value;
         this.helper.save('lang', value);
+    }
+
+    get i18n() {
+        return getLang(this.lang);
     }
 }
 

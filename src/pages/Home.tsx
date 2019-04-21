@@ -85,7 +85,7 @@ class Home extends React.Component<{}, HomeState> {
 
         this.hookSticky();
 
-        // this.togglePage('transaction');
+        this.togglePage('transaction');
     }
 
     componentWillUnmount() {

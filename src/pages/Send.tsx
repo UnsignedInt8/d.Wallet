@@ -1,7 +1,6 @@
 import * as React from 'react';
 import '../styles/Send.scss';
 import anime from 'animejs';
-import { getLang } from '../i18n';
 import { getAppSettings } from '../data/AppSettings';
 import PassMan from '../data/PasswordManager';
 import { Validation, Password } from '../components';
@@ -37,16 +36,16 @@ const mining = require('../assets/mining.svg');
 const write = require('../assets/write.svg');
 
 const coinProps = {
-    default: { feeUnit: 'Sat/B', maxTo: 10, desc: 'Satoshi/Byte', unit: 'Satoshis', },
+    default: { feeUnit: 'Sat/B', maxTo: 10, desc: 'Satoshis/Byte', unit: 'Satoshis', },
     eth: { feeUnit: 'Gwei', maxTo: 1, desc: 'Gwei', unit: 'Gwei', },
-    usdt: { feeUnit: 'Sat/B', maxTo: 1, desc: 'Satoshi/Byte', unit: 'Satoshis' },
+    usdt: { feeUnit: 'Sat/B', maxTo: 1, desc: 'Satoshis/Byte', unit: 'Satoshis' },
 }
 
 export default class Send extends React.Component<PageProps, PageState>{
 
     state: PageState = { toNums: 1, prepareToSend: false, isBuildingTx: false };
     appSettings = getAppSettings(PassMan.password);
-    i18n = getLang(this.appSettings.lang);
+    i18n = this.appSettings.i18n;
     walletMan = getWalletMan(this.appSettings.mnemonic);
     private paymentDetails: PaymentDetails | null = null;
 
