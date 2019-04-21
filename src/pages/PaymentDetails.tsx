@@ -6,11 +6,15 @@ import { getAppSettings } from '../data/AppSettings';
 import PassMan from '../data/PasswordManager';
 import { Validation, Password } from '../components';
 import { Flip, Fade } from 'react-reveal';
+import * as jquery from 'jquery';
 
 interface Props {
     to?: { address: string, amount: number }[],
     from?: string[],
-    onClosePayment: () => void;
+    message?: string;
+    fee?: number;
+    onClose: () => void;
+    onVerified: () => void;
     symbol?: string;
     coinUnit: string;
 }
@@ -25,12 +29,14 @@ const cancelIcon = require('../assets/cancel.svg');
 
 export default class PaymentDetails extends React.Component<Props, State> {
 
+    state: State = {}
     appSettings = getAppSettings(PassMan.password);
     i18n = getLang(this.appSettings.lang);
 
     private onPasswordChange(value: string) {
         if (!PassMan.verify(value)) return;
         this.setState({ validPassword: true });
+        this.props.onVerified();
     }
 
     private jumpToPassword() {
@@ -53,6 +59,28 @@ export default class PaymentDetails extends React.Component<Props, State> {
         this.setState({ validatingPassword: false });
     }
 
+    close() {
+        let height = jquery('#payment-details').height();
+
+        anime({
+            targets: '#payment-details',
+            translateY: [0, height],
+            easing: 'easeInQuad',
+            duration: 600,
+            complete: () => this.props.onClose()
+        });
+    }
+
+    open() {
+        let height = jquery('#payment-details').height();
+
+        anime({
+            targets: '#payment-details',
+            translateY: [height, 0],
+            duration: 100,
+        });
+    }
+
     render() {
         return (
 
@@ -61,7 +89,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                     <Flip bottom opposite cascade when={this.state.validatingPassword}>{this.state.validatingPassword ? 'Validate Password' : 'Transaction Details'}</Flip>
                 </div>
 
-                <img id='close-payment' src={this.state.validatingPassword ? cancelWhite : cancelIcon} onClick={_ => this.props.onClosePayment()} />
+                <img id='close-payment' src={this.state.validatingPassword ? cancelWhite : cancelIcon} onClick={_ => this.close()} />
 
                 <div id='payment-content'>
 
@@ -114,8 +142,8 @@ export default class PaymentDetails extends React.Component<Props, State> {
                             Message:
                     </div>
                         <div className='content'>
-                            Hello World
-                    </div>
+                            {this.props.message}
+                        </div>
                     </div>
 
                     <div className='payment-details-item'>
@@ -123,7 +151,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                             Fee:
                     </div>
                         <div className='content'>
-                            {Math.random() * 100000000} <span>{this.props.coinUnit}</span>
+                            {this.props.fee} <span>{this.props.coinUnit}</span>
                         </div>
                     </div>
 

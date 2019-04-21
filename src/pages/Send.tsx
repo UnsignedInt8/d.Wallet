@@ -10,8 +10,7 @@ import AnimeHelper from '../lib/AnimeHelper';
 import * as jquery from 'jquery';
 import { getWalletMan } from '../wallet/WalletManager';
 import sleep from 'sleep-promise';
-
-const crypto = require('crypto');
+import PaymentDetails from './PaymentDetails';
 
 interface PageProps {
     symbol: string;
@@ -26,8 +25,6 @@ interface PageState {
     isBuildingTx?: boolean;
 }
 
-const cancelWhite = require('../assets/cancel-white.svg');
-const cancelIcon = require('../assets/cancel.svg');
 const sendIcon = require('../assets/send2.svg');
 const calc = require('../assets/calculator.svg');
 const pen = require('../assets/chat.svg');
@@ -45,6 +42,7 @@ export default class Send extends React.Component<PageProps, PageState>{
     appSettings = getAppSettings(PassMan.password);
     i18n = getLang(this.appSettings.lang);
     walletMan = getWalletMan(this.appSettings.mnemonic);
+    private paymentDetails: PaymentDetails | null = null;
 
     get shouldLockSymbol() { return this.state.toNums > 1 };
 
@@ -77,36 +75,6 @@ export default class Send extends React.Component<PageProps, PageState>{
         this.setState({ validatingPassword: false });
     }
 
-    private openPayment() {
-        this.setState({ prepareToSend: true }, () => {
-            let height = jquery('#payment-details').height();
-
-            anime({
-                targets: '#payment-details',
-                translateY: [height, 0],
-                duration: 100,
-            });
-        });
-    }
-
-    private closePayment() {
-        let height = jquery('#payment-details').height();
-
-        // anime({
-        //     targets: '#payment-shadow',
-        //     opacity: 0,
-        //     duration: 500,
-        // });
-
-        anime({
-            targets: '#payment-details',
-            translateY: [0, height],
-            easing: 'easeInQuad',
-            duration: 600,
-            complete: () => this.setState({ prepareToSend: false, validatingPassword: undefined, validPassword: false })
-        });
-    }
-
     private async buildTx() {
         let addresses = jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[];
         let amounts = jquery('.input-amount').map((i, el) => Number.parseFloat(jquery(el).val()) || 0).get() as number[];
@@ -121,9 +89,9 @@ export default class Send extends React.Component<PageProps, PageState>{
         // await wallet.genTx({ to, message });
         await sleep(1000);
 
-        this.setState({ isBuildingTx: false });
-
-        this.openPayment();
+        this.setState({ isBuildingTx: false, prepareToSend: true }, () => {
+            this.paymentDetails!.open();
+        });
     }
 
     private onAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -133,9 +101,8 @@ export default class Send extends React.Component<PageProps, PageState>{
         }
     }
 
-    private onPasswordChange(value: string) {
-        if (!PassMan.verify(value)) return;
-        this.setState({ validPassword: true });
+    private onPasswordVerified() {
+        this.paymentDetails!.close();
     }
 
     render() {
@@ -204,88 +171,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                 }
 
                 {this.state.prepareToSend ?
-                    <div id='payment-details' className={this.state.validatingPassword ? 'validatingPassword' : undefined}>
-                        <div id='payment-title'>
-                            <Flip bottom opposite cascade when={this.state.validatingPassword}>{this.state.validatingPassword ? 'Validate Password' : 'Transaction Details'}</Flip>
-                        </div>
-
-                        <img id='close-payment' src={this.state.validatingPassword ? cancelWhite : cancelIcon} onClick={_ => this.closePayment()} />
-
-                        <div id='payment-content'>
-
-                            <div className='payment-details-item'>
-                                <div className='title amount-title'>
-                                    Amount:
-                                </div>
-                                <div className='content amount'>
-                                    1.2323 <span className='symbol'>{this.props.symbol}</span>
-                                </div>
-                            </div>
-
-                            <div className='payment-details-item'>
-                                <div className='title'>
-                                    From:
-                                </div>
-                                <div className='content'>
-                                    {
-                                        new Array(4).fill(0).map((v, i) => {
-                                            return (
-                                                <div key={i} >
-                                                    {'0x' + crypto.randomBytes(16).toString('hex')}
-                                                </div>
-                                            );
-                                        })
-                                    }
-                                </div>
-                            </div>
-
-                            <div className='payment-details-item'>
-                                <div className='title'>
-                                    To:
-                                </div>
-                                <div className='content'>
-                                    {
-                                        new Array(1).fill(0).map((v, i) => {
-                                            return (
-                                                <div key={i} className='toInfo'>
-                                                    <div className='to'>{'0x' + crypto.randomBytes(16).toString('hex')}</div>
-                                                    <div className='amount'>{Math.random()}</div>
-                                                </div>
-                                            );
-                                        })
-                                    }
-                                </div>
-                            </div>
-
-                            <div className='payment-details-item'>
-                                <div className='title'>
-                                    Message:
-                                </div>
-                                <div className='content'>
-                                    Hello World
-                                </div>
-                            </div>
-
-                            <div className='payment-details-item'>
-                                <div className='title'>
-                                    Fee:
-                                </div>
-                                <div className='content'>
-                                    {Math.random() * 100000000} <span>{coin.unit}</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div id='payment-validation'>
-                            {this.state.validPassword ? <Validation id='validation' /> : undefined}
-                            <Password onChange={v => this.onPasswordChange(v)} inputStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', color: 'white' }} />
-                        </div>
-
-                        <div id='payment-actions'>
-                            <button onClick={_ => this.jumpToPassword()}>{this.i18n.buttons.next}</button>
-                        </div>
-                    </div>
+                    <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={coin.unit} symbol={this.props.symbol} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
                     : undefined
                 }
             </div>
