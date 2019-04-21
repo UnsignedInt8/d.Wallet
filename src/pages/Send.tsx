@@ -23,6 +23,11 @@ interface PageState {
     validatingPassword?: boolean;
     validPassword?: boolean;
     isBuildingTx?: boolean;
+
+    to?: { address: string, amount: number }[],
+    from?: string[],
+    fee?: number,
+    msg?: string;
 }
 
 const sendIcon = require('../assets/send2.svg');
@@ -84,7 +89,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
         let message = jquery('message-input').val() as string || undefined;
 
-        this.setState({ isBuildingTx: true });
+        this.setState({ isBuildingTx: true, to, msg: message });
         let wallet = this.walletMan.wallets[this.props.symbol];
         // await wallet.genTx({ to, message });
         await sleep(1000);
@@ -102,7 +107,12 @@ export default class Send extends React.Component<PageProps, PageState>{
     }
 
     private onPasswordVerified() {
-        this.paymentDetails!.close();
+        setTimeout(async () => {
+            this.paymentDetails!.close();
+
+            await sleep(1500);
+            this.props.onCancel();
+        }, 1500);
     }
 
     render() {
@@ -171,7 +181,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                 }
 
                 {this.state.prepareToSend ?
-                    <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={coin.unit} symbol={this.props.symbol} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
+                    <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={coin.unit} symbol={this.props.symbol} from={this.state.from} to={this.state.to} fee={this.state.fee} message={this.state.msg} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
                     : undefined
                 }
             </div>

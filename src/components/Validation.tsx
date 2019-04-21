@@ -5,6 +5,7 @@ interface Props {
     id?: string;
     className?: string;
     color?: string;
+    style?: React.CSSProperties;
 }
 
 export default class Validation extends React.Component<Props, any> {
