@@ -1,0 +1,169 @@
+#payment-details.validatingPassword {
+  color: white;
+  background: rgb(154, 205, 50);
+  transition: all 0.5s;
+}
+
+#payment-details {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  max-height: 85vh;
+  background: rgb(245, 245, 243);
+  color: rgb(37, 37, 37);
+  transition: all 0.5s;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  grid-template-rows: 36px auto 120px;
+  grid-template-areas:
+    "title"
+    "content"
+    "actions";
+
+  #payment-title {
+    grid-area: title;
+    padding: 16px 16px 0px 16px;
+    font-size: 19px;
+    text-transform: uppercase;
+    font-family: "Questrial", Helvetica, "Segoe UI", sans-serif;
+  }
+
+  #close-payment {
+    grid-area: title;
+    display: block;
+    position: absolute;
+    top: 19px;
+    right: 16px;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    transform: rotate(0deg);
+    transition: all 0.4s ease-in-out;
+  }
+
+  #close-payment:hover {
+    transform: rotate(180deg);
+    transition: all 0.4s ease-in-out 0s;
+  }
+
+  #payment-content {
+    grid-area: content;
+    padding: 16px 16px 0px 16px;
+    overflow-y: scroll;
+    position: relative;
+
+    .payment-details-item {
+      display: grid;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      grid-template-columns: 72px auto;
+      grid-template-areas: "title content";
+      border-bottom: 1px dashed rgba(201, 201, 201, 0.5);
+      font-family: Helvetica, sans-serif;
+
+      div {
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .title {
+        grid-area: title;
+        color: rgb(150, 150, 150);
+        font-size: 14px;
+        display: flex;
+        align-items: baseline;
+      }
+
+      .content {
+        grid-area: content;
+        font-weight: 100;
+
+        .toInfo {
+          display: grid;
+          grid-template-columns: 15fr 3fr;
+          grid-template-areas: "address amount";
+          font-family: Helvetica, sans-serif;
+
+          .to {
+            grid-area: address;
+            text-overflow: ellipsis;
+            word-wrap: none;
+            word-break: normal;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+
+          .amount {
+            grid-area: amount;
+            font-size: 15px;
+            word-wrap: none;
+            word-break: normal;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            text-align: end;
+          }
+        }
+      }
+
+      .amount-title {
+        display: flex;
+        align-items: flex-end;
+        padding-bottom: 2px;
+      }
+
+      .amount {
+        font-size: 24px;
+        text-transform: uppercase;
+        font-family: Lato, sans-serif;
+
+        .symbol {
+          font-size: 15px;
+          display: inline-block;
+          margin-left: 0px;
+        }
+      }
+    }
+  }
+
+  #payment-validation {
+    grid-area: content;
+    position: absolute;
+    top: 52px;
+    right: 0;
+    bottom: 12px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(100%);
+
+    #validation {
+      width: 72px;
+      height: 72px;
+      top: 6%;
+      position: absolute;
+    }
+  }
+
+  #payment-actions {
+    grid-area: actions;
+    padding: 0px 22px 0px 8px;
+
+    button {
+      height: 36px;
+    }
+
+    button:hover {
+      background: rgba(2, 163, 238, 0.644);
+      color: rgba(255, 255, 255, 0.904);
+    }
+
+    button:active {
+      background: black;
+      color: white;
+    }
+  }
+}
