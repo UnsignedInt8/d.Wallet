@@ -22,6 +22,7 @@ import AnimeHelper from '../lib/AnimeHelper';
 import StickyEvents from 'sticky-events';
 import OmniApi from '../wallet/api/OmniExplorer';
 import CountUp from 'react-countup';
+import Transaction from './Transaction';
 
 type Pages = 'sending' | 'receiving' | 'settings' | 'transaction';
 
@@ -83,6 +84,8 @@ class Home extends React.Component<{}, HomeState> {
         }
 
         this.hookSticky();
+
+        // this.togglePage('transaction');
     }
 
     componentWillUnmount() {
@@ -244,6 +247,7 @@ class Home extends React.Component<{}, HomeState> {
                             {this.state.expandPage === 'sending' ? <Send ref={e => this.sendPage = e} onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
                             {this.state.expandPage === 'settings' ? <Settings /> : undefined}
                             {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}
+                            {this.state.expandPage === 'transaction' ? <Transaction /> : undefined}
                         </div>
                         : undefined
                     }

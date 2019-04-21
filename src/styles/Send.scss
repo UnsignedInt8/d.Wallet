@@ -22,6 +22,27 @@
     }
   }
 
+  #eth-message {
+    resize: vertical;
+    font-size: 17px;
+    box-sizing: border-box;
+    background-color: rgba(44, 82, 231, 0.24);
+    color: white;
+    outline: none;
+    border-radius: 6px;
+    border: none;
+    margin: 12px 12px 0px 12px;
+    padding: 12px 12px 12px 42px;
+  }
+
+  img#write {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 27px;
+    left: 24px;
+  }
+
   input {
     margin: 8px 12px 0px 12px;
     font-family: Lato, sans-serif;

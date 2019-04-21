@@ -1,0 +1,18 @@
+#transaction {
+  background: rgb(255, 255, 255);
+  height: 100%;
+
+  display: grid;
+  grid-template-rows: auto 64px;
+  grid-template-areas:
+    "content"
+    "buttons";
+
+  #transaction-details {
+      grid-area: content;
+  }
+
+  #close {
+      grid-area: buttons;
+  }
+}

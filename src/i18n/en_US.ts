@@ -27,7 +27,7 @@ const lang = {
     sending: {
         address: 'Address',
         amount: 'Amount',
-        message: 'Message',
+        message: 'Write something here...',
         fees: 'Fees',
         send: 'Send',
         cancel: 'Cancel',

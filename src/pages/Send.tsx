@@ -34,6 +34,7 @@ const sendIcon = require('../assets/send2.svg');
 const calc = require('../assets/calculator.svg');
 const pen = require('../assets/chat.svg');
 const mining = require('../assets/mining.svg');
+const write = require('../assets/write.svg');
 
 const coinProps = {
     default: { feeUnit: 'Sat/B', maxTo: 10, desc: 'Satoshi/Byte', unit: 'Satoshis', },
@@ -125,8 +126,8 @@ export default class Send extends React.Component<PageProps, PageState>{
                     {new Array(Math.min(this.state.toNums, coin.maxTo)).fill(Date.now()).map((v, i) => {
                         return (
                             <div key={i} className='compose'>
-                                <input className='input-address' type="text" placeholder={`${this.props.symbol.toUpperCase()} Address`} />
-                                <input className={`input-amount ${this.state.toNums > 1 && coin.maxTo > 1 ? 'input_bottom_border' : undefined}`} type="number" placeholder='Amount' max={100_000_000} min={0.0000001} onChange={e => this.onAmountChange(e)} />
+                                <input className='input-address' type="text" placeholder={`${this.props.symbol.toUpperCase()} ${this.i18n.sending.address}`} />
+                                <input className={`input-amount ${this.state.toNums > 1 && coin.maxTo > 1 ? 'input_bottom_border' : undefined}`} type="number" placeholder={this.i18n.sending.amount} max={100_000_000} min={0.0000001} onChange={e => this.onAmountChange(e)} />
 
                                 <img className='send' src={sendIcon} />
                                 <img className='calc' src={calc} />
@@ -135,12 +136,20 @@ export default class Send extends React.Component<PageProps, PageState>{
                     })}
 
                     <div className='message'>
-                        <input className='message-input' type="text" placeholder='Message' maxLength={140} />
-                        <img className='pen' src={pen} />
+                        {this.props.symbol === 'eth' ?
+                            <div style={{ display: 'grid' }}>
+                                <textarea id="eth-message" rows={10} maxLength={20 * 1024} placeholder={this.i18n.sending.message}></textarea>
+                                <img id='write' src={write} />
+                            </div> :
+                            <div style={{ display: 'grid' }}>
+                                <input className='message-input' type="text" placeholder={this.i18n.sending.message} maxLength={140} />
+                                <img className='pen' src={pen} />
+                            </div>
+                        }
                     </div>
 
                     <div className='mining'>
-                        <input className='mining' type="number" defaultValue={'3'} max={100_000_000} min={1} placeholder={`${this.props.symbol.toUpperCase()} Fees`} onChange={e => this.onAmountChange(e)} />
+                        <input className='mining' type="number" defaultValue={'3'} max={100_000_000} min={1} placeholder={`${this.props.symbol.toUpperCase()} ${this.i18n.sending.fees}`} onChange={e => this.onAmountChange(e)} />
                         <img className='mining' src={mining} />
                         <span title={`${coin.desc}`}>{`${coin.feeUnit}`}</span>
                     </div>
