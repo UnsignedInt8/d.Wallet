@@ -71,7 +71,7 @@
   color: white;
   height: 96.5vh;
   overflow-y: scroll;
-
+  position: relative;
   display: grid;
   grid-template-rows: 200px 60px auto 0px;
   grid-template-columns: auto;
@@ -80,6 +80,17 @@
     "balance"
     "txs"
     "buttons";
+
+  #begin-arrow {
+    position: absolute;
+    right: 90px;
+    bottom: 10px;
+
+    img {
+      height: 80px;
+      opacity: 0.2;
+    }
+  }
 
   .chart {
     width: 100%;

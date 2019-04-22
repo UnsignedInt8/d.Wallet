@@ -26,6 +26,7 @@ import Transaction from './Transaction';
 
 type Pages = 'sending' | 'receiving' | 'settings' | 'transaction';
 
+const begin = require('../assets/begin.svg');
 const btc = require('../assets/btc.svg');
 const eth = require('../assets/eth.svg');
 const bch = require('../assets/bch.svg');
@@ -218,6 +219,12 @@ class Home extends React.Component<{}, HomeState> {
                 </div>
 
                 <div id='home-content' className={`home-content ${isDarwin ? 'titlebar-padding' : ''}`}>
+                    {this.walletMan && this.walletMan.current.txs.length > 0 ? undefined :
+                        <div id='begin-arrow'>
+                            <img src={begin} />
+                        </div>
+                    }
+
                     <div className='chart'>
                         <AreaChart width={window.innerWidth - 68} height={200} data={this.state.currentHistory} style={{ marginLeft: -0 }}>
                             <Area dataKey='price' fill='transparent' stroke={this.state.symbolColor} />
