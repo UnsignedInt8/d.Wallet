@@ -75,7 +75,7 @@ export default class ETHWallet extends Wallet {
         let balance = info.address.balance || 0;
         let txs = info.calls.map(c => {
             return <TxInfo>{
-                amount: BigInt(c.value).toString(),
+                amount: (BigInt(c.value) / BigInt('1000000000000000000')),
                 blockHash: '',
                 blockHeight: c.block_id,
                 hash: c.transaction_hash,
@@ -83,6 +83,7 @@ export default class ETHWallet extends Wallet {
                 outputs: [{ address: [c.recipient], value: 0 }],
                 timestamp: new Date(c.time).getTime(),
                 isIncome: c.recipient.toLowerCase() === address,
+                fee: 0,
             };
         });
 

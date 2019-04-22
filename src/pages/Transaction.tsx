@@ -4,17 +4,31 @@ import { getAppSettings } from '../data/AppSettings';
 import PassMan from '../data/PasswordManager';
 import * as QRCode from 'qrcode.react';
 import { TxInfo } from '../wallet/Wallet';
+const { shell } = require('electron');
 
 const blockchair = require('../assets/blockchair_light.png');
 interface Props {
     txInfo: TxInfo;
+    symbol?: string;
     onCacnel: () => void;
+}
+
+const chains = {
+    'btc': 'bitcoin',
+    'bch': 'bitcoin-cash',
+    'eth': 'ethereum',
+    'ltc': 'litecoin',
+    'usdt': 'bitcoin',
 }
 
 export default class Transaction extends React.Component<Props, any> {
 
     appSettings = getAppSettings(PassMan.password);
     i18n = this.appSettings.i18n;
+
+    private openLink(target: string) {
+        shell.openExternal(target);
+    }
 
     render() {
         return (
@@ -26,7 +40,7 @@ export default class Transaction extends React.Component<Props, any> {
                         </div>
 
                         <div id='transaction-details-qrcode'>
-                            <QRCode value={'0xf3d66e021032a18635e6a946a21f2317ca4e8fc1810f169dc282ff4c199bef4c'} level='M' bgColor='transparent' fgColor='white' size={108} />
+                            <QRCode value={`https://blockchair.com/${chains[this.props.symbol!]}/transaction/${this.props.txInfo.hash}`} level='M' bgColor='transparent' fgColor='white' size={79} />
                         </div>
 
                         <div id='transaction-details-head-content'>
@@ -34,7 +48,7 @@ export default class Transaction extends React.Component<Props, any> {
                                 <div className='detail-item-label'>
                                     {this.i18n.txDetails.hash}:
                                 </div>
-                                <div className='detail-item-content'>
+                                <div className='detail-item-content' title={this.props.txInfo.hash}>
                                     {this.props.txInfo.hash}
                                 </div>
                             </div>
@@ -63,40 +77,49 @@ export default class Transaction extends React.Component<Props, any> {
                     <div id='transaction-details-content'>
                         <div className='detail-item'>
                             <div className='transaction-item-label'>
-                                From:
+                                {this.i18n.txDetails.from}:
                             </div>
                             <div className='transaction-item-content'>
-                                <div>12cgpFdJViXbwHbhrA3TuW1EGnL25Zqc3P</div>
-                                {/* <div>3PbJsixkjmjzsjCpi4xAYxxaL5NnxrbF9B</div> */}
+                                {this.props.txInfo.inputs.map(v => {
+                                    return (
+                                        <div title={v.address[0]}>{v.address[0]}</div>
+                                    );
+                                })}
                             </div>
                         </div>
+
                         <div className='detail-item'>
                             <div className='transaction-item-label'>
-                                To:
+                                {this.i18n.txDetails.to}:
                             </div>
                             <div className='transaction-item-content'>
-                                <div>3PbJsixkjmjzsjCpi4xAYxxaL5NnxrbF9B</div>
+                                {this.props.txInfo.outputs.map(v => {
+                                    return (
+                                        <div title={v.address[0]}>{v.address[0]}</div>
+                                    );
+                                })}
                             </div>
                         </div>
+
                         <div className='detail-item'>
                             <div className='transaction-item-label'>
-                                Amount:
+                                {this.i18n.txDetails.amount}:
                             </div>
-                            <div className='transaction-item-content'>
-                                2.3 BTC
+                            <div className='transaction-item-content amount'>
+                                {`${this.props.txInfo.amount} ${this.props.symbol}`}
                             </div>
                         </div>
                         <div className='detail-item'>
                             <div className='transaction-item-label'>
                                 {this.i18n.txDetails.fee}:
                             </div>
-                            <div className='transaction-item-content'>
-                                0.00104520 BTC
+                            <div className='transaction-item-content amount'>
+                                {`${this.props.txInfo.fee || '---'} ${this.props.symbol}`}
                             </div>
                         </div>
 
                         <div id='blockchair_logo'>
-                            <img src={blockchair} />
+                            <img src={blockchair} onClick={e => this.openLink(`https://blockchair.com/${chains[this.props.symbol!]}/transaction/${this.props.txInfo.hash}`)} />
                         </div>
                     </div>
                 </div>

@@ -49,7 +49,8 @@ export default class USDTWallet extends BTCWallet {
                     inputs: [{ address: [t.sendingaddress], value: '' }],
                     outputs: [{ address: [t.referenceaddress], value: '' }],
                     isIncome: t.referenceaddress.toLowerCase() === address.toLowerCase(),
-                    timestamp: t.blocktime * 1000
+                    timestamp: t.blocktime * 1000,
+                    fee: t.fee,
                 };
             });
 

@@ -252,7 +252,7 @@ class Home extends React.Component<{}, HomeState> {
                             {this.state.expandPage === 'sending' ? <Send ref={e => this.sendPage = e} onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
                             {this.state.expandPage === 'settings' ? <Settings /> : undefined}
                             {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}
-                            {this.state.expandPage === 'transaction' ? <Transaction onCacnel={() => this.closePage()} txInfo={this.state.selectedTx!} /> : undefined}
+                            {this.state.expandPage === 'transaction' ? <Transaction onCacnel={() => this.closePage()} txInfo={this.state.selectedTx!} symbol={this.state.selectedSymbol} /> : undefined}
                         </div>
                         : undefined
                     }

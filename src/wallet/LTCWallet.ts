@@ -52,7 +52,8 @@ export default class LTCWallet extends BTCWallet {
                 outputs: tx.outputs.map(o => { return { address: [o.recipient], value: o.value } }),
                 isIncome: outputsValue > inputsValue,
                 timestamp: new Date(tx.transaction.time).getTime(),
-                amount: `${amount.toBTC()}`,
+                amount: amount.toBTC(),
+                fee: tx.transaction.fee,
             }
         });
     }

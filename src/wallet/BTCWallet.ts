@@ -224,7 +224,8 @@ export default class BTCWallet extends Wallet {
                 inputs: tx.inputs.map(i => { return { address: i.prev_addresses, value: i.prev_value } }),
                 outputs: tx.outputs.map(o => { return { address: o.addresses, value: o.value } }),
                 isIncome,
-                amount: `${amount.toBTC()}`
+                amount: amount.toBTC(),
+                fee: tx.fee,
             };
         });
 

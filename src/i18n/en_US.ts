@@ -63,6 +63,9 @@ const lang = {
         time: 'Time',
         height: 'Height',
         fee: 'Fee',
+        from: 'From',
+        to: 'To',
+        amount: 'Amount',
     }
 }
 

@@ -27,9 +27,9 @@
       height: 116px;
       grid-row: 1;
       grid-template-rows: 32px auto;
-      grid-template-columns: auto 108px;
+      grid-template-columns: auto 84px;
       grid-template-areas:
-        "title qrcode"
+        "title ."
         "content qrcode";
 
       #transaction-details-title {
@@ -40,11 +40,14 @@
 
       #transaction-details-qrcode {
         grid-area: qrcode;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -3px;
       }
 
       #transaction-details-head-content {
         grid-area: content;
-        padding-right: 12px;
+        padding-right: 8px;
       }
     }
 
@@ -57,9 +60,14 @@
         justify-content: flex-end;
 
         img {
+          cursor: pointer;
           height: 20px;
         }
       }
+    }
+
+    .amount {
+      text-transform: uppercase;
     }
 
     .detail-item {
