@@ -84,8 +84,8 @@ export default class PaymentDetails extends React.Component<Props, State> {
     render() {
         return (
 
-            <div id='payment-details' className={this.state.validatingPassword ? 'validatingPassword' : undefined}>
-                <div id='payment-title'>
+            <div id='payment-details' className={`${this.state.validatingPassword ? 'validatingPassword' : undefined}`}>
+                <div id='payment-title' className='questrial'>
                     <Flip bottom opposite cascade when={this.state.validatingPassword}>{this.state.validatingPassword ? 'Validate Password' : 'Transaction Details'}</Flip>
                 </div>
 

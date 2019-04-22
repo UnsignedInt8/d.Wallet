@@ -5,6 +5,7 @@ import PassMan from '../data/PasswordManager';
 import * as QRCode from 'qrcode.react';
 import { TxInfo } from '../wallet/Wallet';
 
+const blockchair = require('../assets/blockchair_light.png');
 interface Props {
     txInfo?: TxInfo;
 }
@@ -19,7 +20,7 @@ export default class Transaction extends React.Component<Props, any> {
             <div id='transaction'>
                 <div id='transaction-details'>
                     <div id='transaction-details-head'>
-                        <div id='transaction-details-title'>
+                        <div id='transaction-details-title' className='questrial'>
                             Transaction Details
                         </div>
 
@@ -58,6 +59,45 @@ export default class Transaction extends React.Component<Props, any> {
 
                     </div>
 
+                    <div id='transaction-details-content'>
+                        <div className='detail-item'>
+                            <div className='transaction-item-label'>
+                                From:
+                            </div>
+                            <div className='transaction-item-content'>
+                                <div>12cgpFdJViXbwHbhrA3TuW1EGnL25Zqc3P</div>
+                                {/* <div>3PbJsixkjmjzsjCpi4xAYxxaL5NnxrbF9B</div> */}
+                            </div>
+                        </div>
+                        <div className='detail-item'>
+                            <div className='transaction-item-label'>
+                                To:
+                            </div>
+                            <div className='transaction-item-content'>
+                                <div>3PbJsixkjmjzsjCpi4xAYxxaL5NnxrbF9B</div>
+                            </div>
+                        </div>
+                        <div className='detail-item'>
+                            <div className='transaction-item-label'>
+                                Amount:
+                            </div>
+                            <div className='transaction-item-content'>
+                                2.3 BTC
+                            </div>
+                        </div>
+                        <div className='detail-item'>
+                            <div className='transaction-item-label'>
+                                Fee:
+                            </div>
+                            <div className='transaction-item-content'>
+                                0.00104520 BTC
+                            </div>
+                        </div>
+
+                        <div id='blockchair_logo'>
+                            <img src={blockchair} />
+                        </div>
+                    </div>
                 </div>
 
                 <div id='tx-buttons'>

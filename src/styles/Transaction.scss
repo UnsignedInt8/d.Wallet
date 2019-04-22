@@ -10,9 +10,11 @@
 
   #transaction-details {
     grid-area: content;
-    padding: 3.5vh 14px 12px 12px;
+    padding: 3.5vh 14px 0px 12px;
     display: grid;
     font-size: 15px;
+    grid-template-rows: 116px auto;
+    overflow-y: scroll;
 
     div {
       white-space: nowrap;
@@ -23,6 +25,7 @@
     #transaction-details-head {
       display: grid;
       height: 116px;
+      grid-row: 1;
       grid-template-rows: 32px auto;
       grid-template-columns: auto 108px;
       grid-template-areas:
@@ -45,9 +48,23 @@
       }
     }
 
+    #transaction-details-content {
+      grid-row: 2;
+      margin-top: 8px;
+
+      #blockchair_logo {
+        display: flex;
+        justify-content: flex-end;
+
+        img {
+          height: 20px;
+        }
+      }
+    }
+
     .detail-item {
       display: grid;
-      grid-template-columns: 64px auto;
+      grid-template-columns: 72px auto;
       grid-template-areas: "label content";
       border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
       margin-bottom: 6px;
@@ -71,6 +88,16 @@
 
     button {
       height: 36px;
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    button:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    button:active {
+      background-color: white;
+      color: black;
     }
   }
 }
