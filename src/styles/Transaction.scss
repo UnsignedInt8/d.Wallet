@@ -1,5 +1,5 @@
 #transaction {
-  background: rgb(20, 209, 121);
+  background: rgb(30, 204, 38);
   height: 100%;
 
   display: grid;
@@ -9,15 +9,68 @@
     "buttons";
 
   #transaction-details {
-      grid-area: content;
+    grid-area: content;
+    padding: 3.5vh 14px 12px 12px;
+    display: grid;
+    font-size: 15px;
+
+    div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #transaction-details-head {
+      display: grid;
+      height: 116px;
+      grid-template-rows: 32px auto;
+      grid-template-columns: auto 108px;
+      grid-template-areas:
+        "title qrcode"
+        "content qrcode";
+
+      #transaction-details-title {
+        font-family: Questrial, "Segoe UI", sans-serif;
+        font-size: 24px;
+        grid-area: title;
+      }
+
+      #transaction-details-qrcode {
+        grid-area: qrcode;
+      }
+
+      #transaction-details-head-content {
+        grid-area: content;
+        padding-right: 12px;
+      }
+    }
+
+    .detail-item {
+      display: grid;
+      grid-template-columns: 64px auto;
+      grid-template-areas: "label content";
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
+      margin-bottom: 6px;
+      padding-bottom: 2px;
+      font-family: "Segoe UI", Helvetica, Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 18px;
+
+      .detail-item-label {
+        grid-area: label;
+      }
+
+      .detail-item-content {
+        grid-area: content;
+      }
+    }
   }
 
   #tx-buttons {
-      grid-area: buttons;
-      padding: 0px 22px 0px 8px;
+    grid-area: buttons;
+    padding: 0px 20px 0px 4px;
 
-      button {
-          height: 36px;
-      }
+    button {
+      height: 36px;
+    }
   }
 }

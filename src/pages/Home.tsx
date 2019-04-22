@@ -85,7 +85,6 @@ class Home extends React.Component<{}, HomeState> {
 
         this.hookSticky();
 
-        this.togglePage('transaction');
     }
 
     componentWillUnmount() {
@@ -113,6 +112,8 @@ class Home extends React.Component<{}, HomeState> {
         this.walletMan = getWalletMan(this.appSettings.mnemonic);
 
         this.walletMan.refresh();
+        this.togglePage('transaction');
+
     }
 
     private async refreshPrice() {
