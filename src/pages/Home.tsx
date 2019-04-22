@@ -10,7 +10,7 @@ import Receive from './Receive';
 import anime from 'animejs';
 import Settings from './Settings';
 import { AppSettings, getAppSettings } from '../data/AppSettings';
-import { Wallet } from '../wallet/Wallet';
+import { Wallet, TxInfo } from '../wallet/Wallet';
 import BTCWallet from '../wallet/BTCWallet';
 import ETHWallet from '../wallet/ETHWallet';
 import BCHWallet from '../wallet/BCHWallet';
@@ -46,6 +46,7 @@ const symbols = [
 
 interface HomeState {
     selectedSymbol: string;
+    selectedTx?: TxInfo;
     showSymbol: boolean;
     symbolColor: string;
     currentPrice: string;
@@ -112,8 +113,6 @@ class Home extends React.Component<{}, HomeState> {
         this.walletMan = getWalletMan(this.appSettings.mnemonic);
 
         this.walletMan.refresh();
-        this.togglePage('transaction');
-
     }
 
     private async refreshPrice() {
@@ -184,6 +183,11 @@ class Home extends React.Component<{}, HomeState> {
         }
     }
 
+    private onOpenTxInfo(tx: TxInfo) {
+        this.setState({ selectedTx: tx });
+        this.togglePage('transaction');
+    }
+
     render() {
         let isDarwin = platform() === 'darwin';
 
@@ -248,7 +252,7 @@ class Home extends React.Component<{}, HomeState> {
                             {this.state.expandPage === 'sending' ? <Send ref={e => this.sendPage = e} onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
                             {this.state.expandPage === 'settings' ? <Settings /> : undefined}
                             {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}
-                            {this.state.expandPage === 'transaction' ? <Transaction /> : undefined}
+                            {this.state.expandPage === 'transaction' ? <Transaction onCacnel={() => this.closePage()} txInfo={this.state.selectedTx!} /> : undefined}
                         </div>
                         : undefined
                     }
@@ -260,7 +264,7 @@ class Home extends React.Component<{}, HomeState> {
                     <div className='txs'>
                         {(this.walletMan ? this.walletMan.current.txs : []).map(tx => {
                             return (
-                                <div className='tx' key={tx.hash}>
+                                <div className='tx' key={tx.hash} onClick={e => this.onOpenTxInfo(tx)}>
                                     <div className='icon'>
                                         <img src={tx.isIncome ? inIcon : outIcon} />
                                     </div>

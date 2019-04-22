@@ -55,6 +55,14 @@ const lang = {
 
     lockScreen: {
         title: 'Unlock Your Wallet',
+    },
+
+    txDetails: {
+        title: 'Transaction Details',
+        hash: 'Hash',
+        time: 'Time',
+        height: 'Height',
+        fee: 'Fee',
     }
 }
 

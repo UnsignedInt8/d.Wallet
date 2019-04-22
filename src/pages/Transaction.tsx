@@ -7,7 +7,8 @@ import { TxInfo } from '../wallet/Wallet';
 
 const blockchair = require('../assets/blockchair_light.png');
 interface Props {
-    txInfo?: TxInfo;
+    txInfo: TxInfo;
+    onCacnel: () => void;
 }
 
 export default class Transaction extends React.Component<Props, any> {
@@ -21,7 +22,7 @@ export default class Transaction extends React.Component<Props, any> {
                 <div id='transaction-details'>
                     <div id='transaction-details-head'>
                         <div id='transaction-details-title' className='questrial'>
-                            Transaction Details
+                            {this.i18n.txDetails.title}
                         </div>
 
                         <div id='transaction-details-qrcode'>
@@ -31,28 +32,28 @@ export default class Transaction extends React.Component<Props, any> {
                         <div id='transaction-details-head-content'>
                             <div className='detail-item'>
                                 <div className='detail-item-label'>
-                                    Hash:
+                                    {this.i18n.txDetails.hash}:
                                 </div>
                                 <div className='detail-item-content'>
-                                    8f78a66138f45582a08d3363507a8695cef49bc472b45bd531d61f992d71038d
+                                    {this.props.txInfo.hash}
                                 </div>
                             </div>
 
                             <div className='detail-item'>
                                 <div className='detail-item-label'>
-                                    Time:
+                                    {this.i18n.txDetails.time}:
                                 </div>
                                 <div className='detail-item-content'>
-                                    {`${new Date().toLocaleDateString()}`}
+                                    {new Date(this.props.txInfo.timestamp).toLocaleString()}
                                 </div>
                             </div>
 
                             <div className='detail-item'>
                                 <div className='detail-item-label'>
-                                    Height:
+                                    {this.i18n.txDetails.height}:
                                 </div>
                                 <div className='detail-item-content'>
-                                    573206
+                                    {this.props.txInfo.blockHeight}
                                 </div>
                             </div>
                         </div>
@@ -87,7 +88,7 @@ export default class Transaction extends React.Component<Props, any> {
                         </div>
                         <div className='detail-item'>
                             <div className='transaction-item-label'>
-                                Fee:
+                                {this.i18n.txDetails.fee}:
                             </div>
                             <div className='transaction-item-content'>
                                 0.00104520 BTC
@@ -101,7 +102,7 @@ export default class Transaction extends React.Component<Props, any> {
                 </div>
 
                 <div id='tx-buttons'>
-                    <button id='close'>
+                    <button id='close' onClick={e => this.props.onCacnel()}>
                         {this.i18n.buttons.close}
                     </button>
                 </div>
