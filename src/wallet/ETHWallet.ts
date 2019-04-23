@@ -6,14 +6,59 @@ import { toBuffer } from '../lib/Hash';
 import { observable, computed } from "mobx";
 import Blockchair, { Chain } from "./api/Blockchair";
 import * as Units from 'ethereumjs-units';
+import { IUtxo } from './Wallet';
+import * as hex2dec from 'hex2dec';
+import { PrivateKey } from 'bitcore-lib';
+const EthereumTx = require("ethereumjs-tx");
 
 export default class ETHWallet extends Wallet {
-    genTx(opts: { to: { address: string; amount: string | number; }[]; message?: string | undefined; }): Promise<{ hex: string; id: string; change: { address: string; amount: number; }; msg?: string, fee: number; from: string[], to: any[] } | undefined> {
+
+    async genTx(opts: { to: { address: string; amount: string; }[]; message?: string | undefined; gasPrice: string }): Promise<{ hex: string; id: string; change: { address: string; amount: number; }; msg?: string, fee: number; from: string[], to: any[] } | undefined> {
+        let info = await this.scanAddresses();
+        if (!info) return;
+
+        let [key] = this.getKeys(0, 1);
+        let privkey = Buffer.from((key['privateKey'] as PrivateKey).toString(), 'hex');
+
         throw new Error("Method not implemented.");
     }
 
-    buildTx(args: { inputs: import("./Wallet").IUtxo[]; outputs: { address: string; amount: number; }[]; satoshiPerByte: number; changeIndex?: number | undefined; }): { tx: import("bitcoinjs-lib").Transaction | import("bitcore-lib").Transaction; change: { address: string; amount: number; }; fee: number; } {
+    buildTx(args: { inputs: IUtxo[]; outputs: { address: string; amount: number; }[]; satoshiPerByte: number; changeIndex?: number | undefined; }): { tx: import("bitcoinjs-lib").Transaction | import("bitcore-lib").Transaction; change: { address: string; amount: number; }; fee: number; } {
         throw new Error("Method not implemented.");
+    }
+
+    buildETHTx(args: { to: { address: string, amount: string | number }, msg?: string, gasPrice: string, nonce: number }, balance: number, key: Buffer) {
+        let data = Buffer.from(args.msg || '', 'hex').toString('hex');
+        let gasLimit = 21000 + 68 * data.length / 2;//: string = hex2dec.decToHex(`${}`);
+
+        let balanceWei = BigInt(Units.convert(balance, 'eth', 'wei'));
+        let fee = BigInt(gasLimit) * BigInt(args.gasPrice);
+        let amount = BigInt(args.to.amount);
+        let value = amount;
+
+        if (balanceWei < amount + fee) {
+            value = balanceWei - fee;
+        }
+
+        const txParams = {
+            to: args.to.address,
+            nonce: hex2dec.decToHex(`${args.nonce}`),
+            value: hex2dec.decToHex(value.toString()),
+            gasPrice: hex2dec.decToHex(args.gasPrice),
+            gasLimit,
+            data: '0x' + data,
+            chainId: 1,
+        };
+
+        console.log(txParams);
+
+        let tx = new EthereumTx(txParams);
+
+        tx.sign(key);
+        let signed: Buffer = tx.serialize();
+        let txid = '0x' + tx.hash().toString('hex');
+
+        return { hex: '0x' + signed.toString('hex'), txid, fee: fee.toString(), value: value.toString() }
     }
 
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
@@ -84,9 +129,10 @@ export default class ETHWallet extends Wallet {
                 timestamp: new Date(c.time).getTime(),
                 isIncome: c.recipient.toLowerCase() === address,
                 fee: 0,
+                success: c.transferred,
             };
         });
 
-        return [{ address, balance, txs }];
+        return [{ address, balance, txs, nonce: info.address.spending_call_count }];
     }
 }

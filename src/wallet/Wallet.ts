@@ -142,6 +142,7 @@ export interface TxInfo {
     blockHeight: number;
     amount: number | BigInt | string;
     fee: number | string;
+    success?: boolean;
 }
 
 
