@@ -140,7 +140,7 @@ export interface TxInfo {
     hash: string;
     blockHash: string;
     blockHeight: number;
-    amount: number | BigInt | string;
+    amount: number | string;
     fee: number | string;
     success?: boolean;
 }
