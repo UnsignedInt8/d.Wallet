@@ -20,8 +20,9 @@ interface Props {
 }
 
 interface State {
-    validatingPassword?: boolean;
+    animeTitle?: boolean;
     validPassword?: boolean;
+    showPassword?: boolean;
 }
 
 const cancelWhite = require('../assets/cancel-white.svg');
@@ -29,7 +30,7 @@ const cancelIcon = require('../assets/cancel.svg');
 
 export default class PaymentDetails extends React.Component<Props, State> {
 
-    state: State = {}
+    state: State = { animeTitle: true, showPassword: false };
     appSettings = getAppSettings(PassMan.password);
     i18n = getLang(this.appSettings.lang);
 
@@ -40,7 +41,6 @@ export default class PaymentDetails extends React.Component<Props, State> {
     }
 
     private jumpToPassword() {
-        console.log('jumpto password????????');
         anime({
             targets: '#payment-content, #payment-actions',
             translateX: [0, -window.innerWidth],
@@ -49,15 +49,15 @@ export default class PaymentDetails extends React.Component<Props, State> {
             easing: 'linear',
         });
 
-        anime({
-            targets: '#payment-validation',
-            translateX: [-window.innerWidth, 0],
-            duration: 600,
-            easing: 'linear',
-            complete: () => this.setState({ validatingPassword: true }),
+        this.setState({ animeTitle: false, showPassword: true, }, () => {
+            anime({
+                targets: '#payment-validation',
+                translateX: [window.innerWidth, 0],
+                duration: 600,
+                easing: 'linear',
+                complete: () => this.setState({ animeTitle: true, })
+            });
         });
-
-        this.setState({ validatingPassword: false });
     }
 
     close() {
@@ -85,12 +85,12 @@ export default class PaymentDetails extends React.Component<Props, State> {
     render() {
         return (
 
-            <div id='payment-details' className={`${this.state.validatingPassword ? 'validatingPassword' : ''}`}>
+            <div id='payment-details' className={`${this.state.showPassword ? 'validatingPassword' : ''}`}>
                 <div id='payment-title' className='questrial'>
-                    <Flip bottom opposite cascade when={this.state.validatingPassword}>{this.state.validatingPassword ? 'Validate Password' : 'Transaction Details'}</Flip>
+                    <Flip bottom opposite cascade when={this.state.animeTitle}>{this.state.animeTitle ? 'Validate Password' : 'Transaction Details'}</Flip>
                 </div>
 
-                <img id='close-payment' src={this.state.validatingPassword ? cancelWhite : cancelIcon} onClick={_ => this.close()} />
+                <img id='close-payment' src={this.state.animeTitle ? cancelWhite : cancelIcon} onClick={_ => this.close()} />
 
                 <div id='payment-content'>
 
@@ -158,10 +158,12 @@ export default class PaymentDetails extends React.Component<Props, State> {
 
                 </div>
 
-                <div id='payment-validation'>
-                    {this.state.validPassword ? <Validation id='validation' /> : undefined}
-                    <Password onChange={v => this.onPasswordChange(v)} inputStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', color: 'white' }} />
-                </div>
+                {this.state.showPassword ?
+                    <div id='payment-validation'>
+                        {this.state.validPassword ? <Validation id='validation' /> : undefined}
+                        <Password onChange={v => this.onPasswordChange(v)} inputStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', color: 'white' }} />
+                    </div>
+                    : undefined}
 
                 <div id='payment-actions'>
                     <button onClick={_ => this.jumpToPassword()}>{this.i18n.buttons.next}</button>

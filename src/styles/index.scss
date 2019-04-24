@@ -9,7 +9,11 @@ html {
   background: rgb(25, 32, 48);
 }
 
-.switch {
+body {
+  overflow: hidden;
+}
+
+​ .switch {
   transition: all 0.05s;
 }
 

@@ -12,7 +12,7 @@ export default class Password extends React.Component<Props, {}>{
 
     render() {
         return (
-            <div id='password' style={this.props.style}>
+            <div className='password' style={this.props.style}>
                 <input type="password" maxLength={32} onChange={e => this.props.onChange(e.target.value)} style={this.props.inputStyle} />
                 <img src={lock} />
             </div>

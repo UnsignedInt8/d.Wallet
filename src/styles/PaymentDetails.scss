@@ -20,6 +20,7 @@
     "title"
     "content"
     "actions";
+  overflow: hidden;
 
   #payment-title {
     grid-area: title;
@@ -137,7 +138,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transform: translateX(100%);
 
     #validation {
       width: 64px;
