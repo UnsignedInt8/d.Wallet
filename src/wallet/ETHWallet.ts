@@ -12,25 +12,9 @@ import { PrivateKey } from 'bitcore-lib';
 const EthereumTx = require("ethereumjs-tx");
 import * as ETHUnit from 'ethjs-unit';
 
-
 export default class ETHWallet extends Wallet {
 
-    async genTx(opts: { to: { address: string; amount: number; }[]; message?: string; gasPrice: number }): Promise<GenTxInfo | undefined> {
-        let [info] = await this.scanAddresses();
-        if (!info) return;
-
-        let [key] = this.getKeys(0, 1);
-        let privkey = Buffer.from((key['privateKey'] as PrivateKey).toString(), 'hex');
-
-        let [to] = opts.to;
-        let amount = ETHUnit.toWei(to.amount, 'ether').toString();
-        let gasPrice = ETHUnit.toWei(opts.gasPrice, 'gwei').toString()
-
-        let { hex, txid, fee, value } = this.buildETHTx({ to: { address: to.address, amount }, msg: opts.message, gasPrice, nonce: info.nonce }, info.balance, privkey);
-        return { hex, id: txid, change: { address: this.mainAddress[0], amount: 0 }, fee: Units.convert(fee || 0, 'wei', 'eth'), from: this.mainAddress, to: opts.to, msg: opts.message }
-
-        throw new Error("Method not implemented.");
-    }
+    chainId = 1;
 
     buildTx(args: { inputs: IUtxo[]; outputs: { address: string; amount: number; }[]; satoshiPerByte: number; changeIndex?: number | undefined; }): { tx: import("bitcoinjs-lib").Transaction | import("bitcore-lib").Transaction; change: { address: string; amount: number; }; fee: number; } {
         throw new Error("Method not implemented.");
@@ -39,7 +23,6 @@ export default class ETHWallet extends Wallet {
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
         throw new Error("Method not implemented.");
     }
-
 
     protected getExternalPath(): string {
         return `m/44'/60'/0'/0`;
@@ -111,6 +94,26 @@ export default class ETHWallet extends Wallet {
         return [{ address, balance, txs, nonce: info.address.spending_call_count }];
     }
 
+    async genTx(opts: { to: { address: string; amount: number; }[]; message?: string; gasPrice: number }): Promise<GenTxInfo | undefined> {
+        let [info] = await this.scanAddresses();
+        if (!info) return;
+
+        let [key] = this.getKeys(0, 1);
+        let privkey = Buffer.from((key['privateKey'] as PrivateKey).toString(), 'hex');
+
+        let [to] = opts.to;
+        let amount = ETHUnit.toWei(to.amount, 'ether').toString();
+        let gasPrice = ETHUnit.toWei(opts.gasPrice, 'gwei').toString();
+
+        let { hex, txid, fee, value } = this.buildETHTx({ to: { address: to.address, amount }, msg: opts.message, gasPrice, nonce: info.nonce }, info.balance, privkey);
+
+        return { hex, id: txid, change: { address: this.mainAddress[0], amount: 0 }, fee: Units.convert(fee || 0, 'wei', 'eth'), from: this.mainAddress, to: opts.to, msg: opts.message }
+    }
+    
+    async broadcastTx(hex: string, chain: Chain) {
+
+    }
+
     /**
      * 
      * @param args 
@@ -137,7 +140,7 @@ export default class ETHWallet extends Wallet {
             gasPrice: hex2dec.decToHex(args.gasPrice),
             gasLimit,
             data: data.length === 0 ? '0x' : data,
-            chainId: 1,
+            chainId: this.chainId,
         };
 
         let tx = new EthereumTx(txParams);

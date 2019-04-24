@@ -119,4 +119,8 @@ describe('ETH Wallet', () => {
         expect(result.value).toBe('10871164000000000');
 
     });
+
+    it('tests broadcasting tx', () => {
+
+    });
 });

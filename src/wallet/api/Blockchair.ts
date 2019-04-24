@@ -57,4 +57,14 @@ export default class Blockchair {
         let data = resp.data.data as BTCUtxo[] || [];
         return data;
     }
+
+    static async postTx(hex: string, chain: Chain) {
+        let url = `${Blockchair.host}/${chain}/push/transaction`;
+        let form = new FormData();
+        form.set('data', hex);
+
+        let resp = await axios.post(url, form);
+        if (!resp.data) return null;
+        return resp.data.data.transaction_hash;
+    }
 }

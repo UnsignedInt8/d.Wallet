@@ -74,7 +74,7 @@ export default class BTCWallet extends Wallet {
         return { hex: tx.toHex(), id: tx.getId(), change, fee, from, to: opts.to, msg: opts.message };
     }
 
-    async transfer(hex: string) {
+    async broadcastTx(hex: string, chain: Chain) {
 
     }
 

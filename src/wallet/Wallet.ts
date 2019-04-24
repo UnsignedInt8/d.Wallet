@@ -37,7 +37,8 @@ export abstract class Wallet {
     protected abstract scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]>;
     protected abstract genAddress(key: HDPrivateKey): string[];
     abstract buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number }): IBuildingTx;
-
+    abstract broadcastTx(hex: string, chain: Chain);
+    
     @observable protected _addresses?: string[][];
     @computed get addresses() {
         if (this._addresses) return this._addresses;
