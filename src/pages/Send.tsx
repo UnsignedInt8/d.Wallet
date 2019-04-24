@@ -72,7 +72,7 @@ export default class Send extends React.Component<PageProps, PageState>{
         this.setState({ isBuildingTx: true, to, msg: message });
         let wallet = this.walletMan.wallets[this.props.symbol];
         // await wallet.genTx({ to, message });
-        await sleep(1000);
+        // await sleep(1000);
 
         this.setState({ isBuildingTx: false, prepareToSend: true }, () => {
             this.paymentDetails!.open();
@@ -161,7 +161,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                 {(this.state.prepareToSend || this.state.isBuildingTx) ?
                     <div id='payment-shadow'>
                         {this.state.isBuildingTx ?
-                            <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Building transaction, wait a moment please...</div>
+                            <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Building, wait a moment please...</div>
                             : undefined
                         }
                     </div>

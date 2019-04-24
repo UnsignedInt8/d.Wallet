@@ -10,6 +10,8 @@ import LockScreen from './pages/LockScreen';
 import animeHelper from './lib/AnimeHelper';
 import { getAppSettings } from './data/AppSettings';
 import PassMan from './data/PasswordManager';
+import ReactNotification from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 function glide(val: number) {
     return spring(val, {
@@ -48,6 +50,7 @@ export default class Application extends React.Component<{}, State> {
     static history: History;
 
     state: State = { lockApp: false, firstUse: true };
+    notificationDOMRef: any;
 
     componentDidMount() {
         ipcRenderer.on('autolock', () => this.lockApp());
@@ -59,6 +62,7 @@ export default class Application extends React.Component<{}, State> {
             if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
         });
 
+        setTimeout(() => this.addNotification({ title: '', message: 'hello', type: 'success' }), 2000);
     }
 
     componentWillUnmount() {
@@ -86,9 +90,23 @@ export default class Application extends React.Component<{}, State> {
         animeHelper.expandPage(LockScreen.id, 0, window.innerHeight, () => this.setState({ lockApp: false }));
     }
 
+    addNotification(opts: { title: string, message: string, type: 'success' | 'default' | 'warning' | 'info' | 'danger' }) {
+        this.notificationDOMRef.addNotification({
+            ...opts,
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: { duration: 2000 },
+            dismissable: { click: true }
+        });
+    }
+
     render() {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
+                <ReactNotification ref={e => this.notificationDOMRef = e} isMoble={true} width={300} />
+
                 <AnimatedSwitch
                     className='switch'
                     {...pageTransitions}

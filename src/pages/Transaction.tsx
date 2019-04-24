@@ -80,9 +80,9 @@ export default class Transaction extends React.Component<Props, any> {
                                 {this.i18n.txDetails.from}:
                             </div>
                             <div className='transaction-item-content'>
-                                {this.props.txInfo.inputs.map(v => {
+                                {this.props.txInfo.inputs.map((v, i) => {
                                     return (
-                                        <div title={v.address[0]}>{v.address[0]}</div>
+                                        <div key={i} title={v.address[0]}>{v.address[0]}</div>
                                     );
                                 })}
                             </div>
@@ -93,9 +93,9 @@ export default class Transaction extends React.Component<Props, any> {
                                 {this.i18n.txDetails.to}:
                             </div>
                             <div className='transaction-item-content'>
-                                {this.props.txInfo.outputs.map(v => {
+                                {this.props.txInfo.outputs.map((v, i) => {
                                     return (
-                                        <div title={v.address[0]}>{v.address[0]}</div>
+                                        <div key={i} title={v.address[0]}>{v.address[0]}</div>
                                     );
                                 })}
                             </div>
