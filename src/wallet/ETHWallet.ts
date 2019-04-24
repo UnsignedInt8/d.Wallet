@@ -109,10 +109,6 @@ export default class ETHWallet extends Wallet {
 
         return { hex, id: txid, change: { address: this.mainAddress[0], amount: 0 }, fee: Units.convert(fee || 0, 'wei', 'eth'), from: this.mainAddress, to: opts.to, msg: opts.message }
     }
-    
-    async broadcastTx(hex: string, chain: Chain) {
-
-    }
 
     /**
      * 

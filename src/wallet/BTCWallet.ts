@@ -74,10 +74,6 @@ export default class BTCWallet extends Wallet {
         return { hex: tx.toHex(), id: tx.getId(), change, fee, from, to: opts.to, msg: opts.message };
     }
 
-    async broadcastTx(hex: string, chain: Chain) {
-
-    }
-
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, msg?: string }): IBuildingTx {
 
         const keys = this.getKeys(0, 5).concat(this.getKeys(0, 3, false));

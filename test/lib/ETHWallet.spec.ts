@@ -12,12 +12,25 @@ import USDTWallet from "../../src/wallet/USDTWallet";
 import * as hex2dec from 'hex2dec';
 import * as ETHUnit from 'ethjs-unit';
 import * as keythereum from 'keythereum';
+import Blockchair from "../../src/wallet/api/Blockchair";
 
 linq.enable();
 
 describe('ETH Wallet', () => {
     const mnemonic = 'nerve shop cabbage skate predict rain model sustain patch grocery solution release';
     let wallet = new ETHWallet({ mnemonic });
+
+    function decrypt(keystore: object) {
+        let privkey: Buffer;
+
+        try {
+            privkey = keythereum.recover('static2018test', keystore);
+        } catch{
+            privkey = keythereum.recover('test', keystore);
+        }
+
+        return privkey;
+    }
 
     it(`test eth hex`, () => {
         let key = `{
@@ -120,7 +133,40 @@ describe('ETH Wallet', () => {
 
     });
 
-    it('tests broadcasting tx', () => {
+    it('tests broadcasting tx', async () => {
+        let keystore = JSON.parse(`{
+            "address": "dedecfa31fab889f6aa5a1465c904bcf66753122",
+            "crypto": {
+                "cipher": "aes-128-ctr",
+                "ciphertext": "0f823427e58eea96018b04b20659e86d0bb78a4497193e94972627b6bd3c4d4c",
+                "cipherparams": {
+                    "iv": "806319715861d8b10f8585b3904fcd43"
+                },
+                "kdf": "scrypt",
+                "kdfparams": {
+                    "dklen": 32,
+                    "n": 262144,
+                    "p": 1,
+                    "r": 8,
+                    "salt": "1a3b906318a5e5552da876dd1c2af56890ff00d79863228759bd660a0d74aafb"
+                },
+                "mac": "d98083e97f5183b7d243eafe208fe6197f4354a96aff303c20284f595520ba8a"
+            },
+            "id": "abacc587-9b34-430c-bf68-b5a078121514",
+            "version": 3,
+            "balance": 0.01253762
+        }`);
 
+        let balance = ETHUnit.toWei(0.01253762, 'ether').toString() as string;
+        let gasPrice = ETHUnit.toWei(4, 'gwei').toString() as string;
+
+        let privkey = decrypt(keystore);
+        let result = wallet.buildETHTx({ to: { address: wallet.mainAddress[0], amount: balance }, gasPrice, msg: 'hello', nonce: 1 }, balance, privkey);
+
+        expect(result.hex).toBe('0xf86f0184ee6b280082535c944c094a9c4e494ef7546efd950c9c75613cbba771872c3d43b5f368008568656c6c6f26a06c1f95e22209ba5206c673e23cbf271dc4fe10d039df4d7f1bdeb0d88abead7ea019c11a13f6d4c1ff8ff4610ec13d5a39e076810e8085265e8d9b700103bedd03');
+        expect(result.txid).toBe('0x357b70276f5333bbd4e12f0cadde1d8d93319a767afd712640a7eba079b22ffc');
+        
+        // let txid = await Blockchair.postTx(result.hex, 'ethereum');
+        // console.log(txid);
     });
 });
