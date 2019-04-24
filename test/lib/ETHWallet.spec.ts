@@ -63,4 +63,58 @@ describe('ETH Wallet', () => {
         expect(fee).toBe('84000000000000');
         expect(value).toBe('19542840000000000');
     });
+
+    it(`test tx with a message`, () => {
+        let keystore = JSON.parse(`{
+            "address": "7209b40cd5cd0b39743de0f84a1a9a0003d6fd75",
+            "crypto": {
+                "cipher": "aes-128-ctr",
+                "ciphertext": "6c39453cfd0433229d233a1e926ae654e81eba5f17fe7e2becf9e3dc6729c41e",
+                "cipherparams": {
+                    "iv": "ca8c9d9ad4581edec6d530f1bd2b5ae4"
+                },
+                "kdf": "scrypt",
+                "kdfparams": {
+                    "dklen": 32,
+                    "n": 262144,
+                    "p": 1,
+                    "r": 8,
+                    "salt": "e9688b035cb723fd034661bc1907461e48eaf1303e2db491b8311009fd9ec123"
+                },
+                "mac": "ebe55887656b219f41b69403c8ef537bd5aade1193ef0d286a8560daac12e786"
+            },
+            "id": "891d6b67-e4e3-47e5-81c9-cadb84bfcc01",
+            "version": 3,
+            "balance": 0.00096278
+        }`);
+
+        const balance = 0.00096278;
+        let privkey: Buffer;
+        try {
+            privkey = keythereum.recover('static2018test', keystore);
+        } catch{
+            privkey = keythereum.recover('test', keystore);
+        }
+
+        // console.log(privkey.toString('hex'));
+
+        let gasPrice = ETHUnit.toWei(4, 'gwei').toString();
+        let amount = ETHUnit.toWei(balance, 'ether').toString();
+        let msg = 'Cryptocurrency is the future';
+
+        // console.log('msg', Buffer.from(msg, 'utf8').toString('hex'));
+
+        let result = wallet.buildETHTx({
+            to: { address: wallet.mainAddress[0], amount },
+            msg: msg,
+            gasPrice,
+            nonce: 1,
+        }, balance, privkey);
+
+        expect(result.hex).toBe('0xf8860184ee6b2800825978944c094a9c4e494ef7546efd950c9c75613cbba77187031851acc2d8009c43727970746f63757272656e6379206973207468652066757475726526a018b7982ee944c9d9cecbe9982c6a0cdb1397742d629bb21b24fe3263a2f38875a03c764a48cf251270f6c48a5e7d178e21487826b9e667968730f702e6c48e79a2');
+        expect(result.txid).toBe('0xb53365ffa1a0359b37d3f3f3c67593f8f098fc69c27301a4a12b2a33dadcd86e');
+        expect(result.fee).toBe('91616000000000');
+        expect(result.value).toBe('871164000000000');
+
+    });
 });

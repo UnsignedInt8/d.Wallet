@@ -27,40 +27,6 @@ export default class ETHWallet extends Wallet {
         throw new Error("Method not implemented.");
     }
 
-    buildETHTx(args: { to: { address: string, amount: string | number }, msg?: string, gasPrice: string, nonce: number }, balance: number, key: Buffer) {
-        let data = Buffer.from(args.msg || '', 'hex').toString('hex');
-        let gasLimit = 21000 + 68 * data.length / 2;//: string = hex2dec.decToHex(`${}`);
-
-        let balanceWei = BigInt(Units.convert(balance, 'eth', 'wei'));
-        let fee = BigInt(gasLimit) * BigInt(args.gasPrice);
-        let amount = BigInt(args.to.amount);
-        let value = amount;
-
-        if (balanceWei < amount + fee) {
-            value = balanceWei - fee;
-        }
-
-        const txParams = {
-            to: args.to.address,
-            nonce: hex2dec.decToHex(`${args.nonce}`),
-            value: hex2dec.decToHex(value.toString()),
-            gasPrice: hex2dec.decToHex(args.gasPrice),
-            gasLimit,
-            data: '0x' + data,
-            chainId: 1,
-        };
-
-        console.log(txParams);
-
-        let tx = new EthereumTx(txParams);
-
-        tx.sign(key);
-        let signed: Buffer = tx.serialize();
-        let txid = '0x' + tx.hash().toString('hex');
-
-        return { hex: '0x' + signed.toString('hex'), txid, fee: fee.toString(), value: value.toString() }
-    }
-
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
         throw new Error("Method not implemented.");
     }
@@ -135,4 +101,39 @@ export default class ETHWallet extends Wallet {
 
         return [{ address, balance, txs, nonce: info.address.spending_call_count }];
     }
+
+    buildETHTx(args: { to: { address: string, amount: string }, msg?: string, gasPrice: string, nonce: number }, balance: number, key: Buffer) {
+        let data = Buffer.from(args.msg || '', 'utf8').toString('hex');
+        let gasLimit = 21000 + 68 * data.length / 2;//: string = hex2dec.decToHex(`${}`);
+
+        let balanceWei = BigInt(Units.convert(balance, 'eth', 'wei'));
+        let fee = BigInt(gasLimit) * BigInt(args.gasPrice);
+        let amount = BigInt(args.to.amount);
+        let value = amount;
+
+        if (balanceWei < amount + fee) {
+            value = balanceWei - fee;
+        }
+
+        const txParams = {
+            to: args.to.address,
+            nonce: hex2dec.decToHex(`${args.nonce}`),
+            value: hex2dec.decToHex(value.toString()),
+            gasPrice: hex2dec.decToHex(args.gasPrice),
+            gasLimit,
+            data: '0x' + data,
+            chainId: 1,
+        };
+
+        console.log(txParams);
+
+        let tx = new EthereumTx(txParams);
+
+        tx.sign(key);
+        let signed: Buffer = tx.serialize();
+        let txid = '0x' + tx.hash().toString('hex');
+
+        return { hex: '0x' + signed.toString('hex'), txid, fee: fee.toString(), value: value.toString() }
+    }
+
 }
