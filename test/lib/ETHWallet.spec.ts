@@ -54,9 +54,10 @@ describe('ETH Wallet', () => {
 
         let amount = ETHUnit.toWei(0.01962684, 'ether').toString();
         let gasPrice = ETHUnit.toWei(4, 'gwei').toString();
+        let balance = ETHUnit.toWei(0.01962684, 'ether').toString();
 
         let { hex, txid, fee, value } = wallet.buildETHTx({ to: { address: '0x4c094a9c4e494ef7546efd950c9c75613cbba771', amount }, gasPrice, nonce: 2 },
-            0.01962684, privkey);
+            balance, privkey);
 
         expect(hex).toBe('0xf86a0284ee6b2800825208944c094a9c4e494ef7546efd950c9c75613cbba77187456e1c041a30008025a0fce92224ebf7df6f42bd4e0acab1c562894e3933e5a862edeb22b8ab5eed0cf9a0119afed9a86fb9c98df9e8109d5db302ba6cf712793d872adaa03be411c5a885');
         expect(txid).toBe('0x603aebdffa14397b03d1cf943eca0446ea15b306f9c750de27c757bc4d8726ed');
@@ -109,7 +110,7 @@ describe('ETH Wallet', () => {
             msg: msg,
             gasPrice,
             nonce: 1,
-        }, balance, privkey);
+        }, amount, privkey);
 
         // console.log(result);
         expect(result.hex).toBe('0xf8860184ee6b2800825978944c094a9c4e494ef7546efd950c9c75613cbba77187269f441c83d8009c43727970746f63757272656e6379206973207468652066757475726525a029cc685328ec02a9ebca60fda511cc20f797169b89e533792fd51bfc40ebf1bda0478d1062ace67ed456e0afab20c149424802062431bc38e25133edeea9fe62ff');

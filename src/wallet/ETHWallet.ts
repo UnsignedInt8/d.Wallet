@@ -1,4 +1,4 @@
-import { Wallet, TxInfo } from "./Wallet";
+import { Wallet, TxInfo, GenTxInfo } from "./Wallet";
 import * as ETHUtils from 'ethereumjs-util';
 import { keccak } from "../lib/Hash";
 import * as assert from 'assert';
@@ -10,15 +10,24 @@ import { IUtxo } from './Wallet';
 import * as hex2dec from 'hex2dec';
 import { PrivateKey } from 'bitcore-lib';
 const EthereumTx = require("ethereumjs-tx");
+import * as ETHUnit from 'ethjs-unit';
+
 
 export default class ETHWallet extends Wallet {
 
-    async genTx(opts: { to: { address: string; amount: string; }[]; message?: string | undefined; gasPrice: string }): Promise<{ hex: string; id: string; change: { address: string; amount: number; }; msg?: string, fee: number; from: string[], to: any[] } | undefined> {
-        let info = await this.scanAddresses();
+    async genTx(opts: { to: { address: string; amount: number; }[]; message?: string; gasPrice: number }): Promise<GenTxInfo | undefined> {
+        let [info] = await this.scanAddresses();
         if (!info) return;
 
         let [key] = this.getKeys(0, 1);
         let privkey = Buffer.from((key['privateKey'] as PrivateKey).toString(), 'hex');
+
+        let [to] = opts.to;
+        let amount = ETHUnit.toWei(to.amount, 'ether').toString();
+        let gasPrice = ETHUnit.toWei(opts.gasPrice, 'gwei').toString()
+
+        let { hex, txid, fee, value } = this.buildETHTx({ to: { address: to.address, amount }, msg: opts.message, gasPrice, nonce: info.nonce }, info.balance, privkey);
+        return { hex, id: txid, change: { address: this.mainAddress[0], amount: 0 }, fee: Units.convert(fee || 0, 'wei', 'eth'), from: this.mainAddress, to: opts.to, msg: opts.message }
 
         throw new Error("Method not implemented.");
     }
@@ -83,7 +92,7 @@ export default class ETHWallet extends Wallet {
         let info = await Blockchair.fetchETHAddress(address);
         if (!info) return [];
 
-        let balance = info.address.balance || 0;
+        let balance = info.address.balance || '0';
         let txs = info.calls.map(c => {
             return <TxInfo>{
                 amount: (BigInt(c.value) / BigInt('1000000000000000000')).toString(),
@@ -102,11 +111,17 @@ export default class ETHWallet extends Wallet {
         return [{ address, balance, txs, nonce: info.address.spending_call_count }];
     }
 
-    buildETHTx(args: { to: { address: string, amount: string }, msg?: string, gasPrice: string, nonce: number }, balance: number, key: Buffer) {
+    /**
+     * 
+     * @param args 
+     * @param balance in wei 
+     * @param key 
+     */
+    buildETHTx(args: { to: { address: string, amount: string }, msg?: string, gasPrice: string, nonce: number }, balance: string, key: Buffer) {
         let data = Buffer.from(args.msg || '', 'utf8');
         let gasLimit = 21000 + 68 * data.length;//: string = hex2dec.decToHex(`${}`);
 
-        let balanceWei = BigInt(Units.convert(balance, 'eth', 'wei'));
+        let balanceWei = BigInt(balance);
         let fee = BigInt(gasLimit) * BigInt(args.gasPrice);
         let amount = BigInt(args.to.amount);
         let value = amount;
