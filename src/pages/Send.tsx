@@ -60,26 +60,6 @@ export default class Send extends React.Component<PageProps, PageState>{
         this.setState({ toNums: Math.max(this.state.toNums - 1, 1) });
     }
 
-    private jumpToPassword() {
-        anime({
-            targets: '#payment-content, #payment-actions',
-            translateX: [0, -window.innerWidth],
-            opacity: 0,
-            duration: 600,
-            easing: 'linear',
-        });
-
-        anime({
-            targets: '#payment-validation',
-            translateX: [-window.innerWidth, 0],
-            duration: 600,
-            easing: 'linear',
-            complete: () => this.setState({ validatingPassword: true }),
-        });
-
-        this.setState({ validatingPassword: false });
-    }
-
     private async buildTx() {
         let addresses = jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[];
         let amounts = jquery('.input-amount').map((i, el) => Number.parseFloat(jquery(el).val()) || 0).get() as number[];

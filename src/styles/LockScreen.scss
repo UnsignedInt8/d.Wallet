@@ -7,7 +7,7 @@
   right: 0;
   bottom: 0;
   color: white;
-  background: rgb(154, 205, 50);
+  background: rgba(154, 205, 50, 0.5);
 
   #clock {
     position: absolute;
@@ -30,7 +30,7 @@
     justify-content: center;
     flex-direction: column;
 
-    #validation {
+    #lock-screen-validation {
       width: 72px;
       height: 72px;
       position: absolute;

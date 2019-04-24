@@ -50,7 +50,7 @@ export default class LockScreen extends React.Component<Props, State> {
                 <div id='security'>
                     {
                         this.state.validated ?
-                            <Validation id='validation' />
+                            <Validation id='lock-screen-validation' />
                             : undefined
                     }
 
