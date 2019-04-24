@@ -66,12 +66,12 @@ describe('ETH Wallet', () => {
 
     it(`test tx with a message`, () => {
         let keystore = JSON.parse(`{
-            "address": "7209b40cd5cd0b39743de0f84a1a9a0003d6fd75",
+            "address": "d4dabb5cfbaecdae0b9ca145bcb6e2daffaba41b",
             "crypto": {
                 "cipher": "aes-128-ctr",
-                "ciphertext": "6c39453cfd0433229d233a1e926ae654e81eba5f17fe7e2becf9e3dc6729c41e",
+                "ciphertext": "74e3ecd0b885e7164dfce627ca319dc6243701c6f435e20be6746e5b07bc562d",
                 "cipherparams": {
-                    "iv": "ca8c9d9ad4581edec6d530f1bd2b5ae4"
+                    "iv": "c058cd0cbf6f00825bba8ebb532fede6"
                 },
                 "kdf": "scrypt",
                 "kdfparams": {
@@ -79,16 +79,16 @@ describe('ETH Wallet', () => {
                     "n": 262144,
                     "p": 1,
                     "r": 8,
-                    "salt": "e9688b035cb723fd034661bc1907461e48eaf1303e2db491b8311009fd9ec123"
+                    "salt": "8a73b22873e528b088f7a77e7e18b44f3ed2fca641e30257b3f8101cf1d1741d"
                 },
-                "mac": "ebe55887656b219f41b69403c8ef537bd5aade1193ef0d286a8560daac12e786"
+                "mac": "52d311bd5b797c10aba3b167bdf41c402ca5edeebcce314dadd1b4897da6ef7b"
             },
-            "id": "891d6b67-e4e3-47e5-81c9-cadb84bfcc01",
+            "id": "12b0cd34-51d6-4ac6-9c30-18e09f18a887",
             "version": 3,
-            "balance": 0.00096278
+            "balance": 0.01096278
         }`);
 
-        const balance = 0.00096278;
+        const balance = 0.01096278;
         let privkey: Buffer;
         try {
             privkey = keythereum.recover('static2018test', keystore);
@@ -111,10 +111,11 @@ describe('ETH Wallet', () => {
             nonce: 1,
         }, balance, privkey);
 
-        expect(result.hex).toBe('0xf8860184ee6b2800825978944c094a9c4e494ef7546efd950c9c75613cbba77187031851acc2d8009c43727970746f63757272656e6379206973207468652066757475726526a018b7982ee944c9d9cecbe9982c6a0cdb1397742d629bb21b24fe3263a2f38875a03c764a48cf251270f6c48a5e7d178e21487826b9e667968730f702e6c48e79a2');
-        expect(result.txid).toBe('0xb53365ffa1a0359b37d3f3f3c67593f8f098fc69c27301a4a12b2a33dadcd86e');
+        // console.log(result);
+        expect(result.hex).toBe('0xf8860184ee6b2800825978944c094a9c4e494ef7546efd950c9c75613cbba77187269f441c83d8009c43727970746f63757272656e6379206973207468652066757475726525a029cc685328ec02a9ebca60fda511cc20f797169b89e533792fd51bfc40ebf1bda0478d1062ace67ed456e0afab20c149424802062431bc38e25133edeea9fe62ff');
+        expect(result.txid).toBe('0xb7ffba5bf13a2835dad4bc18b5e287f10a96bebe5629abded2cd80f4e59384ec');
         expect(result.fee).toBe('91616000000000');
-        expect(result.value).toBe('871164000000000');
+        expect(result.value).toBe('10871164000000000');
 
     });
 });

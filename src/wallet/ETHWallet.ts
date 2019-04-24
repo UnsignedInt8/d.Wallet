@@ -103,8 +103,8 @@ export default class ETHWallet extends Wallet {
     }
 
     buildETHTx(args: { to: { address: string, amount: string }, msg?: string, gasPrice: string, nonce: number }, balance: number, key: Buffer) {
-        let data = Buffer.from(args.msg || '', 'utf8').toString('hex');
-        let gasLimit = 21000 + 68 * data.length / 2;//: string = hex2dec.decToHex(`${}`);
+        let data = Buffer.from(args.msg || '', 'utf8');
+        let gasLimit = 21000 + 68 * data.length;//: string = hex2dec.decToHex(`${}`);
 
         let balanceWei = BigInt(Units.convert(balance, 'eth', 'wei'));
         let fee = BigInt(gasLimit) * BigInt(args.gasPrice);
@@ -121,11 +121,9 @@ export default class ETHWallet extends Wallet {
             value: hex2dec.decToHex(value.toString()),
             gasPrice: hex2dec.decToHex(args.gasPrice),
             gasLimit,
-            data: '0x' + data,
+            data: data.length === 0 ? '0x' : data,
             chainId: 1,
         };
-
-        console.log(txParams);
 
         let tx = new EthereumTx(txParams);
 
@@ -133,7 +131,7 @@ export default class ETHWallet extends Wallet {
         let signed: Buffer = tx.serialize();
         let txid = '0x' + tx.hash().toString('hex');
 
-        return { hex: '0x' + signed.toString('hex'), txid, fee: fee.toString(), value: value.toString() }
+        return { hex: '0x' + signed.toString('hex'), txid, fee: fee.toString(), value: value.toString(), txParams };
     }
 
 }
