@@ -98,6 +98,16 @@ export default class Send extends React.Component<PageProps, PageState>{
         }, 1500);
     }
 
+    private onAddressChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const className = 'invalid-data';
+        let wallet = this.walletMan.current;
+        if (wallet.isValidAddress(e.target.value)) {
+            e.target.classList.remove(className);
+        } else {
+            if (!e.target.classList.contains(className)) e.target.classList.add(className);
+        }
+    }
+
     render() {
 
         let coin = coinProps[this.props.symbol] || coinProps.default;
@@ -108,7 +118,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                     {new Array(Math.min(this.state.toNums, coin.maxTo)).fill(Date.now()).map((v, i) => {
                         return (
                             <div key={i} className='compose'>
-                                <input className='input-address' type="text" placeholder={`${this.props.symbol.toUpperCase()} ${this.i18n.sending.address}`} />
+                                <input className='input-address' type="text" placeholder={`${this.props.symbol.toUpperCase()} ${this.i18n.sending.address}`} onChange={e => this.onAddressChange(e)} />
                                 <input className={`input-amount ${this.state.toNums > 1 && coin.maxTo > 1 ? 'input_bottom_border' : undefined}`} type="number" placeholder={this.i18n.sending.amount} max={100_000_000} min={0.0000001} onChange={e => this.onAmountChange(e)} />
 
                                 <img className='send' src={sendIcon} />
