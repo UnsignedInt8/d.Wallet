@@ -66,6 +66,11 @@ const lang = {
         from: 'From',
         to: 'To',
         amount: 'Amount',
+    },
+
+    messages: {
+        invalidAddress: 'There are some invalid addresses',
+        noInternet: 'Internet is not available',
     }
 }
 

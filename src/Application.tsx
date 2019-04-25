@@ -94,22 +94,22 @@ export default class Application extends React.Component<{}, State> {
 
     static addNotification(opts: { title: string, message: string, type: 'success' | 'default' | 'warning' | 'info' | 'danger' }) {
         if (!this.app || !this.app.notificationDOMRef) return;
-        
+
         this.app.notificationDOMRef.addNotification({
             ...opts,
             insert: "top",
             container: "top-right",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
+            animationIn: ["fadeIn"],
+            animationOut: ["fadeOut"],
             dismiss: { duration: 2000 },
-            dismissable: { click: true }
+            width: 300,
         });
     }
 
     render() {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
-                <ReactNotification ref={e => this.notificationDOMRef = e} isMoble={true} width={300} />
+                <ReactNotification ref={e => this.notificationDOMRef = e} width={300} />
 
                 <AnimatedSwitch
                     className='switch'

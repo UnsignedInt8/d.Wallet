@@ -4,6 +4,7 @@ import { AppContainer } from 'react-hot-loader';
 import Application from './Application';
 import './styles/index.scss';
 import * as linq from 'linq';
+const { clipboard } = require('electron');
 
 linq.enable();
 
@@ -33,4 +34,23 @@ if (typeof module.hot !== 'undefined') {
             render(() => <World.default />);
         });
     });
+}
+
+const keyCodes = {
+    V: 86,
+};
+
+document.onkeydown = function (event) {
+    let toReturn = true
+    if (event.ctrlKey || event.metaKey) {  // detect ctrl or cmd
+        if (event.which == keyCodes.V) {
+            let activeEl = document.activeElement as HTMLInputElement;
+            if (!activeEl || !activeEl.value) return;
+            activeEl.value += clipboard.readText();
+            activeEl.dispatchEvent(new Event('input'));
+            toReturn = false;
+        }
+    }
+
+    return toReturn;
 }

@@ -62,17 +62,22 @@ export default class Send extends React.Component<PageProps, PageState>{
     private async buildTx() {
         let addresses = jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[];
         let amounts = jquery('.input-amount').map((i, el) => Number.parseFloat(jquery(el).val()) || 0).get() as number[];
+        let wallet = this.walletMan.wallets[this.props.symbol];
 
         let to = addresses.zip(amounts).select(i => { return { address: i[0], amount: i[1] } }).where(i => i.address.length > 0).toArray();
         if (to.length === 0) return;
 
+        if (to.some(v => !wallet.isValidAddress(v.address))) {
+            Application.addNotification({ title: '', message: this.i18n.messages.invalidAddress, type: 'warning' });
+            return;
+        }
+
         let message = jquery('message-input').val() as string || undefined;
 
         this.setState({ isBuildingTx: true, });
-        let wallet = this.walletMan.wallets[this.props.symbol];
         let tx = await wallet.genTx({ to, message });
         if (!tx) {
-            Application.addNotification({ title: 'Building failed', message: 'Internet not available', type: 'warning' });
+            Application.addNotification({ title: '', message: this.i18n.messages.noInternet, type: 'warning' });
             this.setState({ isBuildingTx: false });
             return;
         }
