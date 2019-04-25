@@ -77,7 +77,7 @@ export default class USDTWallet extends BTCWallet {
         let { tx, change, fee } = this.buildTx({ inputs: utxos, outputs: opts.to, satoshiPerByte: opts.satoshiPerByte, msg: opts.message }) as { tx: bitcoin.Transaction, change: any, fee: number };
         let from = this.mainAddress;
 
-        return { hex: tx.toHex(), id: tx.getId(), change, fee, from, to: opts.to, msg: opts.message };
+        return { hex: tx.toHex(), id: tx.getId(), change, fee, from, to: opts.to, msg: opts.message, value: opts.to[0].amount };
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, msg?: string }): IBuildingTx {

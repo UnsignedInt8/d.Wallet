@@ -7,16 +7,18 @@ import PassMan from '../data/PasswordManager';
 import { Validation, Password } from '../components';
 import { Flip, Fade } from 'react-reveal';
 import * as jquery from 'jquery';
+import { GenTxInfo } from '../wallet/Wallet';
 
 interface Props {
-    to?: { address: string, amount: number }[],
-    from?: string[],
-    message?: string;
-    fee?: number;
+    // to?: { address: string, amount: number }[],
+    // from?: string[],
+    // message?: string;
+    // fee?: number;
     onClose: () => void;
     onVerified: () => void;
     symbol?: string;
     coinUnit: string;
+    txInfo: GenTxInfo;
 }
 
 interface State {
@@ -99,7 +101,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                             Amount:
                     </div>
                         <div className='content amount'>
-                            1.2323 <span className='symbol'>{this.props.symbol}</span>
+                            {} <span className='symbol'>{this.props.symbol}</span>
                         </div>
                     </div>
 
@@ -109,7 +111,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                     </div>
                         <div className='content'>
                             {
-                                (this.props.from || []).map((v, i) => {
+                                (this.props.txInfo.from || []).map((v, i) => {
                                     return (
                                         <div key={i} >
                                             {v}
@@ -126,7 +128,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                     </div>
                         <div className='content'>
                             {
-                                (this.props.to || []).map((v, i) => {
+                                (this.props.txInfo.to || []).map((v, i) => {
                                     return (
                                         <div key={i} className='toInfo'>
                                             <div className='to'>{v.address}</div>
@@ -143,7 +145,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                             Message:
                     </div>
                         <div className='content'>
-                            {this.props.message}
+                            {this.props.txInfo.msg}
                         </div>
                     </div>
 
@@ -152,7 +154,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                             Fee:
                     </div>
                         <div className='content'>
-                            {this.props.fee} <span>{this.props.coinUnit}</span>
+                            {this.props.txInfo.fee} <span>{this.props.coinUnit}</span>
                         </div>
                     </div>
 

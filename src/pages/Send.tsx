@@ -72,16 +72,19 @@ export default class Send extends React.Component<PageProps, PageState>{
             return;
         }
 
-        let message = jquery('message-input').val() as string || undefined;
+        let message: string = jquery('#message-input').val() || jquery('#eth-message').val();
+        let fee = Number.parseInt(jquery('#mining').val());
 
         this.setState({ isBuildingTx: true, });
-        let tx = await wallet.genTx({ to, message });
+        let tx = await wallet.genTx({ to, message, gasPrice: fee, satoshiPerByte: fee });
+
         if (!tx) {
             Application.addNotification({ title: '', message: this.i18n.messages.noInternet, type: 'warning' });
             this.setState({ isBuildingTx: false });
             return;
         }
 
+        console.log(tx);
         this.setState({ isBuildingTx: false, prepareToSend: true, txInfo: tx }, () => {
             this.paymentDetails!.open();
         });
@@ -90,7 +93,7 @@ export default class Send extends React.Component<PageProps, PageState>{
     private onAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
         let amount = Number.parseFloat(e.target.value);
         if (amount > 2100_000_000 || amount < 0) {
-            e.target.value = '1';
+            e.target.value = '0';
         }
     }
 
@@ -124,7 +127,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                         return (
                             <div key={i} className='compose'>
                                 <input className='input-address' type="text" placeholder={`${this.props.symbol.toUpperCase()} ${this.i18n.sending.address}`} onChange={e => this.onAddressChange(e)} />
-                                <input className={`input-amount ${this.state.toNums > 1 && coin.maxTo > 1 ? 'input_bottom_border' : undefined}`} type="number" placeholder={this.i18n.sending.amount} max={100_000_000} min={0.0000001} onChange={e => this.onAmountChange(e)} />
+                                <input className={`input-amount ${this.state.toNums > 1 && coin.maxTo > 1 ? 'input_bottom_border' : undefined}`} type="number" placeholder={this.i18n.sending.amount} max={100_000_000} min={0} onChange={e => this.onAmountChange(e)} />
 
                                 <img className='send' src={sendIcon} />
                                 <img className='calc' src={calc} />
@@ -139,14 +142,14 @@ export default class Send extends React.Component<PageProps, PageState>{
                                 <img id='write' src={write} />
                             </div> :
                             <div style={{ display: 'grid' }}>
-                                <input className='message-input' type="text" placeholder={this.i18n.sending.message} maxLength={140} />
+                                <input id='message-input' className='message-input' type="text" placeholder={this.i18n.sending.message} maxLength={140} />
                                 <img className='pen' src={pen} />
                             </div>
                         }
                     </div>
 
                     <div className='mining'>
-                        <input className='mining' type="number" defaultValue={'3'} max={100_000_000} min={1} placeholder={`${this.props.symbol.toUpperCase()} ${this.i18n.sending.fees}`} onChange={e => this.onAmountChange(e)} />
+                        <input id='mining' className='mining' type="number" defaultValue={'3'} max={100_000_000} min={1} placeholder={`${this.props.symbol.toUpperCase()} ${this.i18n.sending.fees}`} onChange={e => this.onAmountChange(e)} />
                         <img className='mining' src={mining} />
                         <span title={`${coin.desc}`}>{`${coin.feeUnit}`}</span>
                     </div>
@@ -187,7 +190,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                 }
 
                 {this.state.prepareToSend && this.state.txInfo ?
-                    <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={coin.unit} symbol={this.props.symbol} from={this.state.txInfo.from} to={this.state.txInfo.to} fee={this.state.txInfo.fee} message={this.state.txInfo.msg} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
+                    <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={coin.unit} symbol={this.props.symbol} txInfo={this.state.txInfo} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
                     : undefined
                 }
             </div>

@@ -71,7 +71,7 @@ export default class LTCWallet extends BTCWallet {
         let hex = tx.serialize() as string;
         let from = utxos.map(u => u.address).distinct().toArray();
 
-        return { hex, id: tx.id as string, change, fee, from, to: opts.to, msg: opts.message };
+        return { hex, id: tx.id as string, change, fee, from, to: opts.to, msg: opts.message, value: totalAmount };
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, msg?: string }) {

@@ -63,8 +63,6 @@ export default class Application extends React.Component<{}, State> {
             if (!PassMan.isProtected()) Application.history.push('/welcome');
             if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
         });
-
-        setTimeout(() => Application.addNotification({ title: '', message: 'hello', type: 'success' }), 2000);
     }
 
     componentWillUnmount() {

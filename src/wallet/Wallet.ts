@@ -30,7 +30,7 @@ export abstract class Wallet {
     abstract mainAddress: string[];
     @observable balance = 0;
     @observable txs: TxInfo[] = [];
-    abstract genTx(opts: { to: { address: string, amount: number | string }[], message?: string }): Promise<GenTxInfo | undefined>;
+    abstract genTx(opts: { to: { address: string, amount: number | string }[], message?: string, gasPrice?: number, satoshiPerByte?: number }): Promise<GenTxInfo | undefined>;
     abstract async refresh();
     abstract isValidAddress(address: string): boolean;
     protected abstract getExternalPath(): string;
@@ -173,6 +173,7 @@ export interface GenTxInfo {
     msg?: string,
     change: { address: string, amount: number },
     fee: number,
+    value: number | string;
     from: string[],
     to: { address: string, amount: number }[],
 }

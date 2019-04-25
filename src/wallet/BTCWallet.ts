@@ -77,7 +77,7 @@ export default class BTCWallet extends Wallet {
         tx = tx as bitcoin.Transaction;
         let from = utxos.map(u => u.address).distinct().toArray();
 
-        return { hex: tx.toHex(), id: tx.getId(), change, fee, from, to: opts.to, msg: opts.message };
+        return { hex: tx.toHex(), id: tx.getId(), change, fee, from, to: opts.to, msg: opts.message, value: totalAmount };
     }
 
     buildTx(args: { inputs: IUtxo[], outputs: { address: string, amount: number }[], satoshiPerByte: number, changeIndex?: number, msg?: string }): IBuildingTx {
