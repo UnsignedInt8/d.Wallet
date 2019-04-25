@@ -59,10 +59,11 @@
 
 .expand-area {
   grid-area: content;
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: 68px;
+  right: 0px;
+  
   height: 100%;
 }
 

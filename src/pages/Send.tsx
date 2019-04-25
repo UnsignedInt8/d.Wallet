@@ -10,8 +10,8 @@ import * as jquery from 'jquery';
 import { getWalletMan } from '../wallet/WalletManager';
 import sleep from 'sleep-promise';
 import PaymentDetails from './PaymentDetails';
-import Application from '../Application';
 import { GenTxInfo } from '../wallet/Wallet';
+import { withToastManager, } from 'react-toast-notifications';
 
 interface PageProps {
     symbol: string;
@@ -40,7 +40,7 @@ const coinProps = {
     usdt: { feeUnit: 'Sat/B', maxTo: 1, desc: 'Satoshis/Byte', unit: 'Satoshis' },
 }
 
-export default class Send extends React.Component<PageProps, PageState>{
+export class Send extends React.Component<PageProps, PageState>{
 
     state: PageState = { toNums: 1, prepareToSend: false, isBuildingTx: false };
     appSettings = getAppSettings(PassMan.password);
@@ -60,6 +60,8 @@ export default class Send extends React.Component<PageProps, PageState>{
     }
 
     private async buildTx() {
+        let { toastManager } = this.props as any;
+
         let addresses = jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[];
         let amounts = jquery('.input-amount').map((i, el) => Number.parseFloat(jquery(el).val()) || 0).get() as number[];
         let wallet = this.walletMan.wallets[this.props.symbol];
@@ -68,7 +70,7 @@ export default class Send extends React.Component<PageProps, PageState>{
         if (to.length === 0) return;
 
         if (to.some(v => !wallet.isValidAddress(v.address))) {
-            Application.addNotification({ title: '', message: this.i18n.messages.invalidAddress, type: 'warning' });
+            toastManager.add(this.i18n.messages.invalidAddress, { appearance: 'error', autoDismiss: true });
             return;
         }
 
@@ -79,7 +81,7 @@ export default class Send extends React.Component<PageProps, PageState>{
         let tx = await wallet.genTx({ to, message, gasPrice: fee, satoshiPerByte: fee });
 
         if (!tx) {
-            Application.addNotification({ title: '', message: this.i18n.messages.noInternet, type: 'warning' });
+            toastManager.add(this.i18n.messages.noInternet, { appearance: 'error', autoDismiss: true });
             this.setState({ isBuildingTx: false });
             return;
         }
@@ -99,12 +101,15 @@ export default class Send extends React.Component<PageProps, PageState>{
 
     private onPasswordVerified() {
         setTimeout(async () => {
+            const { toastManager } = this.props as any;
+
             let txInfo = this.state.txInfo!;
             let id = await this.walletMan.current.broadcastTx(txInfo.hex);
+            let txid = `${txInfo.id.substring(0, 7)}...${txInfo.id.substring(txInfo.id.length - 7)}`
             if (txInfo.id === id) {
-                Application.addNotification({ title: '', message: `${this.i18n.messages.broadcastTx(id)}`, type: 'success' });
+                toastManager.add(`${this.i18n.messages.broadcastTx(txid)}`, { appearance: 'success', autoDismiss: true });
             } else {
-                Application.addNotification({ title: '', message: `${this.i18n.messages.broadcastFailed}`, type: 'warning' });
+                toastManager.add(`${this.i18n.messages.broadcastFailed}`, { appearance: 'error', autoDismiss: true });
             }
 
             this.paymentDetails!.close();
@@ -204,3 +209,5 @@ export default class Send extends React.Component<PageProps, PageState>{
         );
     }
 }
+
+export default withToastManager(Send);

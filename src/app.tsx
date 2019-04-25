@@ -5,6 +5,7 @@ import Application from './Application';
 import './styles/index.scss';
 import * as linq from 'linq';
 const { clipboard } = require('electron');
+import { ToastProvider, } from 'react-toast-notifications';
 
 linq.enable();
 
@@ -18,9 +19,9 @@ document.body.appendChild(mainElement);
 // Render components
 const render = (Component: () => JSX.Element) => {
     ReactDOM.render(
-        <AppContainer>
+        <ToastProvider autoDismissTimeout={3000}>
             <Component />
-        </AppContainer>,
+        </ToastProvider>,
         mainElement
     );
 };

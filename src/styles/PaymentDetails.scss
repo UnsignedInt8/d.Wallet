@@ -125,8 +125,14 @@
         }
       }
 
+      .tx-msg {
+        max-height: 25vh;
+        overflow-y: scroll;
+        
+      }
+
       .fee {
-          text-transform: uppercase;
+        text-transform: uppercase;
       }
     }
   }

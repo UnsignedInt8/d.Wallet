@@ -48,13 +48,10 @@ interface State {
 export default class Application extends React.Component<{}, State> {
 
     static history: History;
-    private static app: Application;
-
     state: State = { lockApp: false, firstUse: true };
-    notificationDOMRef: any;
 
     componentDidMount() {
-        Application.app = this;
+
         ipcRenderer.on('autolock', () => this.lockApp());
         PassMan.on('password', this.onPasswordChanged);
 
@@ -90,24 +87,9 @@ export default class Application extends React.Component<{}, State> {
         animeHelper.expandPage(LockScreen.id, 0, window.innerHeight, () => this.setState({ lockApp: false }));
     }
 
-    static addNotification(opts: { title: string, message: string, type: 'success' | 'default' | 'warning' | 'info' | 'danger' }) {
-        if (!this.app || !this.app.notificationDOMRef) return;
-
-        this.app.notificationDOMRef.addNotification({
-            ...opts,
-            insert: "top",
-            container: "top-right",
-            animationIn: ["fadeIn"],
-            animationOut: ["fadeOut"],
-            dismiss: { duration: 2000 },
-            width: 300,
-        });
-    }
-
     render() {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
-                <ReactNotification ref={e => this.notificationDOMRef = e} width={300} />
 
                 <AnimatedSwitch
                     className='switch'

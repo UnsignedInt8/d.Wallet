@@ -89,10 +89,10 @@ export default class PaymentDetails extends React.Component<Props, State> {
 
             <div id='payment-details' className={`${this.state.showPassword ? 'validatingPassword' : ''}`}>
                 <div id='payment-title' className='questrial'>
-                    <Flip bottom opposite cascade when={this.state.animeTitle}>{this.state.animeTitle ? 'Validate Password' : 'Transaction Details'}</Flip>
+                    <Flip bottom opposite cascade when={this.state.animeTitle}>{this.state.showPassword ? 'Validate Password' : 'Transaction Details'}</Flip>
                 </div>
 
-                <img id='close-payment' src={this.state.animeTitle ? cancelWhite : cancelIcon} onClick={_ => this.close()} />
+                <img id='close-payment' src={this.state.showPassword ? cancelWhite : cancelIcon} onClick={_ => this.close()} />
 
                 <div id='payment-content'>
 
@@ -144,7 +144,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                         <div className='title'>
                             Message:
                     </div>
-                        <div className='content'>
+                        <div className='content tx-msg'>
                             {this.props.txInfo.msg}
                         </div>
                     </div>

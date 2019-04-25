@@ -5,7 +5,7 @@ import { platform } from 'os';
 import { AreaChart, Area } from 'recharts';
 import CoinRanking, { Coins } from '../api/CoinRanking';
 import PassMan from '../data/PasswordManager';
-import Send from './Send';
+import Send, { Send as SendPage } from './Send';
 import Receive from './Receive';
 import anime from 'animejs';
 import Settings from './Settings';
@@ -20,6 +20,7 @@ import { observer } from 'mobx-react';
 import Axios from 'axios';
 import AnimeHelper from '../lib/AnimeHelper';
 import StickyEvents from 'sticky-events';
+import { withToastManager, } from 'react-toast-notifications';
 import OmniApi from '../wallet/api/OmniExplorer';
 import CountUp from 'react-countup';
 import Transaction from './Transaction';
@@ -71,7 +72,7 @@ class Home extends React.Component<{}, HomeState> {
     private refersher?: NodeJS.Timer | number;
     private history = {};
     private appSettings?: AppSettings;
-    private sendPage: Send | null = null;
+    private sendPage: SendPage | null = null;
 
     componentDidMount() {
         this.refersher = setInterval(() => this.refreshPrice(), 30 * 1000);
@@ -256,7 +257,7 @@ class Home extends React.Component<{}, HomeState> {
 
                     {this.state.expandPage ?
                         <div id='expanding-page' className='expand-area'>
-                            {this.state.expandPage === 'sending' ? <Send ref={e => this.sendPage = e} onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
+                            {this.state.expandPage === 'sending' ? <Send onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
                             {this.state.expandPage === 'settings' ? <Settings /> : undefined}
                             {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}
                             {this.state.expandPage === 'transaction' ? <Transaction onCacnel={() => this.closePage()} txInfo={this.state.selectedTx!} symbol={this.state.selectedSymbol} /> : undefined}
