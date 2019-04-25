@@ -4,7 +4,7 @@ import BTCWallet from "./BTCWallet";
 import { TxInfo, AddressInfo, IUtxo, IBuildingTx } from "./Wallet";
 import OmniApi from "./api/OmniExplorer";
 import { Chain } from "./api/Blockchair";
-import { HDPrivateKey, PrivateKey, Transaction } from "bitcore-lib";
+import { HDPrivateKey, PrivateKey, Transaction, Address } from "bitcore-lib";
 import * as bitcoin from 'bitcoinjs-lib';
 import * as assert from 'assert';
 import { observable, computed } from "mobx";
@@ -27,6 +27,9 @@ export default class USDTWallet extends BTCWallet {
         return this._addresses;
     }
 
+    isValidAddress(addr: string) {
+        return Address['isValid'](addr);
+    }
 
     async scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]> {
         let addresses = (await this.genAddresses(from, to, external)).map(a => a[1]);

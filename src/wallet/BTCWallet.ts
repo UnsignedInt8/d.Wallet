@@ -1,9 +1,11 @@
 import { Wallet, TxInfo, AddressInfo, IUtxo, IBuildingTx } from "./Wallet";
 import { observable, computed } from "mobx";
 import * as bitcoin from 'bitcoinjs-lib';
-import { HDPrivateKey, Unit, PrivateKey, Transaction, Networks } from "bitcore-lib";
+import { HDPrivateKey, Unit, PrivateKey, Transaction, Networks, Address } from "bitcore-lib";
 import Blockchair, { Chain } from './api/Blockchair';
 import BTCOM from "./api/BTCOM";
+
+console.log('isValid', Address['isValid'])
 
 export default class BTCWallet extends Wallet {
 
@@ -60,6 +62,10 @@ export default class BTCWallet extends Wallet {
         console.log(this.balance, this.txs);
         this.save('balance', this.balance);
         this.save('txs', this.txs);
+    }
+
+    isValidAddress(addr: string) {
+        return Address['isValid'](addr) || (addr.startsWith('bc') && addr.length === 42);
     }
 
     async genTx(opts: { to: { address: string, amount: number }[]; message?: string; satoshiPerByte: number }) {

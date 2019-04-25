@@ -70,6 +70,10 @@ export default class ETHWallet extends Wallet {
         this.save('txs', this.txs);
     }
 
+    isValidAddress(addr: string) {
+        return ETHUtils.isValidAddress(addr);
+    }
+
     protected async scanAddresses() {
         let [address] = this.mainAddress;
         let info = await Blockchair.fetchETHAddress(address);

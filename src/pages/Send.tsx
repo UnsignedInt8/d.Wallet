@@ -10,6 +10,8 @@ import * as jquery from 'jquery';
 import { getWalletMan } from '../wallet/WalletManager';
 import sleep from 'sleep-promise';
 import PaymentDetails from './PaymentDetails';
+import Application from '../Application';
+import { GenTxInfo } from '../wallet/Wallet';
 
 interface PageProps {
     symbol: string;
@@ -23,10 +25,7 @@ interface PageState {
     validPassword?: boolean;
     isBuildingTx?: boolean;
 
-    to?: { address: string, amount: number }[],
-    from?: string[],
-    fee?: number,
-    msg?: string;
+    txInfo?: GenTxInfo;
 }
 
 const sendIcon = require('../assets/send2.svg');
@@ -69,12 +68,16 @@ export default class Send extends React.Component<PageProps, PageState>{
 
         let message = jquery('message-input').val() as string || undefined;
 
-        this.setState({ isBuildingTx: true, to, msg: message });
+        this.setState({ isBuildingTx: true, });
         let wallet = this.walletMan.wallets[this.props.symbol];
-        // await wallet.genTx({ to, message });
-        // await sleep(1000);
+        let tx = await wallet.genTx({ to, message });
+        if (!tx) {
+            Application.addNotification({ title: 'Building failed', message: 'Internet not available', type: 'warning' });
+            this.setState({ isBuildingTx: false });
+            return;
+        }
 
-        this.setState({ isBuildingTx: false, prepareToSend: true }, () => {
+        this.setState({ isBuildingTx: false, prepareToSend: true, txInfo: tx }, () => {
             this.paymentDetails!.open();
         });
     }
@@ -168,8 +171,8 @@ export default class Send extends React.Component<PageProps, PageState>{
                     : undefined
                 }
 
-                {this.state.prepareToSend ?
-                    <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={coin.unit} symbol={this.props.symbol} from={this.state.from} to={this.state.to} fee={this.state.fee} message={this.state.msg} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
+                {this.state.prepareToSend && this.state.txInfo ?
+                    <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={coin.unit} symbol={this.props.symbol} from={this.state.txInfo.from} to={this.state.txInfo.to} fee={this.state.txInfo.fee} message={this.state.txInfo.msg} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
                     : undefined
                 }
             </div>

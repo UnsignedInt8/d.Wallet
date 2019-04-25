@@ -48,11 +48,13 @@ interface State {
 export default class Application extends React.Component<{}, State> {
 
     static history: History;
+    private static app: Application;
 
     state: State = { lockApp: false, firstUse: true };
     notificationDOMRef: any;
 
     componentDidMount() {
+        Application.app = this;
         ipcRenderer.on('autolock', () => this.lockApp());
         PassMan.on('password', this.onPasswordChanged);
 
@@ -62,7 +64,7 @@ export default class Application extends React.Component<{}, State> {
             if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
         });
 
-        setTimeout(() => this.addNotification({ title: '', message: 'hello', type: 'success' }), 2000);
+        setTimeout(() => Application.addNotification({ title: '', message: 'hello', type: 'success' }), 2000);
     }
 
     componentWillUnmount() {
@@ -90,8 +92,10 @@ export default class Application extends React.Component<{}, State> {
         animeHelper.expandPage(LockScreen.id, 0, window.innerHeight, () => this.setState({ lockApp: false }));
     }
 
-    addNotification(opts: { title: string, message: string, type: 'success' | 'default' | 'warning' | 'info' | 'danger' }) {
-        this.notificationDOMRef.addNotification({
+    static addNotification(opts: { title: string, message: string, type: 'success' | 'default' | 'warning' | 'info' | 'danger' }) {
+        if (!this.app || !this.app.notificationDOMRef) return;
+        
+        this.app.notificationDOMRef.addNotification({
             ...opts,
             insert: "top",
             container: "top-right",

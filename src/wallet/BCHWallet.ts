@@ -1,5 +1,5 @@
 import { Wallet, AddressInfo, TxInfo, IUtxo } from "./Wallet";
-import { PrivateKey as BCHPrivateKey, Transaction as BCHTransaction } from 'bitcore-lib-cash';
+import { PrivateKey as BCHPrivateKey, Transaction as BCHTransaction, Address } from 'bitcore-lib-cash';
 import { HDPrivateKey, Networks, Transaction, } from "bitcore-lib";
 import { observable, computed } from "mobx";
 import BTCWallet from "./BTCWallet";
@@ -36,6 +36,10 @@ export default class BCHWallet extends BTCWallet {
         let cashAddr = new BCHPrivateKey(privkey).toAddress(this._network).toString().split(':')[1];
         let legacy = bchaddrjs.toLegacyAddress(cashAddr);
         return [cashAddr, legacy];
+    }
+
+    isValidAddress(addr: string) {
+        return Address.isValid(addr);
     }
 
     async scanAddresses(from: number, to: number, external = true, chain: Chain = 'bitcoin-cash') {

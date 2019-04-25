@@ -32,6 +32,7 @@ export abstract class Wallet {
     @observable txs: TxInfo[] = [];
     abstract genTx(opts: { to: { address: string, amount: number | string }[], message?: string }): Promise<GenTxInfo | undefined>;
     abstract async refresh();
+    abstract isValidAddress(address: string): boolean;
     protected abstract getExternalPath(): string;
     protected abstract getChangePath(): string;
     protected abstract scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]>;

@@ -1,5 +1,5 @@
 import { Wallet, TxInfo, IUtxo } from "./Wallet";
-import { PrivateKey, Transaction as LTCTransaction } from 'litecore-lib';
+import { PrivateKey, Transaction as LTCTransaction, Address } from 'litecore-lib';
 import { Transaction } from 'bitcore-lib';
 import { Unit } from 'bitcore-lib';
 import BTCWallet from "./BTCWallet";
@@ -29,6 +29,10 @@ export default class LTCWallet extends BTCWallet {
     protected genAddress(key: import("bitcore-lib").HDPrivateKey): string[] {
         let privkey = key['privateKey'].toString();
         return [new PrivateKey(privkey).toAddress(this._network).toString()];
+    }
+
+    isValidAddress(addr: string) {
+        return Address.isValid(addr);
     }
 
     scanAddresses(from: number, to: number, external = true, chain = 'litecoin') {
