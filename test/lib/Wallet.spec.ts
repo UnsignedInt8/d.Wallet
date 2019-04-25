@@ -19,8 +19,6 @@ describe('tests wallets', () => {
     let ltc = new LTCWallet({ mnemonic, network: LTCNetworks.testnet });
     let usdt = new USDTWallet({ mnemonic, network: bitcoin.networks.regtest });
 
-    console.log(usdt.addresses, usdt.changes);
-
     it('tests address', () => {
         let btc = new BTCWallet({ mnemonic, });
         expect(btc.mainAddress).toContain('1PNUBxhi6fDh3DKV374raZPuXQ5GbABBzV');

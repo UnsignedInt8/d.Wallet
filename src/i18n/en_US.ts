@@ -71,6 +71,8 @@ const lang = {
     messages: {
         invalidAddress: 'There are some invalid addresses',
         noInternet: 'Internet is not available',
+        broadcastTx: (hash:string) => `Tx ${hash} has been broadcasted`,
+        broadcastFailed: `Broadcasting transaction failed, check your balance, and try again`,
     }
 }
 

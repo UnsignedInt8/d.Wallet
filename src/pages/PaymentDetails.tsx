@@ -101,7 +101,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                             Amount:
                     </div>
                         <div className='content amount'>
-                            {} <span className='symbol'>{this.props.symbol}</span>
+                            {this.props.txInfo.value} <span className='symbol'>{this.props.symbol}</span>
                         </div>
                     </div>
 
@@ -153,7 +153,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
                         <div className='title'>
                             Fee:
                     </div>
-                        <div className='content'>
+                        <div className='content fee'>
                             {this.props.txInfo.fee} <span>{this.props.coinUnit}</span>
                         </div>
                     </div>

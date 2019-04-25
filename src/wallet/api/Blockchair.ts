@@ -12,7 +12,7 @@ export default class Blockchair {
         let url = `${Blockchair.host}/${chain}/dashboards/address/${address}`;
 
         try {
-            let resp = await axios.get(url);
+            let resp = await axios.get(url, { timeout: 1000 });
             if (!resp.data) return null;
 
             let data = resp.data as BTCAddressObject;
@@ -28,7 +28,7 @@ export default class Blockchair {
         if (hashes.length === 0) return null;
 
         let url = `${Blockchair.host}/${chain}/dashboards/transactions/${hashes.join(',')}`;
-        let resp = await axios.get(url);
+        let resp = await axios.get(url, { timeout: 1000 });
 
         if (!resp.data) return null;
         let data = resp.data as BTCTxObject;

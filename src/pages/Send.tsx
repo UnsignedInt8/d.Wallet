@@ -99,8 +99,15 @@ export default class Send extends React.Component<PageProps, PageState>{
 
     private onPasswordVerified() {
         setTimeout(async () => {
-            this.paymentDetails!.close();
+            let txInfo = this.state.txInfo!;
+            let id = await this.walletMan.current.broadcastTx(txInfo.hex);
+            if (txInfo.id === id) {
+                Application.addNotification({ title: '', message: `${this.i18n.messages.broadcastTx(id)}`, type: 'success' });
+            } else {
+                Application.addNotification({ title: '', message: `${this.i18n.messages.broadcastFailed}`, type: 'warning' });
+            }
 
+            this.paymentDetails!.close();
             await sleep(1500);
             this.props.onCancel();
         }, 1500);
@@ -190,7 +197,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                 }
 
                 {this.state.prepareToSend && this.state.txInfo ?
-                    <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={coin.unit} symbol={this.props.symbol} txInfo={this.state.txInfo} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
+                    <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={this.props.symbol} symbol={this.props.symbol} txInfo={this.state.txInfo} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
                     : undefined
                 }
             </div>
