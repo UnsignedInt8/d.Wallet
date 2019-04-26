@@ -9,6 +9,7 @@ export default class LTCWallet extends BTCWallet {
 
     get symbol() { return 'ltc'; }
     get chain(): Chain { return 'litecoin'; }
+    protected get refreshingLimit() { return 60 * 2 * 1000; }
 
     protected _mainAddress?: string[];
     get mainAddress() {

@@ -34,6 +34,7 @@ export default class ETHWallet extends Wallet {
 
     get symbol() { return 'eth'; }
     get chain(): Chain { return 'ethereum'; }
+    protected get refreshingLimit() { return 15 * 1000; }
 
     private _mainAddress?: string[];
     get mainAddress() {
@@ -60,6 +61,8 @@ export default class ETHWallet extends Wallet {
     }
 
     async refresh() {
+        if (!this.shouldRefreshing()) return;
+
         let [info] = await this.scanAddresses();
         if (!info) return;
 

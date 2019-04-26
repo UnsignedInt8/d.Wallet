@@ -33,6 +33,7 @@ export abstract class Wallet {
     abstract genTx(opts: { to: { address: string, amount: number | string }[], message?: string, gasPrice?: number, satoshiPerByte?: number }): Promise<GenTxInfo | undefined>;
     abstract async refresh();
     abstract isValidAddress(address: string): boolean;
+    protected abstract get refreshingLimit(): number;
     protected abstract getExternalPath(): string;
     protected abstract getChangePath(): string;
     protected abstract scanAddresses(from: number, to: number, external?: boolean): Promise<AddressInfo[]>;

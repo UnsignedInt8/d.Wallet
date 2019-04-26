@@ -26,6 +26,7 @@ export default class BTCWallet extends Wallet {
 
     get symbol() { return 'btc'; }
     get chain(): Chain { return 'bitcoin'; }
+    protected get refreshingLimit() { return 60 * 6 * 1000; }
 
     protected _mainAddress?: string[];
     get mainAddress() {
