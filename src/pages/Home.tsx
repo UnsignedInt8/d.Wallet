@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flip, Fade } from 'react-reveal';
+import { Flip } from 'react-reveal';
 import '../styles/Home.scss';
 import { platform } from 'os';
 import { AreaChart, Area } from 'recharts';
@@ -10,18 +10,10 @@ import Receive from './Receive';
 import anime from 'animejs';
 import Settings from './Settings';
 import { AppSettings, getAppSettings } from '../data/AppSettings';
-import { Wallet, TxInfo } from '../wallet/Wallet';
-import BTCWallet from '../wallet/BTCWallet';
-import ETHWallet from '../wallet/ETHWallet';
-import BCHWallet from '../wallet/BCHWallet';
-import LTCWallet from '../wallet/LTCWallet';
+import { TxInfo } from '../wallet/Wallet';
 import { WalletManager, getWalletMan } from '../wallet/WalletManager';
 import { observer } from 'mobx-react';
-import Axios from 'axios';
 import AnimeHelper from '../lib/AnimeHelper';
-import StickyEvents from 'sticky-events';
-import { withToastManager, } from 'react-toast-notifications';
-import OmniApi from '../wallet/api/OmniExplorer';
 import CountUp from 'react-countup';
 import Transaction from './Transaction';
 
@@ -70,7 +62,6 @@ class Home extends React.Component<{}, HomeState> {
     };
     walletMan!: WalletManager;
     private refersher?: NodeJS.Timer | number;
-    private history = {};
     private appSettings?: AppSettings;
     private sendPage: SendPage | null = null;
 
@@ -200,7 +191,7 @@ class Home extends React.Component<{}, HomeState> {
                         {
                             symbols.map(i => {
                                 return (
-                                    <div key={i.symbol} className={`icon`} onClick={e => this.selectCoin(i)}>
+                                    <div key={i.symbol} className={`icon`} onClick={() => this.selectCoin(i)}>
                                         <div className={`${this.state.selectedSymbol === i.symbol ? 'indicator' : 'indicator-none'}`} style={{ backgroundColor: i.color }} />
                                         <img src={i.img} alt={i.symbol} />
                                     </div>
@@ -244,7 +235,7 @@ class Home extends React.Component<{}, HomeState> {
 
                     <div id='balanceInfo' className={`balance lato-bold ${this.state.selectedSymbol} ${this.state.stuck ? 'balance-stuck' : ''}`}>
                         <Flip bottom opposite collapse when={this.state.showSymbol} className='balanceNum'>
-                            <span onClick={e => this.setState({ showBalance: !this.state.showBalance })}>
+                            <span onClick={() => this.setState({ showBalance: !this.state.showBalance })}>
                                 {
                                     this.state.showBalance ?
                                         this.walletMan ? <CountUp end={this.walletMan.current.balance} duration={1.5} decimals={4} /> : '0'
@@ -265,14 +256,14 @@ class Home extends React.Component<{}, HomeState> {
                         : undefined
                     }
 
-                    <button id='open-sending' className='send' title='Send' onClick={e => this.togglePage('sending')}>
+                    <button id='open-sending' className='send' title='Send' onClick={() => this.togglePage('sending')}>
                         <img src={send} alt="Send" />
                     </button>
 
                     <div className='txs'>
                         {(this.walletMan ? this.walletMan.current.txs : []).map(tx => {
                             return (
-                                <div className='tx' key={tx.hash} onClick={e => this.onOpenTxInfo(tx)}>
+                                <div className='tx' key={tx.hash} onClick={() => this.onOpenTxInfo(tx)}>
                                     <div className='icon'>
                                         <img src={tx.isIncome ? inIcon : outIcon} />
                                     </div>

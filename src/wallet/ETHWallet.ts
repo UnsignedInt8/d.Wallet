@@ -81,8 +81,11 @@ export default class ETHWallet extends Wallet {
 
         let balance = info.address.balance || '0';
         let txs = info.calls.map(c => {
+            let amount = Units.convert(c.value || 0, 'wei', 'eth');
+            console.log('amount', amount, c.value);
+
             return <TxInfo>{
-                amount: (BigInt(c.value) / BigInt('1000000000000000000')).toString(),
+                amount,
                 blockHash: '',
                 blockHeight: c.block_id,
                 hash: c.transaction_hash,
