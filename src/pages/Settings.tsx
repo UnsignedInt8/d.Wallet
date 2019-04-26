@@ -7,6 +7,8 @@ import { getLang } from '../i18n';
 import { observer } from 'mobx-react';
 import Select from 'react-select';
 import PaperKey from './PaperKey';
+import AnimeHelper from '../lib/AnimeHelper';
+import Application from '../Application';
 
 const selectColor = {
     option: (provided, state) => ({
@@ -20,12 +22,17 @@ const selectColor = {
     })
 };
 
+type Pages = 'paperKey' | 'about';
+interface State {
+    expandedPage?: Pages;
+}
+
 @observer
-export default class Settings extends React.Component<{}, {}> {
+export default class Settings extends React.Component<{}, State> {
 
     private appSettings = getAppSettings(PasswordMan.password)!!;
     private i18n = getLang(this.appSettings.lang);
-
+    state: State = {};
 
     private supportedLangs = [
         { value: 'en-US', label: 'English', },
@@ -38,6 +45,18 @@ export default class Settings extends React.Component<{}, {}> {
 
     private changeLang(selected: any) {
         this.appSettings.lang = selected.value;
+    }
+
+    private openPage(page: Pages) {
+        if (page === 'paperKey') Application.lock();
+
+        this.setState({ expandedPage: page }, () => {
+            AnimeHelper.expandPage('#settings-expanding-page', window.innerHeight, 0);
+        });
+    }
+
+    private closePage() {
+        AnimeHelper.expandPage('#settings-expanding-page', 0, window.innerHeight, () => this.setState({ expandedPage: undefined }));
     }
 
     render() {
@@ -69,7 +88,7 @@ export default class Settings extends React.Component<{}, {}> {
                     </div>
                 </div>
 
-                <div className='setting-item'>
+                <div className='setting-item' onClick={e => this.openPage('paperKey')}>
                     <div className='setting-title clickable'>{this.i18n.settings.paperKey.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.paperKey.desc}</div>
                 </div>
@@ -83,9 +102,13 @@ export default class Settings extends React.Component<{}, {}> {
                     <div className='setting-title clickable'>{this.i18n.settings.about.title}</div>
                 </div>
 
-                <div id='expanding-page'>
-                    <PaperKey />
-                </div>
+                {this.state.expandedPage ?
+                    <div id='settings-expanding-page'>
+                        {this.state.expandedPage === 'paperKey' ? <PaperKey onClose={() => this.closePage()} /> : undefined}
+
+                    </div>
+                    : undefined}
+
             </div>
         );
     }

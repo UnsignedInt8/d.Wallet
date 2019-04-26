@@ -5,6 +5,7 @@
   padding-top: 3.5vh;
   padding-left: 16px;
   padding-right: 16px;
+  position: relative;
 
   #paper-key-desc {
     font-size: 14px;
@@ -43,6 +44,17 @@
       line-height: 20px;
       vertical-align: middle;
       border-bottom: 1px dashed rgba(255, 255, 255, 0.212);
+    }
+  }
+
+  #close {
+    position: absolute;
+    bottom: 24px;
+    left: 2px;
+    right: 18px;
+
+    button {
+      height: 36px;
     }
   }
 }

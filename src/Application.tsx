@@ -47,6 +47,7 @@ interface State {
 @observer
 export default class Application extends React.Component<{}, State> {
 
+    private static app: Application;
     static history: History;
     state: State = { lockApp: false, firstUse: true };
 
@@ -60,6 +61,8 @@ export default class Application extends React.Component<{}, State> {
             if (!PassMan.isProtected()) Application.history.push('/welcome');
             if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
         });
+
+        Application.app = this;
     }
 
     componentWillUnmount() {
@@ -85,6 +88,10 @@ export default class Application extends React.Component<{}, State> {
 
     private unlockApp() {
         animeHelper.expandPage(LockScreen.id, 0, window.innerHeight, () => this.setState({ lockApp: false }));
+    }
+
+    static lock() {
+        this.app.lockApp(true);
     }
 
     render() {

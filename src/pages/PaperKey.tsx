@@ -11,6 +11,10 @@ interface State {
     mouseIn?: boolean;
 }
 
+interface Props {
+    onClose?: () => void;
+}
+
 const derivationPaths = [
     { img: require('../assets/btc.svg'), path: BTCWallet.defaultPath },
     { img: require('../assets/bch.svg'), path: BCHWallet.defaultPath },
@@ -19,7 +23,7 @@ const derivationPaths = [
     { img: require('../assets/usdt.svg'), path: BTCWallet.defaultPath },
 ]
 
-export default class PaperKey extends React.Component<{}, State> {
+export default class PaperKey extends React.Component<Props, State> {
 
     appSettings = getAppSettings(PassMan.password);
     i18n = this.appSettings.i18n;
@@ -50,13 +54,17 @@ export default class PaperKey extends React.Component<{}, State> {
                     {
                         derivationPaths.map((v, i) => {
                             return (
-                                <div>
+                                <div key={i}>
                                     <img src={v.img} />
                                     <span>{v.path}</span>
                                 </div>
                             );
                         })
                     }
+                </div>
+
+                <div id='close'>
+                    <button onClick={e => this.props.onClose!()}>{this.i18n.buttons.close}</button>
                 </div>
             </div>
         );
