@@ -44,7 +44,7 @@ export default class Settings extends React.Component<{}, {}> {
             <div id='settings'>
                 <div className='setting-item' style={{ marginTop: '3.5vh' }}>
                     <div className='setting-title' onClick={_ => this.switchAutoLock(!this.appSettings.autolock)}>{this.i18n.settings.autoLock.title}</div>
-                    <div className='setting-detail'>Automatically lock app after 5 minutes</div>
+                    <div className='setting-detail'>{this.i18n.settings.autoLock.desc}</div>
                     <div className='setting-switch'>
                         <Switch
                             checked={this.appSettings.autolock}
@@ -68,6 +68,19 @@ export default class Settings extends React.Component<{}, {}> {
                     </div>
                 </div>
 
+                <div className='setting-item'>
+                    <div className='setting-title clickable'>{this.i18n.settings.paperKey.title}</div>
+                    <div className='setting-detail'>{this.i18n.settings.paperKey.desc}</div>
+                </div>
+
+                <div className='setting-item'>
+                    <div className='setting-title clickable'>{this.i18n.settings.reset.title}</div>
+                    <div className='setting-detail'>{this.i18n.settings.reset.desc}</div>
+                </div>
+
+                <div className='setting-item'>
+                    <div className='setting-title clickable'>{this.i18n.settings.about.title}</div>
+                </div>
             </div>
         );
     }

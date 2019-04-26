@@ -132,7 +132,7 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     private selectCoin(i) {
-        if (this.state.expandPage === 'sending' && this.sendPage!.shouldLockSymbol) return;
+        if (this.state.expandPage === 'sending') return;
 
         this.walletMan.selectWallet(i.symbol);
         this.setState(

@@ -51,6 +51,17 @@ const lang = {
             title: 'Languages',
             system: 'System',
         },
+        reset: {
+            title: 'Reset',
+            desc: 'Reset all your data',
+        },
+        paperKey: {
+            title: 'Paper Key',
+            desc: 'Backup your mnemonic code',
+        },
+        about: {
+            title: 'About'
+        }
     },
 
     lockScreen: {
@@ -69,10 +80,10 @@ const lang = {
     },
 
     messages: {
-        invalidAddress: 'There are some invalid addresses',
-        noInternet: 'Internet is not available',
-        broadcastTx: (hash:string) => `Tx ${hash} has been broadcasted`,
-        broadcastFailed: `Broadcasting transaction failed, check your balance, and try again`,
+        invalidAddress: 'There are some invalid addresses.',
+        noInternet: 'Internet may not available.',
+        broadcastTx: (hash:string) => `Tx ${hash} has been successfully broadcasted.`,
+        broadcastFailed: `Broadcasting transaction failed, check your balance, and try again.`,
     }
 }
 
