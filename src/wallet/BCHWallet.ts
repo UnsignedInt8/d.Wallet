@@ -8,12 +8,14 @@ import * as bchaddrjs from 'bchaddrjs';
 
 export default class BCHWallet extends BTCWallet {
 
+    static readonly defaultPath = `m/44'/145'/0'/0`;
+
     constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string, network?: Networks.Network }) {
         super(opts);
     }
 
     protected getExternalPath(): string {
-        return `m/44'/145'/0'/0`;
+        return BCHWallet.defaultPath;
     }
 
     protected getChangePath(): string {

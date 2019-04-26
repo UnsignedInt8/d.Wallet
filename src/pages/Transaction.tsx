@@ -35,7 +35,7 @@ export default class Transaction extends React.Component<Props, any> {
             <div id='transaction'>
                 <div id='transaction-details'>
                     <div id='transaction-details-head'>
-                        <div id='transaction-details-title' className='questrial'>
+                        <div id='transaction-details-title' className='page-title'>
                             {this.i18n.txDetails.title}
                         </div>
 

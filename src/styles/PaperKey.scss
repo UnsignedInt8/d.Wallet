@@ -1,4 +1,48 @@
 #paper-key {
   height: 100%;
   background-color: deepskyblue;
+
+  padding-top: 3.5vh;
+  padding-left: 16px;
+  padding-right: 16px;
+
+  #paper-key-desc {
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  #mnemonic-phrases {
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 8px 16px 8px 16px;
+    background: rgba(0, 0, 0, 0.144);
+  }
+
+  #derivation-path-title {
+    margin-top: 12px;
+    margin-bottom: 8px;
+    font-size: 17px;
+  }
+
+  #derivation-path {
+    img {
+      width: 15px;
+      height: 15px;
+      margin-right: 12px;
+      display: inline-block;
+      margin-top: 5px;
+    }
+
+    span {
+      font-size: 15px;
+      font-family: Helvetica, sans-serif;
+    }
+
+    div {
+      line-height: 20px;
+      vertical-align: middle;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.212);
+    }
+  }
 }

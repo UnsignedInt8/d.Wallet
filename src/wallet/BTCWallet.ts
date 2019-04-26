@@ -9,6 +9,8 @@ console.log('isValid', Address['isValid'])
 
 export default class BTCWallet extends Wallet {
 
+    static readonly defaultPath: string = `m/44'/0'/0'/0`;
+
     protected _network?: bitcoin.Network;
 
     constructor(opts: { root?: HDPrivateKey, mnemonic?: string, path?: string, network?: bitcoin.Network | Networks.Network }) {
@@ -17,7 +19,7 @@ export default class BTCWallet extends Wallet {
     }
 
     protected getExternalPath(): string {
-        return `m/44'/0'/0'/0`;
+        return BTCWallet.defaultPath;
     }
 
     protected getChangePath(): string {

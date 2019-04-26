@@ -15,6 +15,7 @@ import * as ETHUnit from 'ethjs-unit';
 export default class ETHWallet extends Wallet {
 
     chainId = 1;
+    static readonly defaultPath = `m/44'/60'/0'/0`;
 
     buildTx(args: { inputs: IUtxo[]; outputs: { address: string; amount: number; }[]; satoshiPerByte: number; changeIndex?: number | undefined; }): { tx: import("bitcoinjs-lib").Transaction | import("bitcore-lib").Transaction; change: { address: string; amount: number; }; fee: number; } {
         throw new Error("Method not implemented.");
@@ -25,7 +26,7 @@ export default class ETHWallet extends Wallet {
     }
 
     protected getExternalPath(): string {
-        return `m/44'/60'/0'/0`;
+        return ETHWallet.defaultPath;
     }
 
     protected getChangePath(): string {

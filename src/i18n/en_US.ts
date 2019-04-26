@@ -79,6 +79,12 @@ const lang = {
         amount: 'Amount',
     },
 
+    paperKey: {
+        title: 'Paper Key',
+        backup: 'The mnemonic phrases is the only way to restore your crypto assets. You should have your mnemonic phrases written down and stored in a safe place.',
+        derivationPath: 'BIP 32 Derivation Path',
+    },
+
     messages: {
         invalidAddress: 'There are some invalid addresses.',
         noInternet: 'Internet may not available.',

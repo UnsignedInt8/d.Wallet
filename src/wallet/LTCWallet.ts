@@ -7,6 +7,8 @@ import Blockchair, { Chain } from "./api/Blockchair";
 
 export default class LTCWallet extends BTCWallet {
 
+    static readonly defaultPath = `m/44'/2'/0'/0`;
+
     get symbol() { return 'ltc'; }
     get chain(): Chain { return 'litecoin'; }
     protected get refreshingLimit() { return 60 * 2 * 1000; }
@@ -20,7 +22,7 @@ export default class LTCWallet extends BTCWallet {
     }
 
     protected getExternalPath(): string {
-        return `m/44'/2'/0'/0`;
+        return LTCWallet.defaultPath;
     }
 
     protected getChangePath(): string {
