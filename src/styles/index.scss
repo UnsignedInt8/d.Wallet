@@ -133,3 +133,17 @@ input {
 input::placeholder {
   color: rgba(255, 255, 255, 0.3);
 }
+
+// div::-webkit-scrollbar {
+//   width: 1px;
+//   background-color: transparent;
+// }
+
+div::-webkit-scrollbar-thumb {
+  background-color: #5622cf86;
+  color: #5622cf86;
+}
+
+div::-webkit-scrollbar-track {
+  background: none;
+}

@@ -163,6 +163,7 @@
 
   .txs {
     grid-area: txs;
+    transition: all 0.5s ease-out;
 
     .tx {
       display: grid;
