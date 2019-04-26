@@ -85,6 +85,11 @@ const lang = {
         derivationPath: 'BIP 32 Derivation Path',
     },
 
+    reset: {
+        title: 'Reset',
+        desc:'',
+    },
+
     messages: {
         invalidAddress: 'There are some invalid addresses.',
         noInternet: 'Internet may not available.',
