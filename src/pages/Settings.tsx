@@ -6,6 +6,7 @@ import { getAppSettings } from '../data/AppSettings';
 import { getLang } from '../i18n';
 import { observer } from 'mobx-react';
 import Select from 'react-select';
+import PaperKey from './PaperKey';
 
 const selectColor = {
     option: (provided, state) => ({
@@ -80,6 +81,10 @@ export default class Settings extends React.Component<{}, {}> {
 
                 <div className='setting-item'>
                     <div className='setting-title clickable'>{this.i18n.settings.about.title}</div>
+                </div>
+
+                <div id='expanding-page'>
+                    <PaperKey />
                 </div>
             </div>
         );
