@@ -7,6 +7,7 @@ const { shell } = require('electron');
 const blockchair = require('../assets/blockchair_light.png');
 const btcom = require('../assets/btc-com.png');
 const coinranking = require('../assets/coinranking.svg');
+const github = require('../assets/github.svg');
 
 export default class About extends React.Component {
 
@@ -41,8 +42,8 @@ export default class About extends React.Component {
                     {this.i18n.about.contact}
                 </div>
 
-                <div className='page-desc'>
-                    <div><a href='#' onClick={_ => this.openLink('https://github.com')}>Github</a></div>
+                <div id='contacts' className='page-desc'>
+                    <div><img src={github} /> <a href='#' onClick={_ => this.openLink('https://github.com')}>Github</a></div>
                 </div>
 
                 <div id='close'>

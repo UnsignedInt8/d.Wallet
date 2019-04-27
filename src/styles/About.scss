@@ -43,6 +43,21 @@
     }
   }
 
+  #contacts {
+    div {
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 12px;
+        height: 12px;
+        margin-bottom: -1px;
+        margin-right: 6px;
+        display: inline-block;
+      }
+    }
+  }
+
   div#close {
     position: absolute;
     bottom: 0;
@@ -55,13 +70,13 @@
   }
 
   a {
-      text-decoration: none;
-      color: white;
-      transition: all 0.5s;
+    text-decoration: none;
+    color: white;
+    transition: all 0.5s;
   }
 
   a:hover {
-      color: deepskyblue;
-      transition: all 0.5s;
+    color: deepskyblue;
+    transition: all 0.5s;
   }
 }
