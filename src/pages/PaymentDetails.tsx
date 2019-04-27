@@ -1,7 +1,6 @@
 import * as React from 'react';
 import '../styles/PaymentDetails.scss';
 import anime from 'animejs';
-import { getLang } from '../i18n';
 import { getAppSettings } from '../data/AppSettings';
 import PassMan from '../data/PasswordManager';
 import { Validation, Password } from '../components';
@@ -34,7 +33,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
 
     state: State = { animeTitle: true, showPassword: false };
     appSettings = getAppSettings(PassMan.password);
-    i18n = getLang(this.appSettings.lang);
+    i18n = this.appSettings.i18n;
 
     private onPasswordChange(value: string) {
         if (!PassMan.verify(value)) return;
@@ -98,7 +97,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
 
                     <div className='payment-details-item'>
                         <div className='title amount-title'>
-                            Amount:
+                            {this.i18n.txDetails.amount}:
                     </div>
                         <div className='content amount'>
                             {this.props.txInfo.value} <span className='symbol'>{this.props.symbol}</span>
@@ -107,7 +106,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
 
                     <div className='payment-details-item'>
                         <div className='title'>
-                            From:
+                            {this.i18n.txDetails.from}:
                     </div>
                         <div className='content'>
                             {
@@ -124,7 +123,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
 
                     <div className='payment-details-item'>
                         <div className='title'>
-                            To:
+                            {this.i18n.txDetails.to}:
                     </div>
                         <div className='content'>
                             {
@@ -142,7 +141,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
 
                     <div className='payment-details-item'>
                         <div className='title'>
-                            Message:
+                            {this.i18n.txDetails.message}:
                     </div>
                         <div className='content tx-msg'>
                             {this.props.txInfo.msg}
@@ -151,7 +150,7 @@ export default class PaymentDetails extends React.Component<Props, State> {
 
                     <div className='payment-details-item'>
                         <div className='title'>
-                            Fee:
+                            {this.i18n.txDetails.fee}:
                     </div>
                         <div className='content fee'>
                             {this.props.txInfo.fee} <span>{this.props.coinUnit}</span>

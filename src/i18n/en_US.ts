@@ -32,6 +32,7 @@ const lang = {
         fees: 'Fees',
         send: 'Send',
         cancel: 'Cancel',
+        building: 'Building, please wait a moment...'
     },
 
     receiving: {
@@ -77,6 +78,7 @@ const lang = {
         from: 'From',
         to: 'To',
         amount: 'Amount',
+        message: 'Message',
     },
 
     paperKey: {

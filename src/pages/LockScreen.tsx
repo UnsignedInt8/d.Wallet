@@ -7,7 +7,6 @@ import PassMan from '../data/PasswordManager';
 import { getAppSettings } from '../data/AppSettings';
 import { Validation, Password } from '../components';
 
-const lock = require('../assets/padlock.svg');
 const i18n = getLang();
 
 interface State {
