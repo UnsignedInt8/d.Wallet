@@ -20,7 +20,7 @@ interface Props {
 
 export default class NewKey extends React.Component<Props, State> {
 
-    state: State = { mnemonic: bip39.generateMnemonic(15) };
+    state: State = { mnemonic: bip39.generateMnemonic() };
 
     private onOKClick() {
         PassMan.password = this.state.password!;
