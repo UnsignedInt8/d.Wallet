@@ -11,6 +11,7 @@ import AnimeHelper from '../lib/AnimeHelper';
 import Application from '../Application';
 import ResetBox from './ResetBox';
 import sleep from 'sleep-promise';
+import About from './About';
 
 const selectColor = {
     option: (provided, state) => ({
@@ -102,13 +103,13 @@ export default class Settings extends React.Component<{}, State> {
                     </div>
                 </div>
 
-                <div className='setting-item' onClick={e => this.openPage('paperKey')}>
-                    <div className='setting-title clickable'>{this.i18n.settings.paperKey.title}</div>
+                <div className='setting-item'>
+                    <div className='setting-title clickable' onClick={e => this.openPage('paperKey')}>{this.i18n.settings.paperKey.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.paperKey.desc}</div>
                 </div>
 
-                <div className='setting-item' onClick={_ => this.openPage('reset')}>
-                    <div className='setting-title clickable'>{this.i18n.settings.reset.title}</div>
+                <div className='setting-item'>
+                    <div className='setting-title clickable' onClick={_ => this.openPage('reset')}>{this.i18n.settings.reset.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.reset.desc}</div>
                 </div>
 
@@ -120,6 +121,7 @@ export default class Settings extends React.Component<{}, State> {
                     <div id='settings-expanding-page' onClick={_ => this.closePage()}>
                         {this.state.expandedPage === 'paperKey' ? <PaperKey onClose={() => this.closePage()} /> : undefined}
                         {this.state.expandedPage === 'reset' ? <ResetBox onCancel={() => this.closePage()} onReset={() => this.reset()} /> : undefined}
+                        {this.state.expandedPage === 'about' ? <About /> : undefined}
                     </div>
                     : undefined}
 

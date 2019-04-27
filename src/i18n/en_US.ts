@@ -87,13 +87,18 @@ const lang = {
 
     reset: {
         title: 'Reset',
-        desc:'This will reset all your data, if you have not saved your paper key, you will lose all your assets.',
+        desc: 'This will reset all your data, if you have not saved your paper key, you will lose all your assets.',
+    },
+
+    about: {
+        title: 'About',
+
     },
 
     messages: {
         invalidAddress: 'There are some invalid addresses.',
         noInternet: 'Internet may not available.',
-        broadcastTx: (hash:string) => `Tx ${hash} has been successfully broadcasted.`,
+        broadcastTx: (hash: string) => `Transaction ${hash} has been successfully broadcasted.`,
         broadcastFailed: `Broadcasting transaction failed, check your balance, and try again.`,
     }
 }
