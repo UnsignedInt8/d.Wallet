@@ -50,9 +50,9 @@
   },
   "build": {
     "productName": "d.Wallet",
-    "appId": "org.your.productname",
+    "appId": "io.dwallet",
     "mac": {
-      "category": "your.app.category.type",
+      "category": "business",
       "icon": "./icons/wallet.icns"
     },
     "directories": {
@@ -68,7 +68,8 @@
       "target": "deb"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "./icons/wallet.png"
     }
   },
   "repository": {

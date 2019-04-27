@@ -2,6 +2,7 @@ import * as React from 'react';
 import '../styles/About.scss';
 import PassMan from '../data/PasswordManager';
 import { getAppSettings } from '../data/AppSettings';
+const { shell } = require('electron');
 
 const blockchair = require('../assets/blockchair_light.png');
 const btcom = require('../assets/btc-com.png');
@@ -11,9 +12,13 @@ export default class About extends React.Component {
 
     i18n = getAppSettings(PassMan.password).i18n;
 
+    openLink(url: string) {
+        shell.openExternal(url);
+    }
+
     render() {
         return (
-            <div id='about-page'>
+            <div id='about-page' onClick={_ => { }}>
                 <div className='page-title'>
                     {this.i18n.about.title}
                 </div>
@@ -27,9 +32,9 @@ export default class About extends React.Component {
                 </div>
 
                 <div id='about-thanks'>
-                    <div><img id='blockchair' src={blockchair} /></div>
-                    <div className='lato'><img id='coinranking' src={coinranking} /> Coinranking </div>
-                    <div><img id='btc-com' src={btcom} /></div>
+                    <div><img id='blockchair' src={blockchair} onClick={_ => this.openLink('https://blockchair.com')} /></div>
+                    <div className='lato'><img id='coinranking' src={coinranking} onClick={_ => this.openLink('https://coinranking.com')} /> Coinranking </div>
+                    <div><img id='btc-com' src={btcom} onClick={_ => this.openLink('https://btc.com')} /></div>
                 </div>
 
                 <div className='page-title title'>
@@ -37,7 +42,11 @@ export default class About extends React.Component {
                 </div>
 
                 <div className='page-desc'>
+                    <div><a href='#' onClick={_ => this.openLink('https://github.com')}>Github</a></div>
+                </div>
 
+                <div id='close'>
+                    <button>{this.i18n.buttons.close}</button>
                 </div>
             </div>
         );

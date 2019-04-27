@@ -35,7 +35,7 @@ export default class Settings extends React.Component<{}, State> {
 
     private appSettings = getAppSettings(PasswordMan.password)!!;
     private i18n = getLang(this.appSettings.lang);
-    state: State = { expandedPage: 'about' };
+    state: State = { expandedPage: undefined };
 
     private supportedLangs = [
         { value: 'en-US', label: 'English', },
@@ -118,7 +118,7 @@ export default class Settings extends React.Component<{}, State> {
                 </div>
 
                 {this.state.expandedPage ?
-                    <div id='settings-expanding-page' onClick={_ => this.closePage()}>
+                    <div id='settings-expanding-page' onClick={_ => this.state.expandedPage === 'reset' ? this.closePage() : undefined}>
                         {this.state.expandedPage === 'paperKey' ? <PaperKey onClose={() => this.closePage()} /> : undefined}
                         {this.state.expandedPage === 'reset' ? <ResetBox onCancel={() => this.closePage()} onReset={() => this.reset()} /> : undefined}
                         {this.state.expandedPage === 'about' ? <About /> : undefined}
