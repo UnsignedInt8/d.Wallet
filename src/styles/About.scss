@@ -1,2 +1,45 @@
 #about-page {
+  padding: 3.5vh 16px 0px 16px;
+  background-color: #7e0acc;
+  height: 100%;
+
+  .page-desc {
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  #thanks-title {
+    margin-top: 16px;
+  }
+
+  #about-thanks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-items: center;
+    margin-top: 8px;
+
+    div {
+      margin-right: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: white;
+    }
+
+    #blockchair {
+      width: 120px;
+    }
+
+    #btc-com {
+      height: 36px;
+    }
+
+    #coinranking {
+        height: 24px;
+        margin-right: 8px;
+        display: inline-block;
+    }
+  }
 }

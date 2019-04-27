@@ -233,7 +233,7 @@ class Home extends React.Component<{}, HomeState> {
                         </span>
                     </div>
 
-                    <div id='balanceInfo' className={`balance lato-bold ${this.state.selectedSymbol} ${this.state.stuck ? 'balance-stuck' : ''}`}>
+                    <div id='balanceInfo' className={`balance lato ${this.state.selectedSymbol} ${this.state.stuck ? 'balance-stuck' : ''}`}>
                         <Flip bottom opposite collapse when={this.state.showSymbol} className='balanceNum'>
                             <span onClick={() => this.setState({ showBalance: !this.state.showBalance })}>
                                 {

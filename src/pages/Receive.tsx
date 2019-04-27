@@ -61,7 +61,7 @@ export default class Receive extends React.Component<Props, State>{
         const qrValue = `${coins[this.props.symbol].toLowerCase().replace(' ', '')}:${address}`;
 
         return (
-            <div id='receiving' className='lato-bold' >
+            <div id='receiving' className='lato' >
                 <div id='info'>
                     {i18n.receiving.desc(this.props.symbol.toUpperCase())}
                     <div id='selection'>

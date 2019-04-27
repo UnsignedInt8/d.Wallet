@@ -35,7 +35,7 @@ export default class Settings extends React.Component<{}, State> {
 
     private appSettings = getAppSettings(PasswordMan.password)!!;
     private i18n = getLang(this.appSettings.lang);
-    state: State = {};
+    state: State = { expandedPage: 'about' };
 
     private supportedLangs = [
         { value: 'en-US', label: 'English', },
@@ -114,7 +114,7 @@ export default class Settings extends React.Component<{}, State> {
                 </div>
 
                 <div className='setting-item'>
-                    <div className='setting-title clickable'>{this.i18n.settings.about.title}</div>
+                    <div className='setting-title clickable' onClick={_ => this.openPage('about')}>{this.i18n.settings.about.title}</div>
                 </div>
 
                 {this.state.expandedPage ?
