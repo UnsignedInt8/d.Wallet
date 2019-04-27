@@ -81,7 +81,7 @@ export abstract class Wallet {
     }
 
     protected shouldRefreshing() {
-        return false;
+        // return false;
         if (Date.now() - this._lastRefreshedTime < this.refreshingLimit) return false;
         this._lastRefreshedTime = Date.now();
         return true;
