@@ -9,6 +9,8 @@ import Select from 'react-select';
 import PaperKey from './PaperKey';
 import AnimeHelper from '../lib/AnimeHelper';
 import Application from '../Application';
+import ResetBox from './ResetBox';
+import sleep from 'sleep-promise';
 
 const selectColor = {
     option: (provided, state) => ({
@@ -22,7 +24,7 @@ const selectColor = {
     })
 };
 
-type Pages = 'paperKey' | 'about';
+type Pages = 'paperKey' | 'about' | 'reset';
 interface State {
     expandedPage?: Pages;
 }
@@ -48,15 +50,27 @@ export default class Settings extends React.Component<{}, State> {
     }
 
     private openPage(page: Pages) {
-        if (page === 'paperKey') Application.lock();
-
-        this.setState({ expandedPage: page }, () => {
+        const open = () => this.setState({ expandedPage: page }, () => {
             AnimeHelper.expandPage('#settings-expanding-page', window.innerHeight, 0);
         });
+
+        if (page === 'paperKey' || page === 'reset') {
+            Application.lock(async () => {
+                await sleep(3250);
+                open();
+            });
+            return;
+        }
+
+        open();
     }
 
     private closePage() {
         AnimeHelper.expandPage('#settings-expanding-page', 0, window.innerHeight, () => this.setState({ expandedPage: undefined }));
+    }
+
+    private reset() {
+
     }
 
     render() {
@@ -93,7 +107,7 @@ export default class Settings extends React.Component<{}, State> {
                     <div className='setting-detail'>{this.i18n.settings.paperKey.desc}</div>
                 </div>
 
-                <div className='setting-item'>
+                <div className='setting-item' onClick={_ => this.openPage('reset')}>
                     <div className='setting-title clickable'>{this.i18n.settings.reset.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.reset.desc}</div>
                 </div>
@@ -103,9 +117,9 @@ export default class Settings extends React.Component<{}, State> {
                 </div>
 
                 {this.state.expandedPage ?
-                    <div id='settings-expanding-page'>
+                    <div id='settings-expanding-page' onClick={_ => this.closePage()}>
                         {this.state.expandedPage === 'paperKey' ? <PaperKey onClose={() => this.closePage()} /> : undefined}
-
+                        {this.state.expandedPage === 'reset' ? <ResetBox onCancel={() => this.closePage()} onReset={() => this.reset()} /> : undefined}
                     </div>
                     : undefined}
 

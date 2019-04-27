@@ -73,7 +73,7 @@ export default class Application extends React.Component<{}, State> {
         this.setState({ firstUse: false });
     }
 
-    private lockApp(force = false) {
+    private lockApp(force = false, cb?: () => void) {
         if (this.state && this.state.lockApp) return;
         if (!PassMan.isProtected()) return;
 
@@ -83,15 +83,15 @@ export default class Application extends React.Component<{}, State> {
             if (!appSettings.autolock) return;
         }
 
-        this.setState({ lockApp: true }, () => animeHelper.expandPage(LockScreen.id, window.innerHeight, 0));
+        this.setState({ lockApp: true }, () => animeHelper.expandPage(LockScreen.id, window.innerHeight, 0, cb));
     }
 
     private unlockApp() {
         animeHelper.expandPage(LockScreen.id, 0, window.innerHeight, () => this.setState({ lockApp: false }));
     }
 
-    static lock() {
-        this.app.lockApp(true);
+    static lock(cb?: () => void) {
+        this.app.lockApp(true, cb);
     }
 
     render() {

@@ -1,4 +1,42 @@
 #reset-box {
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+  padding: 16px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background-color: rgb(99, 33, 185);
+
+  #reset-desc {
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  #reset-buttons {
+    display: flex;
+    justify-content: space-evenly;
+
+    button {
+      height: 36px;
+      margin: 0;
+    }
+
+    #reset-ok {
+      background: rgb(255, 20, 98);
+    }
+
+    #reset-ok:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+      color: rgba(0, 0, 0, 0.555);
+    }
+
+    #reset-ok:active {
+      background-color: white;
+      color: black;
+      transition: all 0.5s;
+    }
+  }
 }

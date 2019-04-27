@@ -87,7 +87,7 @@ const lang = {
 
     reset: {
         title: 'Reset',
-        desc:'',
+        desc:'This will reset all your data, if you have not saved your paper key, you will lose all your assets.',
     },
 
     messages: {
