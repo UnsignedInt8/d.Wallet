@@ -52,7 +52,8 @@
     "productName": "d.Wallet",
     "appId": "org.your.productname",
     "mac": {
-      "category": "your.app.category.type"
+      "category": "your.app.category.type",
+      "icon": "./icons/wallet.icns"
     },
     "directories": {
       "output": "release"
@@ -60,7 +61,8 @@
     "files": [
       "dist/",
       "node_modules/",
-      "package.json"
+      "package.json",
+      "icons/"
     ],
     "linux": {
       "target": "deb"

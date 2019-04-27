@@ -22,7 +22,7 @@ export default class About extends React.Component {
                     {this.i18n.about.desc}
                 </div>
 
-                <div id='thanks-title' className='page-title'>
+                <div className='page-title title'>
                     {this.i18n.about.thanks}
                 </div>
 
@@ -30,6 +30,14 @@ export default class About extends React.Component {
                     <div><img id='blockchair' src={blockchair} /></div>
                     <div className='lato'><img id='coinranking' src={coinranking} /> Coinranking </div>
                     <div><img id='btc-com' src={btcom} /></div>
+                </div>
+
+                <div className='page-title title'>
+                    {this.i18n.about.contact}
+                </div>
+
+                <div className='page-desc'>
+
                 </div>
             </div>
         );

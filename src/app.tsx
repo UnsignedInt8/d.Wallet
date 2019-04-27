@@ -10,7 +10,9 @@ import { ToastProvider, } from 'react-toast-notifications';
 linq.enable();
 
 // https://github.com/bitpay/bitcore/issues/1457#issuecomment-467594031
-Object.defineProperty(global, '_bitcore', { get() { return undefined }, set() { } })
+Object.defineProperty(global, '_bitcore', { get() { return undefined }, set() { } });
+document.title = 'd.Wallet';
+
 
 // Create main element
 const mainElement = document.createElement('div');

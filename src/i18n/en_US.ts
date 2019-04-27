@@ -94,7 +94,7 @@ const lang = {
         title: 'About',
         desc: 'Thanks for using d.Wallet -- A Cryptocurrency Wallet for Desktop. You can easily manage your assets with a user-fridenly interface. At this moment, d.Wallet supports Bitcoin, Ethereum, Bitcoin Cash, Litecoin and USDT. Just enjoy it!',
         thanks: 'Thanks',
-        
+        contact: 'Contact',
     },
 
     messages: {
