@@ -7,7 +7,7 @@ const key = 'fingerprint';
 
 class PasswordManager extends EventEmitter {
     private _pw: string = '';
-    private helper = new PersistenceHelper({ configName: key, defaults: {}, encryption: false, password: '' });
+    private helper = new PersistenceHelper({ configName: 'secret', defaults: {}, encryption: false, password: '' });
 
     get password() { return this._pw || ''; }
     set password(value: string) {

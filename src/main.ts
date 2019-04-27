@@ -21,8 +21,8 @@ const createWindow = async () => {
         await installExtensions();
     }
 
-    console.log('dirname', __dirname + '/wallet.png')
     win = new BrowserWindow({
+        width: 480,
         minWidth: 500, minHeight: 648,
         titleBarStyle: 'hidden',
         webPreferences: { nodeIntegration: true, nodeIntegrationInWorker: true, sandbox: false, webSecurity: false },
