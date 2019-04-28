@@ -7,8 +7,6 @@ import AnimeHelper from '../lib/AnimeHelper';
 import RecoverKey from './RecoverKey';
 import NewKey from './NewKey';
 import Application from '../Application';
-import { getAppSettings } from '../data/AppSettings';
-import PassMan from '../data/PasswordManager';
 
 const i18n = getLang();
 

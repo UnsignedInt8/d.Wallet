@@ -15,6 +15,7 @@ interface State {
 
 interface Props {
     onValidationPass: () => void;
+    style?: React.CSSProperties;
 }
 
 export default class LockScreen extends React.Component<Props, State> {
@@ -44,7 +45,7 @@ export default class LockScreen extends React.Component<Props, State> {
 
     render() {
         return (
-            <div id='lock-screen'>
+            <div id='lock-screen' style={this.props.style}>
                 <div id='clock'><Clock className='clock questrial' format={'HH:mm:ss'} ticking={true} /></div>
                 <div id='security'>
                     {

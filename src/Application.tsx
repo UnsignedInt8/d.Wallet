@@ -58,7 +58,7 @@ export default class Application extends React.Component<{}, State> {
 
         let firstUse = !PassMan.isProtected();
         this.setState({ firstUse }, () => {
-            if (!PassMan.isProtected()) Application.history.push('/welcome');
+            // if (!PassMan.isProtected()) Application.history.push('/');
             if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
         });
 
@@ -70,6 +70,10 @@ export default class Application extends React.Component<{}, State> {
     }
 
     private onPasswordChanged = () => {
+        if (this.state.firstUse) {
+            // location.pathname = '/';
+        }
+
         this.setState({ firstUse: false });
     }
 
@@ -98,22 +102,31 @@ export default class Application extends React.Component<{}, State> {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
 
-                <AnimatedSwitch
-                    className='switch'
-                    {...pageTransitions}
-                    mapStyles={styles => ({
-                        transform: `translateX(${styles.offset}%)`,
-                    })}
-                >
-                    <Route path='/welcome' exact component={Welcome} />
-                    {!this.state.firstUse ? <Route path="/" component={Home} /> : undefined}
-                </AnimatedSwitch>
+                {!this.state.firstUse ? <Home /> : <Welcome />}
 
                 {this.state.lockApp ?
-                    <LockScreen onValidationPass={() => this.unlockApp()} />
+                    <LockScreen style={{ zIndex: 999 }} onValidationPass={() => this.unlockApp()} />
                     : undefined
                 }
             </Router>
         );
     }
 }
+
+
+// <AnimatedSwitch
+// className='switch'
+// {...pageTransitions}
+// mapStyles={styles => ({
+//     transform: `translateX(${styles.offset}%)`,
+// })}
+// >
+// {/* <Route path='/welcome' exact component={Welcome} /> */}
+// {/* {this.state.firstUse ? <Route path='/' component={Welcome} /> : undefined}
+// {!this.state.firstUse ? <Route path="/" component={Home} /> : undefined} */}
+
+// {/* <Route path='/' component={Welcome} /> */}
+// {/* {this.state.firstUse ? <Route path='/' component={Welcome} /> : <Route path='/' component={Home} />} */}
+
+// <Welcome />
+// </AnimatedSwitch>

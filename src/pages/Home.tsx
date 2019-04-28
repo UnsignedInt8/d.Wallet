@@ -63,7 +63,6 @@ class Home extends React.Component<{}, HomeState> {
     walletMan!: WalletManager;
     private refersher?: NodeJS.Timer | number;
     private appSettings?: AppSettings;
-    private sendPage: SendPage | null = null;
 
     componentDidMount() {
         this.refersher = setInterval(() => this.refreshPrice(), 30 * 1000);
