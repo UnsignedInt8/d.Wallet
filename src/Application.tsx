@@ -4,7 +4,7 @@ import { AnimatedSwitch } from 'react-router-transition';
 import { Home, Welcome, Send } from './pages';
 import { spring } from 'react-motion';
 import { History } from 'history';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, } from 'electron';
 import { observer } from 'mobx-react';
 import LockScreen from './pages/LockScreen';
 import animeHelper from './lib/AnimeHelper';
@@ -69,8 +69,13 @@ export default class Application extends React.Component<{}, State> {
     }
 
     private onPasswordChanged = () => {
+
         if (this.state.firstUse) {
-            AnimeHelper.expandPage('#welcome-container', 0, window.innerHeight, () => this.setState({ firstUse: false }));
+            process.nextTick(() => {
+                const remote = require('electron').remote;
+                remote.app.relaunch();
+                remote.app.exit(0);
+            });
             return;
         }
 
@@ -102,35 +107,23 @@ export default class Application extends React.Component<{}, State> {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
 
-                {/* {!this.state.firstUse ? <Home /> : <Welcome />} */}
-                <div id='welcome-container' className='root-page app-drag' style={{ display: this.state.firstUse ? undefined : 'none' }}>
-                    <Welcome />
-                </div>
+                <AnimatedSwitch
+                    className='switch'
+                    {...pageTransitions}
+                    mapStyles={styles => ({
+                        transform: `translateX(${styles.offset}%)`,
+                    })}
+                >
 
-                <div className='root-page app-drag' style={{ display: this.state.firstUse ? 'none' : undefined }}>
-                    <Home />
-                </div>
+                    {this.state.firstUse ? <Route path='/' component={Welcome} /> : <Route path='/' component={Home} />}
 
-                <LockScreen style={{ zIndex: 999, display: this.state.lockApp ? undefined : 'none' }} onValidationPass={() => this.unlockApp()} />
+                </AnimatedSwitch>
+
+                {this.state.lockApp ?
+                    <LockScreen style={{ zIndex: 999, }} onValidationPass={() => this.unlockApp()} />
+                    : undefined}
             </Router>
         );
     }
 }
 
-
-// <AnimatedSwitch
-// className='switch'
-// {...pageTransitions}
-// mapStyles={styles => ({
-//     transform: `translateX(${styles.offset}%)`,
-// })}
-// >
-// {/* <Route path='/welcome' exact component={Welcome} /> */}
-// {/* {this.state.firstUse ? <Route path='/' component={Welcome} /> : undefined}
-// {!this.state.firstUse ? <Route path="/" component={Home} /> : undefined} */}
-
-// {/* <Route path='/' component={Welcome} /> */}
-// {/* {this.state.firstUse ? <Route path='/' component={Welcome} /> : <Route path='/' component={Home} />} */}
-
-// <Welcome />
-// </AnimatedSwitch>
