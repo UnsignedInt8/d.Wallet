@@ -21,7 +21,7 @@ const lang = {
 
         new: {
             title: 'New Wallet',
-            attention: 'Please save the Mnemonic Phrase safely, and do not take a screenshot. Anyone may have access to your assets if you lose the Mnemonic Phrase',
+            attention: 'Please save the Mnemonic Phrase safely, and do not take a screenshot. Anyone may have access to your assets if you lose the Mnemonic Phrases',
         }
     },
 

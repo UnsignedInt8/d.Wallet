@@ -111,10 +111,7 @@ export default class Application extends React.Component<{}, State> {
                     <Home />
                 </div>
 
-                {this.state.lockApp ?
-                    <LockScreen style={{ zIndex: 999 }} onValidationPass={() => this.unlockApp()} />
-                    : undefined
-                }
+                <LockScreen style={{ zIndex: 999, display: this.state.lockApp ? undefined : 'none' }} onValidationPass={() => this.unlockApp()} />
             </Router>
         );
     }
