@@ -21,7 +21,7 @@ const lang = {
 
         new: {
             title: 'New Wallet',
-            attention: 'Please save the Mnemonic Phrase safely, and do not take a screenshot. Anyone may have access to your assets if you lose the Mnemonic Phrases',
+            attention: 'Please save the Mnemonic Phrase, and do not take a screenshot. Anyone may have access to your assets if you lose the Mnemonic Phrases.',
         }
     },
 
@@ -100,6 +100,7 @@ const lang = {
     },
 
     messages: {
+        firstUseRelaunch: 'Thanks for using, app is configuring, see you later...',
         invalidAddress: 'There are some invalid addresses.',
         noInternet: 'Internet may not available.',
         broadcastTx: (hash: string) => `Transaction ${hash} has been successfully broadcasted.`,
