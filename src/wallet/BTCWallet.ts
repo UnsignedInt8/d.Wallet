@@ -60,7 +60,6 @@ export default class BTCWallet extends Wallet {
         let newTxs = txs.filter(t => t.timestamp > oldestTime);
         this.txs = newTxs.concat(this.txs).sort((a, b) => b.timestamp - a.timestamp).distinct((i1, i2) => i1.hash === i2.hash).toArray();
 
-        console.log(this.balance, this.txs);
         this.save('balance', this.balance);
         this.save('txs', this.txs);
     }

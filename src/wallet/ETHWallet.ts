@@ -86,8 +86,7 @@ export default class ETHWallet extends Wallet {
         let balance = info.address.balance || '0';
         let txs = info.calls.map(c => {
             let amount = Units.convert(c.value || 0, 'wei', 'eth');
-            console.log('amount', amount, c.value);
-
+            
             return <TxInfo>{
                 amount,
                 blockHash: '',
@@ -118,7 +117,6 @@ export default class ETHWallet extends Wallet {
 
         let { hex, txid, fee, value } = this.buildETHTx({ to: { address: to.address, amount }, msg: opts.message, gasPrice, nonce: info.nonce }, info.balance, privkey);
 
-        console.log(fee, value, hex);
         return { hex, id: txid, change: { address: this.mainAddress[0], amount: 0 }, fee: Units.convert(fee || 0, 'wei', 'eth'), from: this.mainAddress, to: opts.to, msg: opts.message, value: Units.convert(value, 'wei', 'eth') }
     }
 

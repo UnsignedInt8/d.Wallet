@@ -54,10 +54,10 @@ export default class BTCOM {
         if (txs.length === 0) return null;
 
         const url = `https://${BTCOM.apiHosts[symbol]}${BTCOM.host}/v3/tx/${txs.length > 1 ? txs.join(',') : txs[0]}`;
-        console.log(url);
+        
         let resp = await axios.get(url);
         if (!this.checkResp(resp)) return null;
-        console.log(resp.data.data);
+        
         if (txs.length > 0) return resp.data.data as BTCOMTx[];
         else return resp.data.data as BTCOMTx;
     }

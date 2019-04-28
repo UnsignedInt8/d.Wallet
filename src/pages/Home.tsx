@@ -71,15 +71,18 @@ class Home extends React.Component<{}, HomeState> {
         this.refreshPrice();
         this.refreshHistory();
 
-        if (PassMan.password) this.appSettings = getAppSettings(PassMan.password);
         PassMan.on('password', this.onPasswordChanged);
 
         if (PassMan.password) {
+            this.appSettings = getAppSettings(PassMan.password);
             this.onPasswordChanged();
         }
 
-        this.hookSticky();
+        if (this.appSettings && this.appSettings.mnemonic) {
+            this.walletMan = getWalletMan(this.appSettings.mnemonic);
+        }
 
+        this.hookSticky();
     }
 
     componentWillUnmount() {
@@ -104,11 +107,18 @@ class Home extends React.Component<{}, HomeState> {
 
     private onPasswordChanged = () => {
         let appSettings = getAppSettings(PassMan.password);
-        this.appSettings = appSettings;
-        this.appSettings.once('mnemonic', () => {
-            this.walletMan = getWalletMan(appSettings.mnemonic);
+
+        const initWalletMan = () => {
+            let mnemonic = appSettings.mnemonic;
+            if (!mnemonic) return;
+
+            this.walletMan = getWalletMan(mnemonic);
             this.walletMan.refresh();
-        });
+        };
+
+        this.appSettings = appSettings;
+        this.appSettings.once('mnemonic', () => initWalletMan());
+        initWalletMan();
     }
 
     private async refreshPrice() {

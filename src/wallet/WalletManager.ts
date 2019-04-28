@@ -19,7 +19,6 @@ export class WalletManager {
 
         let seed = new Mnemonic(mnemonic);
         let root = seed.toHDPrivateKey();
-        console.log('walletman', mnemonic);
 
         Object.getOwnPropertyNames(supportedWallets).forEach(key => {
             this.wallets[key] = new supportedWallets[key]({ root });
