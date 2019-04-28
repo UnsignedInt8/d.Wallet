@@ -103,11 +103,11 @@ export default class Application extends React.Component<{}, State> {
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
 
                 {/* {!this.state.firstUse ? <Home /> : <Welcome />} */}
-                <div id='welcome-container' className='root-page' style={{ display: this.state.firstUse ? undefined : 'none' }}>
+                <div id='welcome-container' className='root-page app-drag' style={{ display: this.state.firstUse ? undefined : 'none' }}>
                     <Welcome />
                 </div>
 
-                <div className='root-page' style={{ display: this.state.firstUse ? 'none' : undefined }}>
+                <div className='root-page app-drag' style={{ display: this.state.firstUse ? 'none' : undefined }}>
                     <Home />
                 </div>
 

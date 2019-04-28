@@ -21,8 +21,9 @@ interface Props {
 export default class LockScreen extends React.Component<Props, State> {
 
     static readonly id = '#lock-screen';
-
     state: State = { validated: false }
+
+    private pwInput!: Password;
 
     componentDidMount() {
         jquery('input').focus();
@@ -40,7 +41,11 @@ export default class LockScreen extends React.Component<Props, State> {
             getAppSettings(PassMan.password);
         }
 
-        setTimeout(() => this.props.onValidationPass(), 1500);
+        setTimeout(() => {
+            this.props.onValidationPass();
+            this.setState({ validated: false });
+            this.pwInput.clean();
+        }, 1500);
     }
 
     render() {
@@ -58,7 +63,7 @@ export default class LockScreen extends React.Component<Props, State> {
                         {i18n.lockScreen.title}
                     </div>
 
-                    <Password onChange={value => this.onPasswordChange(value)} style={{ marginTop: 8 }} />
+                    <Password ref={e => this.pwInput = e!} onChange={value => this.onPasswordChange(value)} style={{ marginTop: 8 }} />
                 </div>
             </div>
         );

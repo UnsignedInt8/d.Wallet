@@ -152,3 +152,7 @@ div::-webkit-scrollbar-track {
   font-family: Questrial, "Segoe UI", sans-serif;
   font-size: 24px;
 }
+
+.app-drag {
+  -webkit-app-region: drag;
+}

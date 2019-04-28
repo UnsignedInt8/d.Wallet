@@ -64,20 +64,22 @@ class Welcome extends React.Component<{}, State> {
     state: State = { expandNewKey: false, expandRecoverKey: false };
 
     componentDidMount() {
-        anime({
-            targets: '#logo path',
-            strokeDashoffset: [anime.setDashoffset, 0],
-            easing: 'easeInOutSine',
-            duration: 1500,
-            delay: function (el, i) { return i * 250 },
-            direction: 'alternate',
-            loop: false,
-            complete: () => anime({
-                targets: '#slogan',
-                opacity: 1,
-                duration: 3000
-            }),
-        });
+        setTimeout(() => {
+            anime({
+                targets: '#logo path',
+                strokeDashoffset: [anime.setDashoffset, 0],
+                easing: 'easeInOutSine',
+                duration: 1500,
+                delay: function (el, i) { return i * 250 },
+                direction: 'alternate',
+                loop: false,
+                complete: () => anime({
+                    targets: '#slogan',
+                    opacity: 1,
+                    duration: 3000
+                }),
+            });
+        }, 1500);
     }
 
     private expandPage(page: 'recover' | 'create') {

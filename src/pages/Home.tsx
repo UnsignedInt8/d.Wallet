@@ -257,15 +257,12 @@ class Home extends React.Component<{}, HomeState> {
                         <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
                     </div>
 
-                    {this.state.expandPage ?
-                        <div id='expanding-page' className='expand-area'>
-                            {this.state.expandPage === 'sending' ? <Send onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
-                            {this.state.expandPage === 'settings' ? <Settings /> : undefined}
-                            {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}
-                            {this.state.expandPage === 'transaction' ? <Transaction onCacnel={() => this.closePage()} txInfo={this.state.selectedTx!} symbol={this.state.selectedSymbol} /> : undefined}
-                        </div>
-                        : undefined
-                    }
+                    <div id='expanding-page' className='expand-area' style={{ display: this.state.expandPage ? undefined : 'none' }}>
+                        <Send walletMan={this.walletMan} onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} style={{ display: this.state.expandPage === 'sending' ? undefined : 'none' }} />
+                        {this.state.expandPage === 'settings' ? <Settings /> : undefined}
+                        {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}
+                        {this.state.expandPage === 'transaction' ? <Transaction onCacnel={() => this.closePage()} txInfo={this.state.selectedTx!} symbol={this.state.selectedSymbol} /> : undefined}
+                    </div>
 
                     <button id='open-sending' className='send' title='Send' onClick={() => this.togglePage('sending')}>
                         <img src={send} alt="Send" />

@@ -7,15 +7,18 @@ import { Validation, Password } from '../components';
 import { Flip, Fade } from 'react-reveal';
 import AnimeHelper from '../lib/AnimeHelper';
 import * as jquery from 'jquery';
-import { getWalletMan } from '../wallet/WalletManager';
+import { getWalletMan, WalletManager } from '../wallet/WalletManager';
 import sleep from 'sleep-promise';
 import PaymentDetails from './PaymentDetails';
 import { GenTxInfo } from '../wallet/Wallet';
 import { withToastManager, } from 'react-toast-notifications';
+import { getLang } from '../i18n';
 
 interface PageProps {
     symbol: string;
     onCancel: () => void;
+    style?: React.CSSProperties;
+    walletMan?: WalletManager;
 }
 
 interface PageState {
@@ -43,9 +46,7 @@ const coinProps = {
 export class Send extends React.Component<PageProps, PageState>{
 
     state: PageState = { toNums: 1, prepareToSend: false, isBuildingTx: false };
-    appSettings = getAppSettings(PassMan.password);
-    i18n = this.appSettings.i18n;
-    walletMan = getWalletMan(this.appSettings.mnemonic);
+    i18n = getLang();
     private paymentDetails: PaymentDetails | null = null;
 
     get shouldLockSymbol() { return this.state.toNums > 1 };
@@ -60,11 +61,13 @@ export class Send extends React.Component<PageProps, PageState>{
     }
 
     private async buildTx() {
+        if (!this.props.walletMan) return;
+
         let { toastManager } = this.props as any;
 
         let addresses = jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[];
         let amounts = jquery('.input-amount').map((i, el) => Number.parseFloat(jquery(el).val()) || 0).get() as number[];
-        let wallet = this.walletMan.wallets[this.props.symbol];
+        let wallet = this.props.walletMan.wallets[this.props.symbol];
 
         let to = addresses.zip(amounts).select(i => { return { address: i[0], amount: i[1] } }).where(i => i.address.length > 0).toArray();
         if (to.length === 0) return;
@@ -102,9 +105,10 @@ export class Send extends React.Component<PageProps, PageState>{
     private onPasswordVerified() {
         setTimeout(async () => {
             const { toastManager } = this.props as any;
+            if (!this.props.walletMan) return;
 
             let txInfo = this.state.txInfo!;
-            let id = await this.walletMan.current.broadcastTx(txInfo.hex);
+            let id = await this.props.walletMan.current.broadcastTx(txInfo.hex);
             let txid = `${txInfo.id.substring(0, 7)}...${txInfo.id.substring(txInfo.id.length - 7)}`
             if (txInfo.id === id) {
                 toastManager.add(`${this.i18n.messages.broadcastTx(txid)}`, { appearance: 'success', autoDismiss: true });
@@ -119,8 +123,10 @@ export class Send extends React.Component<PageProps, PageState>{
     }
 
     private onAddressChange(e: React.ChangeEvent<HTMLInputElement>) {
+        if (!this.props.walletMan) return;
+
         const className = 'invalid-data';
-        let wallet = this.walletMan.current;
+        let wallet = this.props.walletMan.current;
         if (wallet.isValidAddress(e.target.value)) {
             e.target.classList.remove(className);
         } else {
@@ -133,7 +139,7 @@ export class Send extends React.Component<PageProps, PageState>{
         let coin = coinProps[this.props.symbol] || coinProps.default;
 
         return (
-            <div className='sending'>
+            <div className='sending' style={this.props.style}>
                 <div className='compose-area'>
                     {new Array(Math.min(this.state.toNums, coin.maxTo)).fill(Date.now()).map((v, i) => {
                         return (

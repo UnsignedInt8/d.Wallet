@@ -10,10 +10,16 @@ interface Props {
 
 export default class Password extends React.Component<Props, {}>{
 
+    private pwInput!: HTMLInputElement;
+
+    clean() {
+        this.pwInput.value = '';
+    }
+
     render() {
         return (
             <div className='password' style={this.props.style}>
-                <input type="password" maxLength={32} onChange={e => this.props.onChange(e.target.value)} style={this.props.inputStyle} />
+                <input ref={e => this.pwInput = e!} type="password" maxLength={32} onChange={e => this.props.onChange(e.target.value)} style={this.props.inputStyle} />
                 <img src={lock} />
             </div>
         )
