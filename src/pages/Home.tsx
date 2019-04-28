@@ -233,15 +233,13 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     <div id='balanceInfo' className={`balance lato ${this.state.selectedSymbol} ${this.state.stuck ? 'balance-stuck' : ''}`}>
-                        <Flip bottom opposite collapse when={this.state.showSymbol} className='balanceNum'>
-                            <span onClick={() => this.setState({ showBalance: !this.state.showBalance })}>
-                                {
-                                    this.state.showBalance ?
-                                        this.walletMan ? <CountUp end={this.walletMan.current.balance} duration={1.5} decimals={4} /> : '0'
-                                        : '••••••••'
-                                }
-                            </span>
-                        </Flip>
+                        <span className='balanceNum' onClick={() => this.setState({ showBalance: !this.state.showBalance })}>
+                            {
+                                this.state.showBalance ?
+                                    <CountUp end={this.walletMan ? this.walletMan.current.balance : 0} duration={1.5} decimals={4} />
+                                    : '••••••••'
+                            }
+                        </span>
                         <Flip bottom opposite cascade when={this.state.showSymbol}><span className={`symbol ${this.state.selectedSymbol}`}>{this.state.selectedSymbol}</span></Flip>
                     </div>
 

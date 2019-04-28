@@ -5,8 +5,6 @@ import { HDPrivateKey, Unit, PrivateKey, Transaction, Networks, Address } from "
 import Blockchair, { Chain } from './api/Blockchair';
 import BTCOM from "./api/BTCOM";
 
-console.log('isValid', Address['isValid'])
-
 export default class BTCWallet extends Wallet {
 
     static readonly defaultPath: string = `m/44'/0'/0'/0`;

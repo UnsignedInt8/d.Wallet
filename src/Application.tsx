@@ -10,8 +10,7 @@ import LockScreen from './pages/LockScreen';
 import animeHelper from './lib/AnimeHelper';
 import { getAppSettings } from './data/AppSettings';
 import PassMan from './data/PasswordManager';
-import ReactNotification from "react-notifications-component";
-import "react-notifications-component/dist/theme.css";
+import "./styles/Application.scss";
 
 function glide(val: number) {
     return spring(val, {
@@ -70,10 +69,6 @@ export default class Application extends React.Component<{}, State> {
     }
 
     private onPasswordChanged = () => {
-        if (this.state.firstUse) {
-            // location.pathname = '/';
-        }
-
         this.setState({ firstUse: false });
     }
 
@@ -102,7 +97,14 @@ export default class Application extends React.Component<{}, State> {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
 
-                {!this.state.firstUse ? <Home /> : <Welcome />}
+                {/* {!this.state.firstUse ? <Home /> : <Welcome />} */}
+                <div className='root-page' style={{ display: this.state.firstUse ? undefined : 'none' }}>
+                    <Welcome />
+                </div>
+
+                <div className='root-page' style={{ display: this.state.firstUse ? 'none' : undefined }}>
+                    <Home />
+                </div>
 
                 {this.state.lockApp ?
                     <LockScreen style={{ zIndex: 999 }} onValidationPass={() => this.unlockApp()} />
