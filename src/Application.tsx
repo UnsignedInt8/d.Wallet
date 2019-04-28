@@ -11,6 +11,7 @@ import animeHelper from './lib/AnimeHelper';
 import { getAppSettings } from './data/AppSettings';
 import PassMan from './data/PasswordManager';
 import "./styles/Application.scss";
+import AnimeHelper from './lib/AnimeHelper';
 
 function glide(val: number) {
     return spring(val, {
@@ -57,7 +58,6 @@ export default class Application extends React.Component<{}, State> {
 
         let firstUse = !PassMan.isProtected();
         this.setState({ firstUse }, () => {
-            // if (!PassMan.isProtected()) Application.history.push('/');
             if (PassMan.isProtected() && !PassMan.password) this.lockApp(true);
         });
 
@@ -69,6 +69,10 @@ export default class Application extends React.Component<{}, State> {
     }
 
     private onPasswordChanged = () => {
+        if (this.state.firstUse) {
+            AnimeHelper.expandPage('#welcome-container', 0, window.innerHeight);
+        }
+        
         this.setState({ firstUse: false });
     }
 
@@ -98,7 +102,7 @@ export default class Application extends React.Component<{}, State> {
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
 
                 {/* {!this.state.firstUse ? <Home /> : <Welcome />} */}
-                <div className='root-page' style={{ display: this.state.firstUse ? undefined : 'none' }}>
+                <div id='welcome-container' className='root-page' style={{ display: this.state.firstUse ? undefined : 'none' }}>
                     <Welcome />
                 </div>
 

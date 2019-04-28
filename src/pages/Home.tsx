@@ -16,6 +16,7 @@ import { observer } from 'mobx-react';
 import AnimeHelper from '../lib/AnimeHelper';
 import CountUp from 'react-countup';
 import Transaction from './Transaction';
+import { observable } from 'mobx';
 
 type Pages = 'sending' | 'receiving' | 'settings' | 'transaction';
 
@@ -60,7 +61,8 @@ class Home extends React.Component<{}, HomeState> {
         currentPrice: '', currentChange: 0, currentHistory: [],
         showBalance: true,
     };
-    walletMan!: WalletManager;
+
+    @observable walletMan!: WalletManager;
     private refersher?: NodeJS.Timer | number;
     private appSettings?: AppSettings;
 
@@ -101,10 +103,12 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     private onPasswordChanged = () => {
-        this.appSettings = getAppSettings(PassMan.password);
-        this.walletMan = getWalletMan(this.appSettings.mnemonic);
-
-        this.walletMan.refresh();
+        let appSettings = getAppSettings(PassMan.password);
+        this.appSettings = appSettings;
+        this.appSettings.once('mnemonic', () => {
+            this.walletMan = getWalletMan(appSettings.mnemonic);
+            this.walletMan.refresh();
+        });
     }
 
     private async refreshPrice() {

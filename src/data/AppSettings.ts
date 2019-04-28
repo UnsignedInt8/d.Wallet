@@ -1,11 +1,13 @@
 import PersistenceHelper from '../lib/PersistenceHelper';
 import { observable, computed } from 'mobx';
 import { getLang } from '../i18n';
+import { EventEmitter } from 'events';
 
-export class AppSettings {
+export class AppSettings extends EventEmitter {
     private helper: PersistenceHelper;
 
     constructor(password: string) {
+        super();
         this.helper = new PersistenceHelper({ configName: 'config', defaults: {}, password, encryption: true });
 
         this._autolock = this.helper.load('autolock', 'true') === 'true';
@@ -20,6 +22,7 @@ export class AppSettings {
         if (value === this._mnemonic) return;
         this._mnemonic = value;
         this.helper.save('mnemonic', value);
+        super.emit('mnemonic');
     }
 
     @observable

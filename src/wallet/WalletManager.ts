@@ -15,8 +15,11 @@ export class WalletManager {
     wallets: { [index: string]: Wallet } = {};
 
     constructor(mnemonic: string) {
+        if (!mnemonic) throw new Error('invalid mnemonic');
+
         let seed = new Mnemonic(mnemonic);
         let root = seed.toHDPrivateKey();
+        console.log('walletman', mnemonic);
 
         Object.getOwnPropertyNames(supportedWallets).forEach(key => {
             this.wallets[key] = new supportedWallets[key]({ root });
