@@ -70,9 +70,10 @@ export default class Application extends React.Component<{}, State> {
 
     private onPasswordChanged = () => {
         if (this.state.firstUse) {
-            AnimeHelper.expandPage('#welcome-container', 0, window.innerHeight);
+            AnimeHelper.expandPage('#welcome-container', 0, window.innerHeight, () => this.setState({ firstUse: false }));
+            return;
         }
-        
+
         this.setState({ firstUse: false });
     }
 

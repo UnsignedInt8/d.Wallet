@@ -9,7 +9,11 @@ const btcom = require('../assets/btc-com.png');
 const coinranking = require('../assets/coinranking.svg');
 const github = require('../assets/github.svg');
 
-export default class About extends React.Component {
+interface Props {
+    onCancel?: () => void;
+}
+
+export default class About extends React.Component<Props, {}> {
 
     i18n = getAppSettings(PassMan.password).i18n;
 
@@ -47,7 +51,7 @@ export default class About extends React.Component {
                 </div>
 
                 <div id='close'>
-                    <button>{this.i18n.buttons.close}</button>
+                    <button onClick={e => this.props.onCancel!()}>{this.i18n.buttons.close}</button>
                 </div>
             </div>
         );

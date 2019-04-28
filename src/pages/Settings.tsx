@@ -121,7 +121,7 @@ export default class Settings extends React.Component<{}, State> {
                     <div id='settings-expanding-page' onClick={_ => this.state.expandedPage === 'reset' ? this.closePage() : undefined}>
                         {this.state.expandedPage === 'paperKey' ? <PaperKey onClose={() => this.closePage()} /> : undefined}
                         {this.state.expandedPage === 'reset' ? <ResetBox onCancel={() => this.closePage()} onReset={() => this.reset()} /> : undefined}
-                        {this.state.expandedPage === 'about' ? <About /> : undefined}
+                        {this.state.expandedPage === 'about' ? <About onCancel={() => this.closePage()} /> : undefined}
                     </div>
                     : undefined}
 
