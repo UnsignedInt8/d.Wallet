@@ -2,7 +2,7 @@ import * as React from 'react';
 import '../styles/Settings.scss';
 const Switch = require("react-switch");
 import PasswordMan from '../data/PasswordManager';
-import { getAppSettings } from '../data/AppSettings';
+import { getAppSettings, AppSettings } from '../data/AppSettings';
 import { getLang } from '../i18n';
 import { observer } from 'mobx-react';
 import Select from 'react-select';
@@ -12,6 +12,7 @@ import { Application } from '../Application';
 import ResetBox from './ResetBox';
 import sleep from 'sleep-promise';
 import About from './About';
+import MiscHelper from '../lib/MiscHelper';
 
 const selectColor = {
     option: (provided, state) => ({
@@ -71,7 +72,11 @@ export default class Settings extends React.Component<{}, State> {
     }
 
     private reset() {
-
+        this.appSettings.delete();
+        PasswordMan.delete();
+        this.closePage();
+        Application.notify({ message: this.i18n.messages.resetDone, appearance: 'success' });
+        setTimeout(() => MiscHelper.relaunch(), 3000);
     }
 
     render() {

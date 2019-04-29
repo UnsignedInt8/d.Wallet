@@ -2,7 +2,8 @@
 
 const electron = require('electron');
 const path = require('path');
-const fs = require('fs');
+// const fs = require('fs');
+import * as fs from 'fs';
 import * as crypto from './CryptoHelper';
 
 interface Options {
@@ -47,6 +48,10 @@ export default class PersistenceHelper {
 
         this.data[ekey] = evalue;
         fs.writeFile(this.configFile, JSON.stringify(this.data), { encoding: 'utf8' }, err => err ? console.error(err) : undefined);
+    }
+
+    delete() {
+        fs.unlinkSync(this.configFile);
     }
 
     static exists(configName: string) {

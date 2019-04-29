@@ -14,6 +14,7 @@ import "./styles/Application.scss";
 import AnimeHelper from './lib/AnimeHelper';
 import { withToastManager, } from 'react-toast-notifications';
 import { getLang } from './i18n';
+import MiscHelper from './lib/MiscHelper';
 
 function glide(val: number) {
     return spring(val, {
@@ -73,16 +74,9 @@ export class Application extends React.Component<any, State> {
     private onPasswordChanged = () => {
 
         if (this.state.firstUse) {
-            let { toastManager } = this.props;
             let i18n = getLang();
-            toastManager.add(i18n.messages.firstUseRelaunch, { appearance: 'success', autoDismiss: true });
-
-            setTimeout(() => {
-                const remote = require('electron').remote;
-                remote.app.relaunch();
-                remote.app.exit(0);
-            }, 3000);
-
+            this.notify({ message: i18n.messages.firstUseRelaunch, appearance: 'success' });
+            setTimeout(() => MiscHelper.relaunch(), 3000);
             return;
         }
 
@@ -108,6 +102,15 @@ export class Application extends React.Component<any, State> {
 
     static lock(cb?: () => void) {
         this.app.lockApp(true, cb);
+    }
+
+    notify(opts: { message: string, appearance: 'success' | 'error' }) {
+        let { toastManager } = this.props;
+        toastManager.add(opts.message, { appearance: opts.appearance, autoDismiss: true });
+    }
+
+    static notify(opts: { message: string, appearance: 'success' | 'error' }) {
+        Application.app.notify(opts);
     }
 
     render() {

@@ -50,6 +50,10 @@ export class AppSettings extends EventEmitter {
     get i18n() {
         return getLang(this.lang);
     }
+
+    delete() {
+        this.helper.delete();
+    }
 }
 
 let instance: AppSettings | undefined;

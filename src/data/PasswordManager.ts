@@ -38,6 +38,10 @@ class PasswordManager extends EventEmitter {
         if (this.helper.load(key)) return true;
         return false;
     }
+
+    delete() {
+        this.helper.delete();
+    }
 }
 
 const singleton = new PasswordManager();

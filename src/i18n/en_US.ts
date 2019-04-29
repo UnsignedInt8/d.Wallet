@@ -105,6 +105,7 @@ const lang = {
         noInternet: 'Internet may not available.',
         broadcastTx: (hash: string) => `Transaction ${hash} has been successfully broadcasted.`,
         broadcastFailed: `Broadcasting transaction failed, check your balance, and try again.`,
+        resetDone: 'Thanks for using, see you later.',
     }
 }
 
