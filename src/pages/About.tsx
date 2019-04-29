@@ -47,7 +47,7 @@ export default class About extends React.Component<Props, {}> {
                 </div>
 
                 <div id='contacts' className='page-desc'>
-                    <div><img src={github} /> <a href='#' onClick={_ => this.openLink('https://github.com')}>Github</a></div>
+                    <div><a href='#' onClick={_ => this.openLink('https://github.com')}><img src={github} /> </a></div>
                 </div>
 
                 <div id='close'>
