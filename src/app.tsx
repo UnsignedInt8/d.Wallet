@@ -16,6 +16,7 @@ document.title = 'd.Wallet';
 
 // Create main element
 const mainElement = document.createElement('div');
+mainElement.classList.add('app-drag');
 document.body.appendChild(mainElement);
 
 // Render components

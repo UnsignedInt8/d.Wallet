@@ -154,6 +154,7 @@
     "ethereumjs-wallet": "^0.6.3",
     "ethjs-unit": "^0.1.6",
     "ethjs-util": "^0.1.6",
+    "frameless-titlebar": "^1.0.6",
     "hex2dec": "^1.1.2",
     "history": "^4.9.0",
     "jquery": "^3.4.0",

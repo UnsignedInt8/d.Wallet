@@ -12,6 +12,8 @@ import sleep from 'sleep-promise';
 import PaymentDetails from './PaymentDetails';
 import { GenTxInfo } from '../wallet/Wallet';
 import { withToastManager, } from 'react-toast-notifications';
+import { platform } from 'os';
+import UIHelper from '../lib/UIHelper';
 
 interface PageProps {
     symbol: string;
@@ -132,10 +134,10 @@ export class Send extends React.Component<PageProps, PageState>{
     render() {
 
         let coin = coinProps[this.props.symbol] || coinProps.default;
-
+        
         return (
             <div className='sending' style={this.props.style}>
-                <div className='compose-area'>
+                <div className={`compose-area ${UIHelper.scrollBarClassName}`}>
                     {new Array(Math.min(this.state.toNums, coin.maxTo)).fill(Date.now()).map((v, i) => {
                         return (
                             <div key={i} className='compose'>

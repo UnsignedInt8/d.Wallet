@@ -17,6 +17,7 @@ import AnimeHelper from '../lib/AnimeHelper';
 import CountUp from 'react-countup';
 import Transaction from './Transaction';
 import { observable } from 'mobx';
+import UIHelper from '../lib/UIHelper';
 
 type Pages = 'sending' | 'receiving' | 'settings' | 'transaction';
 
@@ -200,7 +201,7 @@ class Home extends React.Component<{}, HomeState> {
         return (
             <div className={`home`}>
                 <div className={`home-bar ${isDarwin ? 'titlebar-padding' : ''}`}>
-                    <div className='icons'>
+                    <div className='icons no-drag'>
                         {
                             symbols.map(i => {
                                 return (
@@ -213,7 +214,7 @@ class Home extends React.Component<{}, HomeState> {
                         }
                     </div>
 
-                    <div className='icons'>
+                    <div className='icons no-drag'>
                         <div className='icon' onClick={_ => this.togglePage('receiving')}>
                             <img src={qrcode} />
                         </div>
@@ -223,7 +224,7 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
                 </div>
 
-                <div id='home-content' className={`home-content ${isDarwin ? 'titlebar-padding' : ''}`}>
+                <div id='home-content' className={`home-content ${isDarwin ? 'titlebar-padding' : ''} ${UIHelper.scrollBarClassName}`}>
                     {this.walletMan && this.walletMan.current.txs.length > 0 ? undefined :
                         <div id='begin-arrow'>
                             <img src={begin} />

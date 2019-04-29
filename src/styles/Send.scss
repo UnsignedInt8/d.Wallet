@@ -15,7 +15,7 @@
     grid-area: compose;
     padding-top: 10px;
     min-height: 80vh;
-    overflow: scroll;
+    overflow-y: scroll;
 
     .input_bottom_border {
       border-bottom: 1px dashed rgba(255, 255, 255, 0.5);

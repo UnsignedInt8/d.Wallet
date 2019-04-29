@@ -26,6 +26,7 @@ const createWindow = async () => {
         height: 680,
         minWidth: 500, minHeight: 648,
         titleBarStyle: 'hidden',
+        frame: false,
         webPreferences: { nodeIntegration: true, nodeIntegrationInWorker: true, sandbox: false, webSecurity: false },
         icon: __dirname + '/wallet.png',
     });
@@ -42,9 +43,9 @@ const createWindow = async () => {
         );
     }
 
+    win.webContents.openDevTools();
     if (process.env.NODE_ENV !== 'production') {
         // Open DevTools
-        win.webContents.openDevTools();
     }
 
     win.on('closed', () => {
