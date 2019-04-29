@@ -189,7 +189,7 @@ input::placeholder {
 }
 
 .no-drag {
-  -webkit-app-region: no-drag;
+  -webkit-app-region: no-drag !important;
 }
 
 img {

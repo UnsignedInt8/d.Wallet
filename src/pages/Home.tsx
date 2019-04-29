@@ -146,7 +146,7 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     private selectCoin(i) {
-        if (this.state.expandPage === 'sending') return;
+        if (this.state.expandPage === 'sending' || this.state.expandPage === 'transaction') return;
 
         this.walletMan.selectWallet(i.symbol);
         this.setState(
@@ -201,11 +201,11 @@ class Home extends React.Component<{}, HomeState> {
         return (
             <div className={`home app-drag`}>
                 <div className={`home-bar ${isDarwin ? 'titlebar-padding' : ''}`}>
-                    <div className='icons no-drag'>
+                    <div className='icons'>
                         {
                             symbols.map(i => {
                                 return (
-                                    <div key={i.symbol} className={`icon`} onClick={() => this.selectCoin(i)}>
+                                    <div key={i.symbol} className={`icon no-drag`} onClick={() => this.selectCoin(i)}>
                                         <div className={`${this.state.selectedSymbol === i.symbol ? 'indicator' : 'indicator-none'}`} style={{ backgroundColor: i.color }} />
                                         <img src={i.img} alt={i.symbol} />
                                     </div>
@@ -214,11 +214,11 @@ class Home extends React.Component<{}, HomeState> {
                         }
                     </div>
 
-                    <div className='icons no-drag'>
-                        <div className='icon' onClick={_ => this.togglePage('receiving')}>
+                    <div className='icons'>
+                        <div className='icon no-drag' onClick={_ => this.togglePage('receiving')}>
                             <img src={qrcode} />
                         </div>
-                        <div className='icon' onClick={_ => this.togglePage('settings')}>
+                        <div className='icon no-drag' onClick={_ => this.togglePage('settings')}>
                             <img src={settings} />
                         </div>
                     </div>
@@ -268,7 +268,7 @@ class Home extends React.Component<{}, HomeState> {
                         : undefined
                     }
 
-                    <button id='open-sending' className='send' title='Send' onClick={() => this.togglePage('sending')}>
+                    <button id='open-sending' className='send no-drag' title='Send' onClick={() => this.togglePage('sending')}>
                         <img src={send} alt="Send" />
                     </button>
 

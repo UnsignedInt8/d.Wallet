@@ -103,7 +103,7 @@ export default class Settings extends React.Component<{}, State> {
 
                 <div className='setting-item no-drag'>
                     <div className='setting-title'>{this.i18n.settings.languages.title}</div>
-                    <div className='setting-detail'>
+                    <div className='setting-detail no-drag'>
                         <Select onChange={e => this.changeLang(e)} options={this.supportedLangs} styles={selectColor} defaultValue={this.supportedLangs.filter(i => i.value === this.appSettings.lang)[0]} isClearable={false} isSearchable={false} />
                     </div>
                 </div>
