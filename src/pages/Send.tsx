@@ -138,11 +138,11 @@ export class Send extends React.Component<PageProps, PageState>{
         let coin = coinProps[this.props.symbol] || coinProps.default;
 
         return (
-            <div className='sending' style={this.props.style}>
+            <div className={`sending ${UIHelper.isDarwin ? '' : 'no-drag'}`} style={this.props.style}>
                 <div className={`compose-area ${UIHelper.scrollBarClassName}`}>
                     {new Array(Math.min(this.state.toNums, coin.maxTo)).fill(Date.now()).map((v, i) => {
                         return (
-                            <div key={i} className='compose'>
+                            <div key={i} className='compose no-drag'>
                                 <input className='input-address' type="text" placeholder={`${this.props.symbol.toUpperCase()} ${this.i18n.sending.address}`} onChange={e => this.onAddressChange(e)} />
                                 <input className={`input-amount ${this.state.toNums > 1 && coin.maxTo > 1 ? 'input_bottom_border' : undefined}`} type="number" placeholder={this.i18n.sending.amount} max={100_000_000} min={0} onChange={e => this.onAmountChange(e)} />
 
@@ -152,26 +152,26 @@ export class Send extends React.Component<PageProps, PageState>{
                         );
                     })}
 
-                    <div className='message'>
+                    <div className='message no-drag'>
                         {this.props.symbol === 'eth' ?
-                            <div style={{ display: 'grid' }}>
-                                <textarea id="eth-message" rows={10} maxLength={20 * 1024} placeholder={this.i18n.sending.message}></textarea>
+                            <div className='no-drag' style={{ display: 'grid' }}>
+                                <textarea id="eth-message no-drag" rows={10} maxLength={20 * 1024} placeholder={this.i18n.sending.message}></textarea>
                                 <img id='write' src={write} />
                             </div> :
-                            <div style={{ display: 'grid' }}>
+                            <div className='no-drag' style={{ display: 'grid' }}>
                                 <input id='message-input' className='message-input' type="text" placeholder={this.i18n.sending.message} maxLength={140} />
                                 <img className='pen' src={pen} />
                             </div>
                         }
                     </div>
 
-                    <div className='mining'>
+                    <div className='mining nodrag'>
                         <input id='mining' className='mining' type="number" defaultValue={'3'} max={100_000_000} min={1} placeholder={`${this.props.symbol.toUpperCase()} ${this.i18n.sending.fees}`} onChange={e => this.onAmountChange(e)} />
                         <img className='mining' src={mining} />
                         <span title={`${coin.desc}`}>{`${coin.feeUnit}`}</span>
                     </div>
 
-                    <div className='plus-container'>
+                    <div className='plus-container no-drag'>
                         {
                             this.state.toNums > 1 && coin.maxTo > 1 ?
                                 <button className='plus' onClick={_ => this.removeReceiver()}>
@@ -190,7 +190,7 @@ export class Send extends React.Component<PageProps, PageState>{
 
                 </div>
 
-                <div className='buttons'>
+                <div className='buttons no-drag'>
                     <button className='cancel' onClick={e => this.props.onCancel()}>{this.i18n.buttons.cancel}</button>
                     <button className='confirm' onClick={e => this.buildTx()}>{this.i18n.buttons.ok}</button>
                 </div>

@@ -259,7 +259,7 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     {this.state.expandPage ?
-                        <div id='expanding-page' className='expand-area'>
+                        <div id='expanding-page' className='expand-area no-drag'>
                             {this.state.expandPage === 'sending' ? <Send onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
                             {this.state.expandPage === 'settings' ? <Settings /> : undefined}
                             {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}
