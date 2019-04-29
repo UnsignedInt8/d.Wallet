@@ -47,7 +47,7 @@ interface State {
 }
 
 @observer
-class Application extends React.Component<any, State> {
+export class Application extends React.Component<any, State> {
 
     private static app: Application;
     static history: History;

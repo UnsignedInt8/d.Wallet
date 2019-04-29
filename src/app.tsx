@@ -48,13 +48,11 @@ document.onkeydown = function (event) {
 
     if (event.ctrlKey || event.metaKey) {  // detect ctrl or cmd
         if (event.which == keyCodes.V) {
-            alert('paste 1');
             let activeEl = document.activeElement as HTMLInputElement;
-            if (!activeEl || !activeEl.value) return;
+            if (!activeEl) return;
             activeEl.value += clipboard.readText();
             activeEl.dispatchEvent(new Event('input'));
             toReturn = false;
-            alert('paste 2');
         }
     }
 

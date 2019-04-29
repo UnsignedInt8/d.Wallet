@@ -103,7 +103,7 @@ class Welcome extends React.Component<{}, State> {
     }
 
     private onOk() {
-        Application.history.push('/');
+
     }
 
     render() {

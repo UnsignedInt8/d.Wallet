@@ -8,7 +8,7 @@ import { observer } from 'mobx-react';
 import Select from 'react-select';
 import PaperKey from './PaperKey';
 import AnimeHelper from '../lib/AnimeHelper';
-import Application from '../Application';
+import { Application } from '../Application';
 import ResetBox from './ResetBox';
 import sleep from 'sleep-promise';
 import About from './About';
