@@ -82,7 +82,7 @@ export default class Settings extends React.Component<{}, State> {
     render() {
         return (
             <div id='settings'>
-                <div className='setting-item' style={{ marginTop: '3.5vh' }}>
+                <div className='setting-item no-drag' style={{ marginTop: '3.5vh' }}>
                     <div className='setting-title' onClick={_ => this.switchAutoLock(!this.appSettings.autolock)}>{this.i18n.settings.autoLock.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.autoLock.desc}</div>
                     <div className='setting-switch'>
@@ -101,24 +101,24 @@ export default class Settings extends React.Component<{}, State> {
                     </div>
                 </div>
 
-                <div className='setting-item'>
+                <div className='setting-item no-drag'>
                     <div className='setting-title'>{this.i18n.settings.languages.title}</div>
                     <div className='setting-detail'>
                         <Select onChange={e => this.changeLang(e)} options={this.supportedLangs} styles={selectColor} defaultValue={this.supportedLangs.filter(i => i.value === this.appSettings.lang)[0]} isClearable={false} isSearchable={false} />
                     </div>
                 </div>
 
-                <div className='setting-item'>
+                <div className='setting-item no-drag'>
                     <div className='setting-title clickable' onClick={e => this.openPage('paperKey')}>{this.i18n.settings.paperKey.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.paperKey.desc}</div>
                 </div>
 
-                <div className='setting-item'>
+                <div className='setting-item no-drag'>
                     <div className='setting-title clickable' onClick={_ => this.openPage('reset')}>{this.i18n.settings.reset.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.reset.desc}</div>
                 </div>
 
-                <div className='setting-item'>
+                <div className='setting-item no-drag'>
                     <div className='setting-title clickable' onClick={_ => this.openPage('about')}>{this.i18n.settings.about.title}</div>
                 </div>
 

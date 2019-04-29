@@ -62,7 +62,7 @@ export default class Receive extends React.Component<Props, State>{
 
         return (
             <div id='receiving' className='lato' >
-                <div id='info'>
+                <div id='info' className=''>
                     {i18n.receiving.desc(this.props.symbol.toUpperCase())}
                     <div id='selection'>
                         <Select onChange={e => this.onAddressChanged(e)} styles={selectColor} options={addresses} isClearable={false} isSearchable={false} value={selectedAddress} defaultValue={addresses[0]} />

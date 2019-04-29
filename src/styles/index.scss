@@ -138,28 +138,24 @@ input::placeholder {
 //   background-color: transparent;
 // }
 
-div::-webkit-scrollbar-thumb {
-  background-color: #5622cf86;
-  color: #5622cf86;
-}
+// div::-webkit-scrollbar-thumb {
+//   background-color: #5622cf86;
+//   color: #5622cf86;
+// }
 
-div::-webkit-scrollbar-track {
-  background: none;
-}
+// div::-webkit-scrollbar-track {
+//   background: none;
+// }
 
 .page-title {
   font-family: Questrial, "Segoe UI", sans-serif;
   font-size: 24px;
 }
 
-.app-drag {
-  -webkit-app-region: drag;
-}
-
 /* total width */
 .scrollbar::-webkit-scrollbar {
   background-color: transparent;
-  width: 16px;
+  width: 0;
 }
 
 /* background of the scrollbar except button or resizer */
@@ -174,7 +170,7 @@ div::-webkit-scrollbar-track {
 /* scrollbar itself */
 .scrollbar::-webkit-scrollbar-thumb {
   background-color: #babac0;
-  border-radius: 16px;
+  border-radius: 10px;
   border: none;
 }
 
@@ -188,8 +184,16 @@ div::-webkit-scrollbar-track {
   display: none;
 }
 
+.app-drag {
+  -webkit-app-region: drag;
+}
+
 .no-drag {
   -webkit-app-region: no-drag;
+}
+
+img {
+  -webkit-app-region: drag;
 }
 
 div {

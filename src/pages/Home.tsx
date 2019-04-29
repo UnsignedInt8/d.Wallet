@@ -199,7 +199,7 @@ class Home extends React.Component<{}, HomeState> {
         let isDarwin = platform() === 'darwin';
 
         return (
-            <div className={`home`}>
+            <div className={`home app-drag`}>
                 <div className={`home-bar ${isDarwin ? 'titlebar-padding' : ''}`}>
                     <div className='icons no-drag'>
                         {
@@ -275,7 +275,7 @@ class Home extends React.Component<{}, HomeState> {
                     <div className='txs'>
                         {(this.walletMan ? this.walletMan.current.txs : []).map(tx => {
                             return (
-                                <div className='tx' key={tx.hash} onClick={() => this.onOpenTxInfo(tx)}>
+                                <div className='tx no-drag' key={tx.hash} onClick={() => this.onOpenTxInfo(tx)}>
                                     <div className='icon'>
                                         <img src={tx.isIncome ? inIcon : outIcon} />
                                     </div>
