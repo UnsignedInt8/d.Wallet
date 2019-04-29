@@ -36,6 +36,8 @@ const calc = require('../assets/calculator.svg');
 const pen = require('../assets/chat.svg');
 const mining = require('../assets/mining.svg');
 const write = require('../assets/write.svg');
+const minus = require('../assets/minus.svg');
+const plus = require('../assets/plus.svg');
 
 const coinProps = {
     default: { feeUnit: 'Sat/B', maxTo: 10, desc: 'Satoshis/Byte', unit: 'Satoshis', },
@@ -134,7 +136,7 @@ export class Send extends React.Component<PageProps, PageState>{
     render() {
 
         let coin = coinProps[this.props.symbol] || coinProps.default;
-        
+
         return (
             <div className='sending' style={this.props.style}>
                 <div className={`compose-area ${UIHelper.scrollBarClassName}`}>
@@ -173,14 +175,14 @@ export class Send extends React.Component<PageProps, PageState>{
                         {
                             this.state.toNums > 1 && coin.maxTo > 1 ?
                                 <button className='plus' onClick={_ => this.removeReceiver()}>
-                                    <span>-</span>
+                                    <img src={minus} />
                                 </button>
                                 : undefined
                         }
                         {
                             this.state.toNums < coin.maxTo ?
                                 <button className='plus' onClick={_ => this.addReceiver()}>
-                                    <span>+</span>
+                                    <img src={plus} />
                                 </button>
                                 : undefined
                         }

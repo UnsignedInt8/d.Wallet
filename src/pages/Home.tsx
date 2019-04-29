@@ -207,7 +207,7 @@ class Home extends React.Component<{}, HomeState> {
                                 return (
                                     <div key={i.symbol} className={`icon no-drag`} onClick={() => this.selectCoin(i)}>
                                         <div className={`${this.state.selectedSymbol === i.symbol ? 'indicator' : 'indicator-none'}`} style={{ backgroundColor: i.color }} />
-                                        <img src={i.img} alt={i.symbol} />
+                                        <img src={i.img} alt={i.symbol} draggable={false} />
                                     </div>
                                 );
                             })
@@ -215,10 +215,10 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     <div className='icons'>
-                        <div className='icon no-drag' onClick={_ => this.togglePage('receiving')}>
+                        <div className='icon no-drag' draggable={false} onClick={_ => this.togglePage('receiving')}>
                             <img src={qrcode} />
                         </div>
-                        <div className='icon no-drag' onClick={_ => this.togglePage('settings')}>
+                        <div className='icon no-drag' draggable={false} onClick={_ => this.togglePage('settings')}>
                             <img src={settings} />
                         </div>
                     </div>
@@ -269,7 +269,7 @@ class Home extends React.Component<{}, HomeState> {
                     }
 
                     <button id='open-sending' className='send no-drag' title='Send' onClick={() => this.togglePage('sending')}>
-                        <img src={send} alt="Send" />
+                        <img src={send} draggable={false} />
                     </button>
 
                     <div className='txs'>

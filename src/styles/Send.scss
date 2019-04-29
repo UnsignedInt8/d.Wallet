@@ -150,12 +150,25 @@
     width: 32px;
     height: 32px;
     transition: all 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      display: inline-block;
+      margin-top: 1px;
+      width: 12px;
+      height: 12px;
+    }
 
     span {
-      display: block;
-      margin-top: -5px;
+      display: inline-block;
+      background: rgba(255, 255, 0, 0.301);
+      height: 20px;
+      margin-top: 0px;
       font-size: 28px;
-      font-weight: 200;
+      font-weight: 100;
+      font-family: Arial, sans-serif;
     }
   }
 

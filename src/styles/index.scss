@@ -94,7 +94,7 @@ button {
   background-color: #4080d3;
   margin: 8px;
   cursor: pointer;
-  -webkit-app-region: no-drag;
+  -webkit-app-region: no-drag !important;
 
   transition: all 0.5s;
 }
@@ -126,7 +126,7 @@ input {
   border: none;
   border-radius: 6px;
 
-  -webkit-app-region: no-drag;
+  -webkit-app-region: no-drag !important;
 }
 
 input::placeholder {
@@ -193,6 +193,7 @@ input::placeholder {
 }
 
 img {
-  -webkit-app-region: drag;
+  -webkit-app-region: no-drag;
+  user-select: none;
 }
 
