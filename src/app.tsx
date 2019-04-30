@@ -57,11 +57,6 @@ document.onkeydown = function (event) {
                 activeEl.dispatchEvent(new Event('input'));
                 toReturn = false;
                 break;
-
-            case keyCodes.L:
-                Application.lock();
-                toReturn = false;
-                break;
         }
 
     }

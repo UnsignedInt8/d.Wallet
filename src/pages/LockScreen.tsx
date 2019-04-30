@@ -26,7 +26,7 @@ export default class LockScreen extends React.Component<Props, State> {
 
     componentDidMount() {
         jquery('input').focus();
-        
+
         if (PassMan.isProtected() && PassMan.password) {
             this.i18n = getAppSettings(PassMan.password).i18n;
         } else {
@@ -57,7 +57,7 @@ export default class LockScreen extends React.Component<Props, State> {
 
     render() {
         return (
-            <div id='lock-screen' style={this.props.style}>
+            <div id='lock-screen' style={this.props.style} className='app-drag'>
                 <div id='clock'><Clock className='clock questrial' format={'HH:mm:ss'} ticking={true} /></div>
                 <div id='security'>
                     {

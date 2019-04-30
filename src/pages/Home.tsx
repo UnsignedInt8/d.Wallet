@@ -85,11 +85,13 @@ class Home extends React.Component<{}, HomeState> {
         }
 
         this.hookSticky();
+        window.onresize = () => this.forceUpdate();
     }
 
     componentWillUnmount() {
         clearInterval(this.refersher as NodeJS.Timer);
-        PassMan.removeListener('password', this.onPasswordChanged)
+        PassMan.removeListener('password', this.onPasswordChanged);
+        window.onresize = null;
     }
 
     private hookSticky() {

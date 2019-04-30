@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -69,6 +69,8 @@ const createWindow = async () => {
     });
 
     win.webContents.setUserAgent([`Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36`, `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Safari/605.1.15`][Date.now() % 2]);
+
+    globalShortcut.register('CommandOrControl+L', () => win && win.webContents.send('autolock'));
 };
 
 app.on('ready', createWindow);

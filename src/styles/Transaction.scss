@@ -13,7 +13,7 @@
     padding: 3.5vh 14px 0px 12px;
     display: grid;
     font-size: 15px;
-    grid-template-rows: 116px auto;
+    grid-template-rows: 124px auto;
     overflow-y: scroll;
 
     div {
@@ -24,9 +24,9 @@
 
     #transaction-details-head {
       display: grid;
-      height: 116px;
+      height: 124px;
       grid-row: 1;
-      grid-template-rows: 32px auto;
+      grid-template-rows: 40px auto;
       grid-template-columns: auto 84px;
       grid-template-areas:
         "title ."
@@ -51,7 +51,7 @@
 
     #transaction-details-content {
       grid-row: 2;
-      margin-top: 8px;
+      margin-top: 0px;
 
       #blockchair_logo {
         display: flex;

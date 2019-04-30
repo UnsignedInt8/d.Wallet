@@ -76,7 +76,7 @@ const lang = {
         height: '区块高度',
         fee: '手续费',
         from: '发送地址',
-        to: '接受地址',
+        to: '接收地址',
         amount: '数量',
         message: '消息',
     },
