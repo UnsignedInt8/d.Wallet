@@ -52,7 +52,7 @@ export default class Send extends React.Component<PageProps, PageState>{
     walletMan = getWalletMan(this.appSettings.mnemonic);
     private paymentDetails: PaymentDetails | null = null;
 
-    get shouldLockSymbol() { return this.state.toNums > 1 };
+    get shouldLockSymbol() { return (jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[]).filter(a => a.length > 0).length > 0 };
 
     componentDidMount() {
         jquery('.input-address').focus();

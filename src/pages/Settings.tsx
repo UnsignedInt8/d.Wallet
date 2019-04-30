@@ -13,6 +13,7 @@ import ResetBox from './ResetBox';
 import sleep from 'sleep-promise';
 import About from './About';
 import MiscHelper from '../lib/MiscHelper';
+import * as jquery from 'jquery';
 
 const selectColor = {
     option: (provided, state) => ({
@@ -43,6 +44,10 @@ export default class Settings extends React.Component<{}, State> {
         { value: 'zh-CN', label: '简体中文' },
         { value: '', label: this.i18n.settings.languages.system, }
     ]
+
+    componentDidMount() {
+        jquery('#lang-selector').focus();
+    }
 
     private switchAutoLock(on: boolean) {
         this.appSettings.autolock = on;
@@ -105,7 +110,7 @@ export default class Settings extends React.Component<{}, State> {
                 <div className='setting-item no-drag'>
                     <div className='setting-title'>{this.i18n.settings.languages.title}</div>
                     <div className='setting-detail no-drag'>
-                        <Select onChange={e => this.changeLang(e)} options={this.supportedLangs} styles={selectColor} defaultValue={this.supportedLangs.filter(i => i.value === this.appSettings.lang)[0]} isClearable={false} isSearchable={false} />
+                        <Select id='lang-selector' onChange={e => this.changeLang(e)} options={this.supportedLangs} styles={selectColor} defaultValue={this.supportedLangs.filter(i => i.value === this.appSettings.lang)[0]} isClearable={false} isSearchable={false} />
                     </div>
                 </div>
 

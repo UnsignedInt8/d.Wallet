@@ -6,7 +6,7 @@ import { getAppSettings } from '../data/AppSettings';
 import PassMan from '../data/PasswordManager';
 import Select from 'react-select';
 import { observer } from 'mobx-react';
-import { Flip, Fade } from 'react-reveal';
+import * as jquery from 'jquery';
 
 const selectColor = {
     option: (provided, state) => ({
@@ -40,12 +40,14 @@ const coins: { [index: string]: string } = {
     'usdt': 'USDT'
 };
 
-const multiAddrTypes = ['btc'];
-
 @observer
 export default class Receive extends React.Component<Props, State>{
 
     state: State = { selectedIndex: 0, selectedType: 0 };
+
+    componentDidMount() {
+        jquery('#addr-selector').focus();
+    }
 
     private onAddressChanged(selected: any) {
         this.setState({ selectedIndex: selected.index });
@@ -65,7 +67,7 @@ export default class Receive extends React.Component<Props, State>{
                 <div id='info' className=''>
                     {i18n.receiving.desc(this.props.symbol.toUpperCase())}
                     <div id='selection'>
-                        <Select onChange={e => this.onAddressChanged(e)} styles={selectColor} options={addresses} isClearable={false} isSearchable={false} value={selectedAddress} defaultValue={addresses[0]} />
+                        <Select id='addr-selector' onChange={e => this.onAddressChanged(e)} styles={selectColor} options={addresses} isClearable={false} isSearchable={false} value={selectedAddress} defaultValue={addresses[0]} />
                     </div>
                     <div id='address'>
                         {address}

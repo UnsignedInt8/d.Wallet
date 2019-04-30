@@ -66,6 +66,7 @@ class Home extends React.Component<{}, HomeState> {
     @observable walletMan!: WalletManager;
     private refersher?: NodeJS.Timer | number;
     private appSettings?: AppSettings;
+    private sendPage: Send | null = null;
 
     componentDidMount() {
         this.refersher = setInterval(() => this.refreshPrice(), 30 * 1000);
@@ -146,7 +147,7 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     private selectCoin(i) {
-        if (this.state.expandPage === 'sending' || this.state.expandPage === 'transaction') return;
+        if (this.state.expandPage === 'sending' || this.state.expandPage === 'transaction' || (this.sendPage && this.sendPage.shouldLockSymbol)) return;
 
         this.walletMan.selectWallet(i.symbol);
         this.setState(
@@ -260,7 +261,7 @@ class Home extends React.Component<{}, HomeState> {
 
                     {this.state.expandPage ?
                         <div id='expanding-page' className='expand-area no-drag'>
-                            {this.state.expandPage === 'sending' ? <Send onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
+                            {this.state.expandPage === 'sending' ? <Send ref={e => this.sendPage = e} onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
                             {this.state.expandPage === 'settings' ? <Settings /> : undefined}
                             {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}
                             {this.state.expandPage === 'transaction' ? <Transaction onCacnel={() => this.closePage()} txInfo={this.state.selectedTx!} symbol={this.state.selectedSymbol} /> : undefined}
