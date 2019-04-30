@@ -43,9 +43,9 @@ const createWindow = async () => {
         );
     }
 
-    win.webContents.openDevTools();
     if (process.env.NODE_ENV !== 'production') {
         // Open DevTools
+        win.webContents.openDevTools();
     }
 
     win.on('closed', () => {
