@@ -67,7 +67,7 @@ export class Application extends React.Component<any, State> {
 
         Application.app = this;
 
-        jquery('button.quit').focus();
+        setTimeout(() => jquery('.quit').focus(), 2000);
     }
 
     componentWillUnmount() {
@@ -137,21 +137,6 @@ export class Application extends React.Component<any, State> {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
 
-                {UIHelper.isWin ?
-                    <div id='win-title-bar' className='no-drag'>
-                        <button className='minimize no-drag' onClick={_ => this.handleWindow('minimize')}>
-                            <img src={require('./assets/win-minimize.svg')} />
-                        </button>
-                        <button className='maximize no-drag' onClick={_ => this.handleWindow('maximize')}>
-                            <img src={require('./assets/win-maximize.svg')} />
-                        </button>
-                        <button className='quit no-drag' onClick={_ => this.handleWindow('close')}>
-                            <img src={require('./assets/win-close.svg')} />
-                        </button>
-                    </div>
-                    : undefined
-                }
-
                 <AnimatedSwitch
                     className='switch'
                     {...pageTransitions}
@@ -167,6 +152,22 @@ export class Application extends React.Component<any, State> {
                 {this.state.lockApp ?
                     <LockScreen style={{ zIndex: 999, }} onValidationPass={() => this.unlockApp()} />
                     : undefined}
+
+                {UIHelper.isWin ?
+                    <div id='win-title-bar' className='no-drag'>
+                        <button className='minimize no-drag' onClick={_ => this.handleWindow('minimize')}>
+                            <img src={require('./assets/win-minimize.svg')} draggable={false} />
+                        </button>
+                        <button className='maximize no-drag' onClick={_ => this.handleWindow('maximize')}>
+                            <img src={require('./assets/win-maximize.svg')} draggable={false} />
+                        </button>
+                        <button className='quit no-drag' onClick={_ => this.handleWindow('close')}>
+                            <img src={require('./assets/win-close.svg')} draggable={false} />
+                        </button>
+                    </div>
+                    : undefined
+                }
+
             </Router>
         );
     }

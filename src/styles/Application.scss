@@ -16,6 +16,7 @@
   height: 26px;
   z-index: 1000;
   padding: 4px 4px 4px 0px;
+  background: rgba(0, 0, 0, 0);
 
   button {
     border: none;
@@ -32,6 +33,7 @@
       width: 4px;
       height: 4px;
       opacity: 0;
+      user-select: none;
     }
   }
 
