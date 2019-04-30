@@ -45,7 +45,7 @@ const lang = {
 
     settings: {
         autoLock: {
-            title: 'App 自动锁',
+            title: '自动锁',
             desc: '5分钟后自动锁上钱包',
         },
         languages: {

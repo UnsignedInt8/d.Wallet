@@ -46,7 +46,7 @@ export default class Receive extends React.Component<Props, State>{
     state: State = { selectedIndex: 0, selectedType: 0 };
 
     componentDidMount() {
-
+        jquery('#win-hook').focus();
     }
 
     private onAddressChanged(selected: any) {
@@ -64,6 +64,9 @@ export default class Receive extends React.Component<Props, State>{
 
         return (
             <div id='receiving' className='lato' >
+
+                <button id='win-hook' style={{ opacity: 0, display: 'hidden', position: 'absolute', bottom: 0, width: 0, height: 0 }}></button>
+
                 <div id='info' className=''>
                     {i18n.receiving.desc(this.props.symbol.toUpperCase())}
                     <div id='selection'>
