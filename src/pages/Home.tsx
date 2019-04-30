@@ -5,7 +5,7 @@ import { platform } from 'os';
 import { AreaChart, Area } from 'recharts';
 import CoinRanking, { Coins } from '../api/CoinRanking';
 import PassMan from '../data/PasswordManager';
-import Send, { Send as SendPage } from './Send';
+import Send from './Send';
 import Receive from './Receive';
 import anime from 'animejs';
 import Settings from './Settings';

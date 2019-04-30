@@ -11,9 +11,8 @@ import { getWalletMan } from '../wallet/WalletManager';
 import sleep from 'sleep-promise';
 import PaymentDetails from './PaymentDetails';
 import { GenTxInfo } from '../wallet/Wallet';
-import { withToastManager, } from 'react-toast-notifications';
-import { platform } from 'os';
 import UIHelper from '../lib/UIHelper';
+import { Application } from '../Application';
 
 interface PageProps {
     symbol: string;
@@ -45,7 +44,7 @@ const coinProps = {
     usdt: { feeUnit: 'Sat/B', maxTo: 1, desc: 'Satoshis/Byte', unit: 'Satoshis' },
 }
 
-export class Send extends React.Component<PageProps, PageState>{
+export default class Send extends React.Component<PageProps, PageState>{
 
     state: PageState = { toNums: 1, prepareToSend: false, isBuildingTx: false };
     appSettings = getAppSettings(PassMan.password);
@@ -54,6 +53,10 @@ export class Send extends React.Component<PageProps, PageState>{
     private paymentDetails: PaymentDetails | null = null;
 
     get shouldLockSymbol() { return this.state.toNums > 1 };
+
+    componentDidMount() {
+        jquery('.input-address').focus();
+    }
 
     private addReceiver() {
         let coin = coinProps[this.props.symbol] || coinProps.default;
@@ -65,7 +68,6 @@ export class Send extends React.Component<PageProps, PageState>{
     }
 
     private async buildTx() {
-        let { toastManager } = this.props as any;
 
         let addresses = jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[];
         let amounts = jquery('.input-amount').map((i, el) => Number.parseFloat(jquery(el).val()) || 0).get() as number[];
@@ -75,7 +77,7 @@ export class Send extends React.Component<PageProps, PageState>{
         if (to.length === 0) return;
 
         if (to.some(v => !wallet.isValidAddress(v.address))) {
-            toastManager.add(this.i18n.messages.invalidAddress, { appearance: 'error', autoDismiss: true });
+            Application.notify({ message: this.i18n.messages.invalidAddress, appearance: 'error', });
             return;
         }
 
@@ -86,7 +88,7 @@ export class Send extends React.Component<PageProps, PageState>{
         let tx = await wallet.genTx({ to, message, gasPrice: fee, satoshiPerByte: fee });
 
         if (!tx) {
-            toastManager.add(this.i18n.messages.noInternet, { appearance: 'error', autoDismiss: true });
+            Application.notify({ message: this.i18n.messages.noInternet, appearance: 'error', });
             this.setState({ isBuildingTx: false });
             return;
         }
@@ -106,15 +108,13 @@ export class Send extends React.Component<PageProps, PageState>{
 
     private onPasswordVerified() {
         setTimeout(async () => {
-            const { toastManager } = this.props as any;
-
             let txInfo = this.state.txInfo!;
             let id = await this.walletMan.current.broadcastTx(txInfo.hex);
             let txid = `${txInfo.id.substring(0, 7)}...${txInfo.id.substring(txInfo.id.length - 7)}`
             if (txInfo.id === id) {
-                toastManager.add(`${this.i18n.messages.broadcastTx(txid)}`, { appearance: 'success', autoDismiss: true });
+                Application.notify({ message: `${this.i18n.messages.broadcastTx(txid)}`, appearance: 'success', });
             } else {
-                toastManager.add(`${this.i18n.messages.broadcastFailed}`, { appearance: 'error', autoDismiss: true });
+                Application.notify({ message: `${this.i18n.messages.broadcastFailed}`, appearance: 'error', });
             }
 
             this.paymentDetails!.close();
@@ -155,11 +155,11 @@ export class Send extends React.Component<PageProps, PageState>{
                     <div className='message no-drag'>
                         {this.props.symbol === 'eth' ?
                             <div className='no-drag' style={{ display: 'grid' }}>
-                                <textarea id="eth-message no-drag" rows={10} maxLength={20 * 1024} placeholder={this.i18n.sending.message}></textarea>
+                                <textarea id="eth-message" className='no-drag' rows={10} maxLength={20 * 1024} placeholder={this.i18n.sending.message}></textarea>
                                 <img id='write' src={write} />
                             </div> :
                             <div className='no-drag' style={{ display: 'grid' }}>
-                                <input id='message-input' className='message-input' type="text" placeholder={this.i18n.sending.message} maxLength={140} />
+                                <input id='message-input' className='message-input no-drag' type="text" placeholder={this.i18n.sending.message} maxLength={140} />
                                 <img className='pen' src={pen} />
                             </div>
                         }
@@ -214,5 +214,3 @@ export class Send extends React.Component<PageProps, PageState>{
         );
     }
 }
-
-export default withToastManager(Send);

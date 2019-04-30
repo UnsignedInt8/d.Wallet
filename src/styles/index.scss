@@ -4,7 +4,7 @@ html {
   padding: 0;
   margin: 0;
   -webkit-user-select: none;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Microsoft YaHei", "Segoe UI", Helvetica, Tahoma, Geneva, Verdana, sans-serif;
   background: rgb(25, 32, 48);
 }
 
@@ -33,7 +33,7 @@ body {
 @import url("https://fonts.googleapis.com/css?family=Lato|Questrial|Quicksand");
 
 .lato {
-  font-family: "Lato", sans-serif;
+  font-family: "Lato", "Microsoft YaHei", "Segoe UI", Helvetica, sans-serif;
 }
 
 .quicksand {
@@ -41,7 +41,7 @@ body {
 }
 
 .questrial {
-  font-family: "Questrial", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Questrial", "Meiryo", "Microsoft YaHei", "Segoe UI", Helvetica, Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .btc {
@@ -148,7 +148,7 @@ input::placeholder {
 // }
 
 .page-title {
-  font-family: Questrial, "Segoe UI", sans-serif;
+  font-family: Questrial, "Microsoft YaHei", "Segoe UI", sans-serif;
   font-size: 24px;
 }
 

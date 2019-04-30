@@ -59,7 +59,7 @@ export default class LockScreen extends React.Component<Props, State> {
                             : undefined
                     }
 
-                    <div className='questrial' style={{ fontSize: 20 }}>
+                    <div className='questrial' style={{ fontSize: 20, }}>
                         {i18n.lockScreen.title}
                     </div>
 
