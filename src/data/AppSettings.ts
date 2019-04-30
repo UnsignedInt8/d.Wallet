@@ -47,7 +47,7 @@ export class AppSettings extends EventEmitter {
         this.helper.save('lang', value);
     }
 
-    get i18n() {
+    @computed get i18n() {
         return getLang(this.lang);
     }
 

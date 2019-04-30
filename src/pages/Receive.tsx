@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as QRCode from 'qrcode.react';
 import '../styles/Receive.scss';
-import { getLang } from '../i18n';
 import { getAppSettings } from '../data/AppSettings';
 import PassMan from '../data/PasswordManager';
 import Select from 'react-select';
@@ -55,7 +54,7 @@ export default class Receive extends React.Component<Props, State>{
 
     render() {
         const appSettings = getAppSettings(PassMan.password);
-        const i18n = getLang(appSettings.lang);
+        const i18n = appSettings.i18n;
         const addresses = this.props.addresses ? this.props.addresses.map((value, index) => { return { index, value, label: value[0] } }) : [];
         const selectedAddress = addresses[this.state.selectedIndex] || addresses[0] || { index: 0, value: [this.props.address], label: this.props.address };
 

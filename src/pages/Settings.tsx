@@ -3,7 +3,6 @@ import '../styles/Settings.scss';
 const Switch = require("react-switch");
 import PasswordMan from '../data/PasswordManager';
 import { getAppSettings, AppSettings } from '../data/AppSettings';
-import { getLang } from '../i18n';
 import { observer } from 'mobx-react';
 import Select from 'react-select';
 import PaperKey from './PaperKey';
@@ -14,6 +13,7 @@ import sleep from 'sleep-promise';
 import About from './About';
 import MiscHelper from '../lib/MiscHelper';
 import * as jquery from 'jquery';
+import { observable } from 'mobx';
 
 const selectColor = {
     option: (provided, state) => ({
@@ -36,7 +36,7 @@ interface State {
 export default class Settings extends React.Component<{}, State> {
 
     private appSettings = getAppSettings(PasswordMan.password)!!;
-    private i18n = getLang(this.appSettings.lang);
+    private i18n = this.appSettings.i18n;
     state: State = { expandedPage: undefined };
 
     private supportedLangs = [
@@ -55,6 +55,8 @@ export default class Settings extends React.Component<{}, State> {
 
     private changeLang(selected: any) {
         this.appSettings.lang = selected.value;
+        this.i18n = this.appSettings.i18n;
+        this.forceUpdate();
     }
 
     private openPage(page: Pages) {
