@@ -2,6 +2,8 @@ import * as React from 'react';
 import '../styles/About.scss';
 import PassMan from '../data/PasswordManager';
 import { getAppSettings } from '../data/AppSettings';
+import Particles from 'react-particles-js';
+import { nightSky } from './Welcome';
 const { shell } = require('electron');
 
 const blockchair = require('../assets/blockchair_light.png');
@@ -24,6 +26,8 @@ export default class About extends React.Component<Props, {}> {
     render() {
         return (
             <div id='about-page' onClick={_ => { }}>
+                <Particles className='particlejs' params={nightSky} width={`100%`} height={`100%`} />
+
                 <div className='page-title'>
                     {this.i18n.about.title}
                 </div>

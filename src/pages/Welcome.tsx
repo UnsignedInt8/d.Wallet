@@ -10,7 +10,7 @@ import Application from '../Application';
 
 const i18n = getLang();
 
-const nightSky: any = {
+export const nightSky: any = {
     "particles": {
         "number": {
             "value": 500,
