@@ -53,7 +53,7 @@ export default class RecoverKey extends React.Component<Props, State> {
             <div id='recover-page' className='welcome-page'>
 
                 <div id='recover-content'>
-                    <div className='title'>{i18n.welcome.recover.title}</div>
+                    <div className='page-title'>{i18n.welcome.recover.title}</div>
                     <div>{i18n.welcome.recover.typingMnemonic}</div>
                     <div style={{ marginBottom: 12 }}>
                         <textarea className={`${this.state.isValidMnemonic ? 'valid' : ''}`} id="mnemonic" rows={5} style={{}} onChange={e => this.onTextAreaChange(e)}></textarea>

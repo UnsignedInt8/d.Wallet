@@ -34,7 +34,7 @@ export default class NewKey extends React.Component<Props, State> {
         return (
             <div id='newkey-page' className='welcome-page'>
                 <div id='newkey-content'>
-                    <div className='title'>{i18n.welcome.new.title}</div>
+                    <div className='page-title'>{i18n.welcome.new.title}</div>
                     <div style={{ fontSize: 14 }}>{i18n.welcome.new.attention}</div>
                     <div id='mnemonic'>
                         {this.state.mnemonic}

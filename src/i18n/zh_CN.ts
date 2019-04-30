@@ -46,7 +46,7 @@ const lang = {
     settings: {
         autoLock: {
             title: '自动锁',
-            desc: '5分钟后自动锁上钱包 (Ctrl+L)',
+            desc: '5分钟后自动锁上钱包 (Ctrl/CMD+L)',
         },
         languages: {
             title: '语言',
@@ -94,7 +94,7 @@ const lang = {
 
     about: {
         title: '关于',
-        desc: '感谢使用 d.Wallet ',
+        desc: '感谢使用 d.Wallet, d.Wallet 是一款加密货币轻钱包。目前它支持Bitcoin, Ethereum, Bitcoin Cash, Litecoin 以及 USDT。欢迎提出宝贵的意见与反馈。',
         thanks: '感谢',
         contact: '联系',
     },
