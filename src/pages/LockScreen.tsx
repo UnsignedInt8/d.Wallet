@@ -1,13 +1,11 @@
 import * as React from 'react';
 import '../styles/LockScreen.scss';
 import * as Clock from 'react-live-clock';
-import { getLang } from '../i18n';
 import * as jquery from 'jquery';
 import PassMan from '../data/PasswordManager';
 import { getAppSettings } from '../data/AppSettings';
 import { Validation, Password } from '../components';
-
-const i18n = getLang();
+import { getLang } from '../i18n';
 
 interface State {
     validated: boolean;
@@ -24,9 +22,18 @@ export default class LockScreen extends React.Component<Props, State> {
     state: State = { validated: false }
 
     private pwInput!: Password;
+    i18n: any;
 
     componentDidMount() {
         jquery('input').focus();
+        
+        if (PassMan.isProtected() && PassMan.password) {
+            this.i18n = getAppSettings(PassMan.password).i18n;
+        } else {
+            this.i18n = getLang();
+        }
+
+        this.forceUpdate();
     }
 
     private onPasswordChange(e: string) {
@@ -60,7 +67,7 @@ export default class LockScreen extends React.Component<Props, State> {
                     }
 
                     <div className='questrial' style={{ fontSize: 20, }}>
-                        {i18n.lockScreen.title}
+                        {this.i18n ? this.i18n.lockScreen.title : undefined}
                     </div>
 
                     <Password ref={e => this.pwInput = e!} onChange={value => this.onPasswordChange(value)} style={{ marginTop: 8 }} />

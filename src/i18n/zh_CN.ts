@@ -46,7 +46,7 @@ const lang = {
     settings: {
         autoLock: {
             title: '自动锁',
-            desc: '5分钟后自动锁上钱包',
+            desc: '5分钟后自动锁上钱包 (Ctrl+L)',
         },
         languages: {
             title: '语言',
@@ -66,7 +66,7 @@ const lang = {
     },
 
     lockScreen: {
-        title: '解锁钱包',
+        title: '钱包已锁定',
     },
 
     txDetails: {

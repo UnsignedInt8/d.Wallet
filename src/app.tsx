@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import Application from './Application';
+import ApplicationWrapper, { Application } from './Application';
 import './styles/index.scss';
 import * as linq from 'linq';
 const { clipboard } = require('electron');
@@ -29,7 +29,7 @@ const render = (Component: () => JSX.Element) => {
     );
 };
 
-render(() => <Application />);
+render(() => <ApplicationWrapper />);
 
 // Hot Module Replacement API
 if (typeof module.hot !== 'undefined') {
@@ -42,19 +42,28 @@ if (typeof module.hot !== 'undefined') {
 
 const keyCodes = {
     V: 86,
+    L: 76,
 };
 
 document.onkeydown = function (event) {
     let toReturn = true;
 
     if (event.ctrlKey || event.metaKey) {  // detect ctrl or cmd
-        if (event.which == keyCodes.V) {
-            let activeEl = document.activeElement as HTMLInputElement;
-            if (!activeEl) return;
-            activeEl.value += clipboard.readText();
-            activeEl.dispatchEvent(new Event('input'));
-            toReturn = false;
+        switch (event.which) {
+            case keyCodes.V:
+                let activeEl = document.activeElement as HTMLInputElement;
+                if (!activeEl) return;
+                activeEl.value += clipboard.readText();
+                activeEl.dispatchEvent(new Event('input'));
+                toReturn = false;
+                break;
+
+            case keyCodes.L:
+                Application.lock();
+                toReturn = false;
+                break;
         }
+
     }
 
     return toReturn;
