@@ -1,7 +1,66 @@
 .root-page {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+#win-title-bar {
+  position: fixed;
+  top: 0;
+  left: 68px;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  height: 26px;
+  z-index: 9999999999;
+  padding: 4px 4px 4px 0px;
+
+  div {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 4px;
+      height: 4px;
+      opacity: 0;
+    }
+  }
+
+  div.minimize {
+    background: rgb(255, 175, 27);
+  }
+
+  div.maximize {
+    background: rgb(12, 206, 12);
+    
+    img {
+      width: 6px;
+      height: 6px;
+    }
+  }
+
+  div.quit {
+    background: rgb(243, 38, 117);
+  }
+
+  div:hover {
+    opacity: 0.8;
+    transition: all 0.5s;
+
+    img {
+      opacity: 1;
+    }
+  }
+
+  div:active {
+    opacity: 0.5;
+    transition: all 0.5s;
+  }
 }

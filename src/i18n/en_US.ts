@@ -46,7 +46,7 @@ const lang = {
     settings: {
         autoLock: {
             title: 'Auto Lock',
-            desc: 'Automatically lock app after 5 minutes (Ctrl/CMD+L)',
+            desc: 'Automatically lock app after 5 minutes (Ctrl/CMD+Shift+L)',
         },
         languages: {
             title: 'Languages',

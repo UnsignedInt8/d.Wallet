@@ -46,7 +46,7 @@ const lang = {
     settings: {
         autoLock: {
             title: '自动锁',
-            desc: '5分钟后自动锁上钱包 (Ctrl/CMD+L)',
+            desc: '5分钟后自动锁上钱包 (Ctrl/CMD+Shift+L)',
         },
         languages: {
             title: '语言',

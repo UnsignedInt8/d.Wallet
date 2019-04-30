@@ -15,6 +15,7 @@ import AnimeHelper from './lib/AnimeHelper';
 import { withToastManager, } from 'react-toast-notifications';
 import { getLang } from './i18n';
 import MiscHelper from './lib/MiscHelper';
+import UIHelper from './lib/UIHelper';
 
 function glide(val: number) {
     return spring(val, {
@@ -116,6 +117,21 @@ export class Application extends React.Component<any, State> {
     render() {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
+
+                {UIHelper.isDarwin ?
+                    <div id='win-title-bar'>
+                        <div className='minimize'>
+                            <img src={require('./assets/win-minimize.svg')} />
+                        </div>
+                        <div className='maximize'>
+                            <img src={require('./assets/win-maximize.svg')} />
+                        </div>
+                        <div className='quit'>
+                            <img src={require('./assets/win-close.svg')} />
+                        </div>
+                    </div>
+                    : undefined
+                }
 
                 <AnimatedSwitch
                     className='switch'
