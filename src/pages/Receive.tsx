@@ -46,7 +46,7 @@ export default class Receive extends React.Component<Props, State>{
     state: State = { selectedIndex: 0, selectedType: 0 };
 
     componentDidMount() {
-        jquery('#addr-selector').focus();
+
     }
 
     private onAddressChanged(selected: any) {
@@ -67,22 +67,22 @@ export default class Receive extends React.Component<Props, State>{
                 <div id='info' className=''>
                     {i18n.receiving.desc(this.props.symbol.toUpperCase())}
                     <div id='selection'>
-                        <Select id='addr-selector' onChange={e => this.onAddressChanged(e)} styles={selectColor} options={addresses} isClearable={false} isSearchable={false} value={selectedAddress} defaultValue={addresses[0]} />
+                        <Select onChange={e => this.onAddressChanged(e)} styles={selectColor} options={addresses} isClearable={false} isSearchable={false} value={selectedAddress} defaultValue={addresses[0]} />
                     </div>
                     <div id='address'>
                         {address}
                     </div>
                     {this.props.symbol === 'btc' ?
-                        <div id='address-type'>
-                            <div className={`radio ${this.state.selectedType === 0 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 0 })}>{i18n.receiving.segwit}</div>
+                        <div id='address-type' className='no-drag'>
+                            <div className={`radio no-drag ${this.state.selectedType === 0 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 0 })}>{i18n.receiving.segwit}</div>
                             <div className={`radio ${this.state.selectedType === 1 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 1 })}>{i18n.receiving.legacy}</div>
                         </div>
                         : undefined
                     }
                     {this.props.symbol === 'bch' ?
-                        <div id='address-type'>
-                            <div className={`radio ${this.state.selectedType === 0 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 0 })}>{i18n.receiving.cashAddr}</div>
-                            <div className={`radio ${this.state.selectedType === 1 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 1 })}>{i18n.receiving.legacy}</div>
+                        <div id='address-type' className='no-drag'>
+                            <div className={`radio no-drag ${this.state.selectedType === 0 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 0 })}>{i18n.receiving.cashAddr}</div>
+                            <div className={`radio no-drag ${this.state.selectedType === 1 ? 'selected' : ''}`} onClick={_ => this.setState({ selectedType: 1 })}>{i18n.receiving.legacy}</div>
                         </div>
                         : undefined
                     }

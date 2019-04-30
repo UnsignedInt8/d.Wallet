@@ -46,7 +46,7 @@ export default class Settings extends React.Component<{}, State> {
     ]
 
     componentDidMount() {
-        jquery('#lang-selector').focus();
+        jquery('#app-lock-switch').focus().blur();
     }
 
     private switchAutoLock(on: boolean) {
@@ -93,6 +93,8 @@ export default class Settings extends React.Component<{}, State> {
                     <div className='setting-detail'>{this.i18n.settings.autoLock.desc}</div>
                     <div className='setting-switch'>
                         <Switch
+                            id='app-lock-switch'
+                            className={`no-drag`}
                             checked={this.appSettings.autolock}
                             onChange={checked => this.switchAutoLock(checked)}
                             onColor="#c2ff86"
@@ -110,22 +112,22 @@ export default class Settings extends React.Component<{}, State> {
                 <div className='setting-item no-drag'>
                     <div className='setting-title'>{this.i18n.settings.languages.title}</div>
                     <div className='setting-detail no-drag'>
-                        <Select id='lang-selector' onChange={e => this.changeLang(e)} options={this.supportedLangs} styles={selectColor} defaultValue={this.supportedLangs.filter(i => i.value === this.appSettings.lang)[0]} isClearable={false} isSearchable={false} />
+                        <Select onChange={e => this.changeLang(e)} options={this.supportedLangs} styles={selectColor} defaultValue={this.supportedLangs.filter(i => i.value === this.appSettings.lang)[0]} isClearable={false} isSearchable={false} />
                     </div>
                 </div>
 
                 <div className='setting-item no-drag'>
-                    <div className='setting-title clickable' onClick={e => this.openPage('paperKey')}>{this.i18n.settings.paperKey.title}</div>
+                    <div className='setting-title clickable no-drag' onClick={e => this.openPage('paperKey')}>{this.i18n.settings.paperKey.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.paperKey.desc}</div>
                 </div>
 
                 <div className='setting-item no-drag'>
-                    <div className='setting-title clickable' onClick={_ => this.openPage('reset')}>{this.i18n.settings.reset.title}</div>
+                    <div className='setting-title clickable no-drag' onClick={_ => this.openPage('reset')}>{this.i18n.settings.reset.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.reset.desc}</div>
                 </div>
 
                 <div className='setting-item no-drag'>
-                    <div className='setting-title clickable' onClick={_ => this.openPage('about')}>{this.i18n.settings.about.title}</div>
+                    <div className='setting-title clickable no-drag' onClick={_ => this.openPage('about')}>{this.i18n.settings.about.title}</div>
                 </div>
 
                 {this.state.expandedPage ?
