@@ -203,7 +203,7 @@ class Home extends React.Component<{}, HomeState> {
 
         return (
             <div className={`home app-drag`}>
-                <div className={`home-bar ${isDarwin ? 'titlebar-padding' : ''}`}>
+                <div className={`home-bar titlebar-padding`}>
                     <div className='icons'>
                         {
                             symbols.map(i => {
@@ -227,7 +227,7 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
                 </div>
 
-                <div id='home-content' className={`home-content ${isDarwin ? 'titlebar-padding' : ''} ${UIHelper.scrollBarClassName}`}>
+                <div id='home-content' className={`home-content titlebar-padding ${UIHelper.scrollBarClassName}`}>
                     {this.walletMan && this.walletMan.current.txs.length > 0 ? undefined :
                         <div id='begin-arrow'>
                             <img src={begin} />
@@ -262,7 +262,7 @@ class Home extends React.Component<{}, HomeState> {
                     </div>
 
                     {this.state.expandPage ?
-                        <div id='expanding-page' className='expand-area no-drag'>
+                        <div id='expanding-page' className='expand-area'>
                             {this.state.expandPage === 'sending' ? <Send ref={e => this.sendPage = e} onCancel={() => this.closePage()} symbol={this.state.selectedSymbol} /> : undefined}
                             {this.state.expandPage === 'settings' ? <Settings /> : undefined}
                             {this.state.expandPage === 'receiving' ? <Receive symbol={this.state.selectedSymbol} addresses={this.walletMan.current.addresses} address={this.walletMan.current.mainAddress[0]} onCancel={() => this.closePage()} /> : undefined}

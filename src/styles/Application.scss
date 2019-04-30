@@ -14,7 +14,7 @@
   display: flex;
   justify-content: flex-end;
   height: 26px;
-  z-index: 9999999999;
+  z-index: 1000;
   padding: 4px 4px 4px 0px;
 
   div {
@@ -39,7 +39,7 @@
 
   div.maximize {
     background: rgb(12, 206, 12);
-    
+
     img {
       width: 6px;
       height: 6px;
