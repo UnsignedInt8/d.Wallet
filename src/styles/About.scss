@@ -1,8 +1,11 @@
 #about-page {
-  padding: 3.5vh 16px 0px 16px;
+  padding: 39px 16px 0px 16px;
   background: rgb(1, 14, 36);
-  height: 97.5%;
-  position: relative;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: absolute;
 
   div.particlejs {
     position: absolute;
@@ -15,6 +18,7 @@
     font-size: 14px;
     margin-top: 8px;
     margin-bottom: 8px;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
   .title {

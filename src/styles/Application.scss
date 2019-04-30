@@ -17,10 +17,12 @@
   z-index: 1000;
   padding: 4px 4px 4px 0px;
 
-  div {
+  button {
+    border: none;
     width: 12px;
     height: 12px;
     border-radius: 50%;
+    padding: 0;
     margin: 4px;
     display: flex;
     justify-content: center;
@@ -33,11 +35,11 @@
     }
   }
 
-  div.minimize {
+  button.minimize {
     background: rgb(255, 175, 27);
   }
 
-  div.maximize {
+  button.maximize {
     background: rgb(12, 206, 12);
 
     img {
@@ -46,11 +48,11 @@
     }
   }
 
-  div.quit {
+  button.quit {
     background: rgb(243, 38, 117);
   }
 
-  div:hover {
+  button:hover {
     opacity: 0.8;
     transition: all 0.5s;
 
@@ -59,7 +61,7 @@
     }
   }
 
-  div:active {
+  button:active {
     opacity: 0.5;
     transition: all 0.5s;
   }

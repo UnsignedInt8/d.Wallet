@@ -90,7 +90,7 @@ export default class Settings extends React.Component<{}, State> {
     render() {
         return (
             <div id='settings'>
-                <div className='setting-item no-drag' style={{ marginTop: '3.5vh' }}>
+                <div className='setting-item no-drag' style={{ marginTop: 32 }}>
                     <div className='setting-title' onClick={_ => this.switchAutoLock(!this.appSettings.autolock)}>{this.i18n.settings.autoLock.title}</div>
                     <div className='setting-detail'>{this.i18n.settings.autoLock.desc}</div>
                     <div className='setting-switch'>

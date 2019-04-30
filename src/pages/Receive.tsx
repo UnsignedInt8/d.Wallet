@@ -62,11 +62,11 @@ export default class Receive extends React.Component<Props, State>{
         const qrValue = `${coins[this.props.symbol].toLowerCase().replace(' ', '')}:${address}`;
 
         return (
-            <div id='receiving' className='lato' >
+            <div id='receiving' className='lato no-drag' >
 
                 <button id='win-hook' style={{ opacity: 0, display: 'hidden', position: 'absolute', bottom: 0, width: 0, height: 0 }}></button>
 
-                <div id='info' className=''>
+                <div id='info' className='no-drag'>
                     {i18n.receiving.desc(this.props.symbol.toUpperCase())}
                     <div id='selection'>
                         <Select onChange={e => this.onAddressChanged(e)} styles={selectColor} options={addresses} isClearable={false} isSearchable={false} value={selectedAddress} defaultValue={addresses[0]} />

@@ -94,7 +94,7 @@ const lang = {
 
     about: {
         title: 'About',
-        desc: 'Thanks for using d.Wallet. d.Wallet is a light cryptocurrency wallet for Desktop users. It supports Bitcoin, Ethereum, Bitcoin Cash, Litecoin and USDT now. If you have any ideas, tell us please.',
+        desc: 'Thanks for using d.Wallet. d.Wallet is a light cryptocurrency wallet for Desktop users.',
         thanks: 'Thanks',
         contact: 'Contact',
     },

@@ -7,10 +7,11 @@
   grid-template-areas:
     "content"
     "buttons";
+  -webkit-app-region: drag;
 
   #transaction-details {
     grid-area: content;
-    padding: 3.5vh 14px 0px 12px;
+    padding: 39px 14px 0px 12px;
     display: grid;
     font-size: 15px;
     grid-template-rows: 124px auto;

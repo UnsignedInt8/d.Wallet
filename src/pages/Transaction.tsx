@@ -125,7 +125,7 @@ export default class Transaction extends React.Component<Props, any> {
                 </div>
 
                 <div id='tx-buttons'>
-                    <button id='close' onClick={e => this.props.onCacnel()}>
+                    <button id='close' className='no-drag' onClick={e => this.props.onCacnel()}>
                         {this.i18n.buttons.close}
                     </button>
                 </div>

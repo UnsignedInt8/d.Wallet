@@ -11,7 +11,7 @@ import animeHelper from './lib/AnimeHelper';
 import { getAppSettings } from './data/AppSettings';
 import PassMan from './data/PasswordManager';
 import "./styles/Application.scss";
-import AnimeHelper from './lib/AnimeHelper';
+import * as jquery from 'jquery';
 import { withToastManager, } from 'react-toast-notifications';
 import { getLang } from './i18n';
 import MiscHelper from './lib/MiscHelper';
@@ -66,6 +66,8 @@ export class Application extends React.Component<any, State> {
         });
 
         Application.app = this;
+
+        jquery('button.quit').focus();
     }
 
     componentWillUnmount() {
@@ -136,16 +138,16 @@ export class Application extends React.Component<any, State> {
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
 
                 {UIHelper.isWin ?
-                    <div id='win-title-bar' className='app-drag'>
-                        <div className='minimize' onClick={_ => this.handleWindow('minimize')}>
+                    <div id='win-title-bar' className='no-drag'>
+                        <button className='minimize no-drag' onClick={_ => this.handleWindow('minimize')}>
                             <img src={require('./assets/win-minimize.svg')} />
-                        </div>
-                        <div className='maximize' onClick={_ => this.handleWindow('maximize')}>
+                        </button>
+                        <button className='maximize no-drag' onClick={_ => this.handleWindow('maximize')}>
                             <img src={require('./assets/win-maximize.svg')} />
-                        </div>
-                        <div className='quit' onClick={_ => this.handleWindow('close')}>
+                        </button>
+                        <button className='quit no-drag' onClick={_ => this.handleWindow('close')}>
                             <img src={require('./assets/win-close.svg')} />
-                        </div>
+                        </button>
                     </div>
                     : undefined
                 }
