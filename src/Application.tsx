@@ -4,7 +4,7 @@ import { AnimatedSwitch } from 'react-router-transition';
 import { Home, Welcome, Send } from './pages';
 import { spring } from 'react-motion';
 import { History } from 'history';
-import { ipcRenderer, } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { observer } from 'mobx-react';
 import LockScreen from './pages/LockScreen';
 import animeHelper from './lib/AnimeHelper';
@@ -114,19 +114,36 @@ export class Application extends React.Component<any, State> {
         Application.app.notify(opts);
     }
 
+    handleWindow(action: 'close' | 'maximize' | 'minimize') {
+        let win = remote.BrowserWindow.getFocusedWindow();
+        if (!win) return;
+
+        switch (action) {
+            case 'maximize':
+                win.maximize();
+                break;
+            case 'minimize':
+                win.minimize();
+                break;
+            case 'close':
+                win.close();
+                break;
+        }
+    }
+
     render() {
         return (
             <Router ref={e => e ? Application.history = e!['history'] : undefined}>
 
-                {UIHelper.isDarwin ?
-                    <div id='win-title-bar'>
-                        <div className='minimize'>
+                {UIHelper.isWin ?
+                    <div id='win-title-bar' className='app-drag'>
+                        <div className='minimize' onClick={_ => this.handleWindow('minimize')}>
                             <img src={require('./assets/win-minimize.svg')} />
                         </div>
-                        <div className='maximize'>
+                        <div className='maximize' onClick={_ => this.handleWindow('maximize')}>
                             <img src={require('./assets/win-maximize.svg')} />
                         </div>
-                        <div className='quit'>
+                        <div className='quit' onClick={_ => this.handleWindow('close')}>
                             <img src={require('./assets/win-close.svg')} />
                         </div>
                     </div>
