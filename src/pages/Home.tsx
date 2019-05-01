@@ -150,7 +150,7 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     private selectCoin(i) {
-        if (this.state.expandPage === 'sending' || this.state.expandPage === 'transaction' || (this.sendPage && this.sendPage.shouldLockSymbol)) return;
+        if ((this.state.expandPage === 'sending' && this.sendPage && this.sendPage.shouldLockSymbol) || this.state.expandPage === 'transaction') return;
 
         this.walletMan.selectWallet(i.symbol);
         this.setState(
@@ -200,8 +200,6 @@ class Home extends React.Component<{}, HomeState> {
     }
 
     render() {
-        let isDarwin = platform() === 'darwin';
-
         return (
             <div className={`home app-drag`}>
                 <div className={`home-bar titlebar-padding`}>
