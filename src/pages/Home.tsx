@@ -32,6 +32,7 @@ const send = require('../assets/send.svg');
 const inIcon = require('../assets/in.svg');
 const outIcon = require('../assets/out.svg');
 const qrcode = require('../assets/qrcode.svg');
+const logo = require('../assets/logo-title.svg');
 
 const symbols = [
     { img: btc, symbol: 'btc', color: '#f7931a' },
@@ -204,6 +205,8 @@ class Home extends React.Component<{}, HomeState> {
         return (
             <div className={`home app-drag`}>
                 <div className={`home-bar titlebar-padding`}>
+                    {!UIHelper.isDarwin ? <div id='logo'> <img src={logo} /></div> : undefined}
+
                     <div className='icons'>
                         {
                             symbols.map(i => {

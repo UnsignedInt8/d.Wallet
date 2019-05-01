@@ -153,7 +153,7 @@ export class Application extends React.Component<any, State> {
                     <LockScreen style={{ zIndex: 999, }} onValidationPass={() => this.unlockApp()} />
                     : undefined}
 
-                {UIHelper.isWin ?
+                {!UIHelper.isDarwin ?
                     <div id='win-title-bar'>
                         <button className='minimize no-drag' onClick={_ => this.handleWindow('minimize')}>
                             <img src={require('./assets/win-minimize.svg')} draggable={false} />

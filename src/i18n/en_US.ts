@@ -94,7 +94,7 @@ const lang = {
 
     about: {
         title: 'About',
-        desc: 'Thanks for using d.Wallet. d.Wallet is a light cryptocurrency wallet for Desktop users.',
+        desc: 'Thanks for using. d.Wallet is a light cryptocurrency wallet for Desktop users. It provides a security environment and user-friendly interface for using crypto assets. ',
         thanks: 'Thanks',
         contact: 'Contact',
     },

@@ -19,6 +19,21 @@
   box-shadow: 2px 0px 10px -2px rgba(0, 0, 0, 0.25);
   z-index: 5;
 
+  #logo {
+    height: 24px;
+    width: 68px;
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    img {
+      height: 20px;
+      transform: scale(4);
+    }
+  }
+
   .icons {
     display: flex;
     flex-direction: column;
@@ -63,7 +78,7 @@
   top: 0;
   left: 68px;
   right: 0px;
-  
+
   height: 100%;
 }
 
