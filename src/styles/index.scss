@@ -95,6 +95,7 @@ button {
   margin: 8px;
   cursor: pointer;
   -webkit-app-region: no-drag !important;
+  font-family: "Segoe UI", "Microsoft YaHei", "Microsoft JhengHei", system-ui;
 
   transition: all 0.5s;
 }
@@ -131,6 +132,8 @@ input {
 
 input::placeholder {
   color: rgba(255, 255, 255, 0.3);
+  font-family: "Lato", "Segoe UI", "Microsoft YaHei", "Microsoft JhengHei", Helvetica, Tahoma, Geneva, Verdana,
+    sans-serif;
 }
 
 // div::-webkit-scrollbar {
