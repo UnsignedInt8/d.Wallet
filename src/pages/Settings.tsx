@@ -41,6 +41,8 @@ export default class Settings extends React.Component<{}, State> {
 
     private supportedLangs = [
         { value: 'en-US', label: 'English', },
+        { value: 'ja-JP', label: '日本語' },
+        { value: 'zh-TW', label: '繁体中文（台湾）' },
         { value: 'zh-CN', label: '简体中文' },
         { value: '', label: this.i18n.settings.languages.system, }
     ]

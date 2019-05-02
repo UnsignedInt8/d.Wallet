@@ -16,12 +16,12 @@ const lang = {
 
         recover: {
             title: 'Import Wallet',
-            typingMnemonic: 'Please typing your Mnemonic Phrase in the box',
+            typingMnemonic: 'Please typing your Mnemonic Phrases in the box',
         },
 
         new: {
             title: 'New Wallet',
-            attention: 'Please save the Mnemonic Phrase, and do not take a screenshot. Anyone may have access to your assets if you lose the Mnemonic Phrases.',
+            attention: 'Please save the Mnemonic Phrases, and do not take a screenshot. Anyone may have access to your assets if you lose the Mnemonic Phrases.',
         }
     },
 
@@ -58,7 +58,7 @@ const lang = {
         },
         paperKey: {
             title: 'Paper Key',
-            desc: 'Backup your mnemonic code',
+            desc: 'Backup your mnemonic phrases',
         },
         about: {
             title: 'About'
@@ -94,7 +94,7 @@ const lang = {
 
     about: {
         title: 'About',
-        desc: 'Thanks for using. d.Wallet is a light cryptocurrency wallet for Desktop users. It provides a security environment and user-friendly interface for using crypto assets. ',
+        desc: 'Thanks for using. d.Wallet is a light cryptocurrency wallet for Desktop users. It provides a security environment and user-friendly interface for using crypto assets. If you like this app, please tell your friends.',
         thanks: 'Thanks',
         contact: 'Contact',
     },
