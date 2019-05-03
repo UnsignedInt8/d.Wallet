@@ -118,7 +118,7 @@ class Home extends React.Component<{}, HomeState> {
             if (!mnemonic) return;
 
             this.walletMan = getWalletMan(mnemonic);
-            this.walletMan.refresh();
+            // this.walletMan.autoRefresh();
         };
 
         this.appSettings = appSettings;

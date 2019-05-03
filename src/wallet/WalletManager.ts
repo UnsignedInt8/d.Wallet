@@ -34,8 +34,17 @@ export class WalletManager {
         this.current.refresh();
     }
 
-    refresh() {
-        this.wallets['ltc'].refresh();
+    autoRefresh() {
+        this.refresh();
+        setInterval(async () => await this.refresh(), 10 * 60 * 1000);
+    }
+
+    async refresh() {
+        let keys = Object.getOwnPropertyNames(this.wallets);
+
+        for (let key of keys) {
+            await this.wallets[key].refresh();
+        }
     }
 }
 

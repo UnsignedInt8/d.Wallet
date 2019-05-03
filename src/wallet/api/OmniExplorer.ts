@@ -13,7 +13,7 @@ export default class OmniApi {
         let resp = await axios.post(url, form);
 
         if (!resp.data) return null;
-        let data = addresses.map(addr => resp.data[addr.trim()] as OmniAddress);
+        let data = addresses.filter(a => a).map(addr => resp.data[addr.trim()] as OmniAddress);
         return data;
     }
 
