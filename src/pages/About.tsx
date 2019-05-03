@@ -4,7 +4,7 @@ import PassMan from '../data/PasswordManager';
 import { getAppSettings } from '../data/AppSettings';
 import Particles from 'react-particles-js';
 import { nightSky } from './Welcome';
-const { shell } = require('electron');
+import MiscHelper from '../lib/MiscHelper';
 
 const blockchair = require('../assets/blockchair_light.png');
 const btcom = require('../assets/btc-com.png');
@@ -20,7 +20,7 @@ export default class About extends React.Component<Props, {}> {
     i18n = getAppSettings(PassMan.password).i18n;
 
     openLink(url: string) {
-        shell.openExternal(url);
+        MiscHelper.openLink(url);
     }
 
     render() {
@@ -40,10 +40,10 @@ export default class About extends React.Component<Props, {}> {
                     {this.i18n.about.thanks}
                 </div>
 
-                <div id='about-thanks'>
-                    <div><img id='blockchair' src={blockchair} onClick={_ => this.openLink('https://blockchair.com')} /></div>
-                    <div className='lato'><img id='coinranking' src={coinranking} onClick={_ => this.openLink('https://coinranking.com')} /> Coinranking </div>
-                    <div><img id='btc-com' src={btcom} onClick={_ => this.openLink('https://btc.com')} /></div>
+                <div id='about-thanks' className='no-drag'>
+                    <div className='no-drag clickable' onClick={_ => this.openLink('https://blockchair.com')} > <img id='blockchair' src={blockchair} /></div>
+                    <div className='lato no-drag clickable' onClick={_ => this.openLink('https://coinranking.com')}><img id='coinranking' src={coinranking} /> Coinranking </div>
+                    <div className='no-drag clickable' onClick={_ => this.openLink('https://btc.com')}><img id='btc-com' src={btcom} /></div>
                 </div>
 
                 <div className='page-title title'>
@@ -57,7 +57,7 @@ export default class About extends React.Component<Props, {}> {
                 <div id='close'>
                     <button onClick={e => this.props.onCancel!()}>{this.i18n.buttons.close}</button>
                 </div>
-            </div>
+            </div >
         );
     }
 }
