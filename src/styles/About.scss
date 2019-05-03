@@ -19,7 +19,6 @@
     left: 0;
     z-index: 0;
     pointer-events: none;
-
   }
 
   .page-desc {
@@ -44,7 +43,7 @@
     flex-wrap: wrap;
     justify-items: center;
     margin-top: 8px;
-    
+
     div {
       margin-right: 16px;
       display: flex;
@@ -70,16 +69,25 @@
   }
 
   #contacts {
-    div {
+    #icons {
       display: flex;
-      align-items: center;
 
-      img {
-        width: 20px;
-        height: 20px;
+      div {
+        display: flex;
+        align-items: center;
         margin-right: 8px;
-        display: inline-block;
+
+        img {
+          width: 20px;
+          height: 20px;
+          margin-right: 8px;
+          display: inline-block;
+        }
       }
+    }
+
+    #home-link {
+      margin-top: 8px;
     }
   }
 

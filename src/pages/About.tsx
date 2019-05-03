@@ -10,6 +10,8 @@ const blockchair = require('../assets/blockchair_light.png');
 const btcom = require('../assets/btc-com.png');
 const coinranking = require('../assets/coinranking.svg');
 const github = require('../assets/github.svg');
+const email = require('../assets/email.svg');
+const home = require('../assets/home.svg');
 
 interface Props {
     onCancel?: () => void;
@@ -51,7 +53,11 @@ export default class About extends React.Component<Props, {}> {
                 </div>
 
                 <div id='contacts' className='page-desc'>
-                    <div><a href='#' onClick={_ => this.openLink('https://github.com')}><img src={github} /> </a></div>
+                    <div id='icons'>
+                        <div><a href='#' onClick={_ => this.openLink('https://github.com')}><img src={github} /> </a></div>
+                        <div><a href="#" onClick={_ => this.openLink('mailto:')}> <img src={email} /> </a> </div>
+                        <div><a href="#" onClick={_ => this.openLink('https://d-wallet.app')}><img src={home} /> </a></div>
+                    </div>
                 </div>
 
                 <div id='close'>
