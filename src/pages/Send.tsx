@@ -133,6 +133,11 @@ export default class Send extends React.Component<PageProps, PageState>{
         }
     }
 
+    private onBalanceClick() {
+        let balance = this.walletMan.current.balance;
+        jquery('.input-amount').first().val(balance);
+    }
+
     render() {
 
         let coin = coinProps[this.props.symbol] || coinProps.default;
@@ -152,7 +157,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                         );
                     })}
 
-                    <div id='balance'>
+                    <div id='balance' className='no-drag' onClick={_ => this.onBalanceClick()}>
                         {this.i18n.sending.balance}: {this.walletMan.current.balance}
                     </div>
 
