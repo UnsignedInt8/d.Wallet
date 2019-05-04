@@ -158,7 +158,7 @@ export default class Send extends React.Component<PageProps, PageState>{
                     })}
 
                     <div id='balance' className='no-drag' onClick={_ => this.onBalanceClick()}>
-                        {this.i18n.sending.balance}: {this.walletMan.current.balance}
+                        {this.i18n.sending.balance}: {this.walletMan.current.balance} <span>{this.props.symbol}</span>
                     </div>
 
                     <div className='message no-drag'>
