@@ -142,6 +142,13 @@
     }
   }
 
+  #balance {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 14px 0px 12px;
+    font-size: 12px;
+  }
+
   button.plus {
     border-radius: 50%;
     background: none;

@@ -32,6 +32,7 @@ const lang = {
         fees: '手續費',
         send: '發送',
         cancel: '取消',
+        balance: '餘額',
         building: '交易構建中，請稍後...'
     },
 

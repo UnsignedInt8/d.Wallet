@@ -32,6 +32,7 @@ const lang = {
         fees: 'Fees',
         send: 'Send',
         cancel: 'Cancel',
+        balance: 'Balance',
         building: 'Building, please wait a moment...'
     },
 

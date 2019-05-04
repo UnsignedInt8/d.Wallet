@@ -152,6 +152,10 @@ export default class Send extends React.Component<PageProps, PageState>{
                         );
                     })}
 
+                    <div id='balance'>
+                        {this.i18n.sending.balance}: {this.walletMan.current.balance}
+                    </div>
+
                     <div className='message no-drag'>
                         {this.props.symbol === 'eth' ?
                             <div className='no-drag' style={{ display: 'grid' }}>

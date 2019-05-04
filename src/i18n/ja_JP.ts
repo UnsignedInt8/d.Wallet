@@ -32,6 +32,7 @@ const lang = {
         fees: '料金',
         send: '発信',
         cancel: 'キャンセル',
+        balance: 'バランス',
         building: 'ビルディング、しばらくお待ちください...'
     },
 
