@@ -54,8 +54,8 @@ export default class About extends React.Component<Props, {}> {
 
                 <div id='contacts' className='page-desc'>
                     <div id='icons'>
-                        <div><a href='#' onClick={_ => this.openLink('https://github.com')}><img src={github} /> </a></div>
-                        <div><a href="#" onClick={_ => this.openLink('mailto:')}> <img src={email} /> </a> </div>
+                        <div><a href='#' onClick={_ => this.openLink('https://github.com/bitcoindwallet/d.Wallet-Feedback')}><img src={github} /> </a></div>
+                        <div><a href="#" onClick={_ => this.openLink('mailto:bitcoindwallet@outlook.com?subject=d.Wallet Feedback')}> <img src={email} /> </a> </div>
                         <div><a href="#" onClick={_ => this.openLink('https://d-wallet.app')}><img src={home} /> </a></div>
                     </div>
                 </div>
