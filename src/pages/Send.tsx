@@ -37,6 +37,7 @@ const mining = require('../assets/mining.svg');
 const write = require('../assets/write.svg');
 const minus = require('../assets/minus.svg');
 const plus = require('../assets/plus.svg');
+const scan = require('../assets/scan.svg');
 
 const coinProps = {
     default: { feeUnit: 'Sat/B', maxTo: 10, desc: 'Satoshis/Byte', unit: 'Satoshis', },
@@ -168,6 +169,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                                 <img className='send' src={sendIcon} />
                                 <img className='calc' src={calc} />
+                                <img className='scan' src={scan} />
                             </div>
                         );
                     })}

@@ -95,6 +95,13 @@
     img.calc {
       top: 74px;
     }
+
+    img.scan {
+      top: 22px;
+      left: unset !important;
+      right: 28px;
+      cursor: pointer;
+    }
   }
 
   .plus-container {
