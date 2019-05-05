@@ -150,6 +150,7 @@ export interface TxInfo {
     amount: number | string;
     fee: number | string;
     success?: boolean;
+    isPending?: boolean;
 }
 
 

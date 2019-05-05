@@ -10,7 +10,7 @@ import * as jquery from 'jquery';
 import { getWalletMan } from '../wallet/WalletManager';
 import sleep from 'sleep-promise';
 import PaymentDetails from './PaymentDetails';
-import { GenTxInfo } from '../wallet/Wallet';
+import { GenTxInfo, TxInfo } from '../wallet/Wallet';
 import UIHelper from '../lib/UIHelper';
 import { Application } from '../Application';
 
@@ -120,6 +120,21 @@ export default class Send extends React.Component<PageProps, PageState>{
             this.paymentDetails!.close();
             await sleep(1500);
             this.props.onCancel();
+
+            let tx: TxInfo = {
+                amount: txInfo.value,
+                blockHash: '',
+                blockHeight: Number.NaN,
+                fee: txInfo.fee,
+                hash: txInfo.id,
+                isPending: true,
+                timestamp: Date.now(),
+                isIncome: false,
+                inputs: txInfo.from.map(f => { return { address: [f], value: 0 } }),
+                outputs: txInfo.to.map(t => { return { address: [t.address], value: t.amount } }),
+            };
+
+            this.walletMan.current.txs.unshift(tx);
         }, 1500);
     }
 

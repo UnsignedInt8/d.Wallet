@@ -95,7 +95,7 @@ const lang = {
 
     about: {
         title: '关于',
-        desc: '感谢使用 d.Wallet, d.Wallet 是一款加密货币轻钱包。目前它支持Bitcoin, Ethereum, Bitcoin Cash, Litecoin 以及 USDT。欢迎提出宝贵的意见与反馈。',
+        desc: '感谢使用 d.Wallet, d.Wallet 是一款加密货币轻钱包。目前它支持Bitcoin, Ethereum, Bitcoin Cash, Litecoin 以及 USDT。欢迎提出宝贵的意见与反馈。注意，中国用户可能需要连接国际互联网才能正常使用。',
         thanks: '感谢',
         contact: '联系',
     },
