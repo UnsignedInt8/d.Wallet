@@ -158,12 +158,13 @@ export default class Send extends React.Component<PageProps, PageState>{
 
     private expandPage(page: 'qrscanner') {
         this.setState({ expandPage: page }, () => {
-            AnimeHelper.expandPage('#sending-expanding-page', window.innerHeight, 0);
+            AnimeHelper.expandPage('#sending-expanding-page', 12, 0, undefined, 'linear');
         });
     }
 
     private onQRCode(data: string | null) {
         if (!data) return;
+        console.log(data);
     }
 
     render() {
