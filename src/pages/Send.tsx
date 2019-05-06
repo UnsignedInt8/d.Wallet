@@ -162,6 +162,10 @@ export default class Send extends React.Component<PageProps, PageState>{
         });
     }
 
+    private closePage() {
+        AnimeHelper.expandPage('#sending-expanding-page', 0, window.innerHeight, () => this.setState({ expandPage: undefined }), 'linear');
+    }
+
     private onQRCode(data: string | null) {
         if (!data) return;
         console.log(data);
@@ -252,7 +256,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                 {this.state.expandPage ?
                     <div id='sending-expanding-page'>
-                        {this.state.expandPage === 'qrscanner' ? <QRScanner onResult={r => this.onQRCode(r)} /> : undefined}
+                        {this.state.expandPage === 'qrscanner' ? <QRScanner onResult={r => this.onQRCode(r)} onCancel={() => this.closePage()} /> : undefined}
                     </div>
                     : undefined}
 

@@ -6,6 +6,7 @@ import PassMan from '../data/PasswordManager';
 
 interface Props {
     onResult: (result: string | null) => void;
+    onCancel: () => void;
 }
 
 export default class QRScanner extends React.Component<Props, {}> {
@@ -29,7 +30,7 @@ export default class QRScanner extends React.Component<Props, {}> {
 
                 <div id='view-border' />
 
-                <button id='close-scanner'>
+                <button id='close-scanner' onClick={e => this.props.onCancel()}>
                     {this.i18n.buttons.close}
                 </button>
             </div>
