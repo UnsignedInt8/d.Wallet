@@ -13,7 +13,7 @@ import PaymentDetails from './PaymentDetails';
 import { GenTxInfo, TxInfo } from '../wallet/Wallet';
 import UIHelper from '../lib/UIHelper';
 import { Application } from '../Application';
-import QRScanner from './QRScanner';
+import QRScanner, { QResult } from './QRScanner';
 
 interface PageProps {
     symbol: string;
@@ -50,10 +50,11 @@ const coinProps = {
 export default class Send extends React.Component<PageProps, PageState>{
 
     state: PageState = { toNums: 1, prepareToSend: false, isBuildingTx: false };
-    appSettings = getAppSettings(PassMan.password);
-    i18n = this.appSettings.i18n;
-    walletMan = getWalletMan(this.appSettings.mnemonic);
+    private appSettings = getAppSettings(PassMan.password);
+    private i18n = this.appSettings.i18n;
+    private walletMan = getWalletMan(this.appSettings.mnemonic);
     private paymentDetails: PaymentDetails | null = null;
+    private qrIndex?: number;
 
     get shouldLockSymbol() { return (jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[]).filter(a => a.length > 0).length > 0 };
 
@@ -78,6 +79,11 @@ export default class Send extends React.Component<PageProps, PageState>{
 
         let to = addresses.zip(amounts).select(i => { return { address: i[0], amount: i[1] } }).where(i => i.address.length > 0).toArray();
         if (to.length === 0) return;
+
+        if (wallet.balance <= 0) {
+            Application.notify({ message: this.i18n.messages.checkBalance, appearance: 'error' });
+            return;
+        }
 
         if (to.some(v => !wallet.isValidAddress(v.address))) {
             Application.notify({ message: this.i18n.messages.invalidAddress, appearance: 'error', });
@@ -166,9 +172,11 @@ export default class Send extends React.Component<PageProps, PageState>{
         AnimeHelper.expandPage('#sending-expanding-page', 0, window.innerHeight, () => this.setState({ expandPage: undefined }), 'linear');
     }
 
-    private onQRCode(data: string | null) {
-        if (!data) return;
-        console.log(data);
+    private onQRCode(data: QResult) {
+        if (!data || this.qrIndex === undefined) return;
+        jquery('.input-address').eq(this.qrIndex || 0).val(data.address);
+        this.qrIndex = undefined;
+        this.closePage();
     }
 
     render() {
@@ -186,7 +194,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                                 <img className='send' src={sendIcon} />
                                 <img className='calc' src={calc} />
-                                <img className='scan' src={scan} onClick={e => this.expandPage('qrscanner')} />
+                                <img className='scan' src={scan} onClick={e => { this.expandPage('qrscanner'); this.qrIndex = i }} />
                             </div>
                         );
                     })}

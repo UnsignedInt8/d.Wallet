@@ -107,6 +107,7 @@ const lang = {
         broadcastTx: (hash: string) => `トランザクション ${hash} は正常にブロードキャストされました。`,
         broadcastFailed: `トランザクションをブロードキャストが失敗しました。残高を確認して、もう一度やり直してください。`,
         resetDone: 'ご利用いただきありがとうございます。　See you...',
+        checkBalance: '残高を確認して、もう一度やり直してください',
     }
 }
 

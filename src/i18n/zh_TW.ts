@@ -107,6 +107,7 @@ const lang = {
         broadcastTx: (hash: string) => `交易 ${hash} 已經成功廣播`,
         broadcastFailed: `廣播交易失敗，請檢查餘額並重試`,
         resetDone: '謝謝使用，稍後見...',
+        checkBalance: '請檢查您的餘額',
     }
 }
 
