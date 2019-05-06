@@ -13,6 +13,7 @@ import PaymentDetails from './PaymentDetails';
 import { GenTxInfo, TxInfo } from '../wallet/Wallet';
 import UIHelper from '../lib/UIHelper';
 import { Application } from '../Application';
+import QRScanner from './QRScanner';
 
 interface PageProps {
     symbol: string;
@@ -28,6 +29,7 @@ interface PageState {
     isBuildingTx?: boolean;
 
     txInfo?: GenTxInfo;
+    expandPage?: 'qrscanner';
 }
 
 const sendIcon = require('../assets/send2.svg');
@@ -154,6 +156,16 @@ export default class Send extends React.Component<PageProps, PageState>{
         jquery('.input-amount').first().val(balance);
     }
 
+    private expandPage(page: 'qrscanner') {
+        this.setState({ expandPage: page }, () => {
+            AnimeHelper.expandPage('#sending-expanding-page', window.innerHeight, 0);
+        });
+    }
+
+    private onQRCode(data: string | null) {
+        if (!data) return;
+    }
+
     render() {
 
         let coin = coinProps[this.props.symbol] || coinProps.default;
@@ -169,7 +181,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                                 <img className='send' src={sendIcon} />
                                 <img className='calc' src={calc} />
-                                <img className='scan' src={scan} />
+                                <img className='scan' src={scan} onClick={e => this.expandPage('qrscanner')} />
                             </div>
                         );
                     })}
@@ -236,6 +248,13 @@ export default class Send extends React.Component<PageProps, PageState>{
                     <PaymentDetails ref={e => this.paymentDetails = e} coinUnit={this.props.symbol} symbol={this.props.symbol} txInfo={this.state.txInfo} onClose={() => this.setState({ prepareToSend: false })} onVerified={() => this.onPasswordVerified()} />
                     : undefined
                 }
+
+                {this.state.expandPage ?
+                    <div id='sending-expanding-page'>
+                        {this.state.expandPage === 'qrscanner' ? <QRScanner onResult={r => this.onQRCode(r)} /> : undefined}
+                    </div>
+                    : undefined}
+
             </div>
         );
     }
