@@ -108,6 +108,8 @@ const lang = {
         broadcastFailed: `トランザクションをブロードキャストが失敗しました。残高を確認して、もう一度やり直してください。`,
         resetDone: 'ご利用いただきありがとうございます。　See you...',
         checkBalance: '残高を確認して、もう一度やり直してください',
+        cameraNotAvailable: 'カメラが利用できない可能性があります',
+
     }
 }
 

@@ -108,6 +108,8 @@ const lang = {
         broadcastFailed: `广播交易失败，请检查余额并重试`,
         resetDone: '谢谢使用，稍后见...',
         checkBalance: '请检查您的余额',
+        cameraNotAvailable: '摄像头不可用，请检查后重试',
+
     }
 }
 

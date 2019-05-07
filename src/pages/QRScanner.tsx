@@ -15,6 +15,7 @@ export interface QResult {
 interface Props {
     onResult: (opts: QResult) => void;
     onCancel: () => void;
+    onError: (err: any) => void;
 }
 
 export default class QRScanner extends React.Component<Props, {}> {
@@ -22,7 +23,7 @@ export default class QRScanner extends React.Component<Props, {}> {
     i18n = getAppSettings(PassMan.password).i18n;
 
     handleError = err => {
-
+        this.props.onError(err);
     };
 
     handleData = (data: string | null) => {
@@ -38,7 +39,7 @@ export default class QRScanner extends React.Component<Props, {}> {
         if (!host) return;
         let lowercase = data.toLowerCase();
         let address = data.substring(lowercase.indexOf(host.toLowerCase()), host.length + protocol.length);
-        
+
         this.props.onResult({ protocol: result.protocol, address, query: result.query });
     }
 

@@ -108,6 +108,8 @@ const lang = {
         broadcastFailed: `廣播交易失敗，請檢查餘額並重試`,
         resetDone: '謝謝使用，稍後見...',
         checkBalance: '請檢查您的餘額',
+        cameraNotAvailable: '攝像頭不可用，請檢查後重試',
+
     }
 }
 

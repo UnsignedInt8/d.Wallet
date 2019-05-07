@@ -179,6 +179,10 @@ export default class Send extends React.Component<PageProps, PageState>{
         this.closePage();
     }
 
+    private onQRError(err: any) {
+        Application.notify({ message: this.i18n.messages.cameraNotAvailable, appearance: 'error' });
+    }
+
     render() {
 
         let coin = coinProps[this.props.symbol] || coinProps.default;
@@ -264,7 +268,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
                 {this.state.expandPage ?
                     <div id='sending-expanding-page'>
-                        {this.state.expandPage === 'qrscanner' ? <QRScanner onResult={r => this.onQRCode(r)} onCancel={() => this.closePage()} /> : undefined}
+                        {this.state.expandPage === 'qrscanner' ? <QRScanner onResult={r => this.onQRCode(r)} onCancel={() => this.closePage()} onError={e => this.onQRError(e)} /> : undefined}
                     </div>
                     : undefined}
 
