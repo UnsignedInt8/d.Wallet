@@ -6,6 +6,10 @@
   bottom: 0;
 }
 
+.top-most {
+  z-index: 99999999 !important;
+}
+
 #win-title-bar {
   position: fixed;
   top: 0;
@@ -14,7 +18,7 @@
   display: flex;
   justify-content: flex-end;
   height: 26px;
-  z-index: 1000;
+  z-index: 0;
   padding: 4px 4px 4px 0px;
   background: rgba(0, 0, 0, 0);
 

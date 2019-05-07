@@ -154,7 +154,7 @@ export class Application extends React.Component<any, State> {
                     : undefined}
 
                 {!UIHelper.isDarwin ?
-                    <div id='win-title-bar'>
+                    <div id='win-title-bar' className={`${this.state.lockApp ? 'top-most' : ''}`}>
                         <button className='minimize no-drag' onClick={_ => this.handleWindow('minimize')}>
                             <img src={require('./assets/win-minimize.svg')} draggable={false} />
                         </button>

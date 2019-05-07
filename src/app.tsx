@@ -24,7 +24,10 @@ document.body.appendChild(mainElement);
 // Render components
 const render = (Component: () => JSX.Element) => {
     ReactDOM.render(
-        <ToastProvider autoDismissTimeout={3000}>
+        <ToastProvider autoDismissTimeout={3000} className='toastprovider'
+            styles={{
+                container: (provided) => ({ ...provided, zIndex: 100000, })
+            }}>
             <Component />
         </ToastProvider>,
         mainElement
