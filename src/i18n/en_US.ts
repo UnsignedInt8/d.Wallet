@@ -98,6 +98,7 @@ const lang = {
         desc: 'Thanks for using. d.Wallet is a light cryptocurrency wallet for Desktop users. It provides a security environment and user-friendly interface for using crypto assets. If you like this app, please tell your friends.',
         thanks: 'Thanks',
         contact: 'Contact',
+        updateAvailable: (ver: string) => `Update Available: ${ver}`,
     },
 
     messages: {

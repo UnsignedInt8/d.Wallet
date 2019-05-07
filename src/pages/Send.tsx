@@ -182,6 +182,7 @@ export default class Send extends React.Component<PageProps, PageState>{
 
     private onQRError(err: any) {
         Application.notify({ message: this.i18n.messages.cameraNotAvailable, appearance: 'error' });
+        if (this.state.expandPage === 'qrscanner') this.closePage();
     }
 
     render() {

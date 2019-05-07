@@ -13,7 +13,7 @@ import sleep from 'sleep-promise';
 import About from './About';
 import MiscHelper from '../lib/MiscHelper';
 import * as jquery from 'jquery';
-import { observable } from 'mobx';
+import AppVersion from '../data/AppVersion';
 
 const selectColor = {
     option: (provided, state) => ({
@@ -132,6 +132,7 @@ export default class Settings extends React.Component<{}, State> {
 
                 <div className='setting-item no-drag'>
                     <div className='setting-title clickable no-drag' onClick={_ => this.openPage('about')}>{this.i18n.settings.about.title}</div>
+                    <div className='setting-detail'>{AppVersion.updateAvailable ? this.i18n.about.updateAvailable(AppVersion.latest) : undefined}</div>
                 </div>
 
                 {this.state.expandedPage ?

@@ -7,14 +7,16 @@ const currentVersion = require('../../package.json').version as string;
 class AppVersion {
 
     @observable updateAvailable = false;
+    @observable latest = currentVersion;
 
     async check() {
         let resp = await axios.get('https://d-wallet.app/version.json');
         let data = resp.data;
         if (!data) return;
-        let lastest = data.ver;
+        let latest = data.ver;
 
-        this.updateAvailable = compareVersions(lastest, currentVersion) > 0;
+        this.updateAvailable = compareVersions(latest, currentVersion) > 0;
+        this.latest = latest;
     }
 }
 

@@ -98,6 +98,7 @@ const lang = {
         desc: '感謝使用 d.Wallet, d.Wallet 是一款加密貨幣輕錢包。目前它支持Bitcoin, Ethereum, Bitcoin Cash, Litecoin 以及 USDT。歡迎提出寶貴的意見與反饋。',
         thanks: '感謝',
         contact: '聯繫',
+        updateAvailable: (ver: string) => `有更新可升級: ${ver}`,
     },
 
     messages: {
