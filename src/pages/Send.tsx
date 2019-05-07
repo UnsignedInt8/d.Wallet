@@ -175,6 +175,7 @@ export default class Send extends React.Component<PageProps, PageState>{
     private onQRCode(data: QResult) {
         if (!data || this.qrIndex === undefined) return;
         jquery('.input-address').eq(this.qrIndex || 0).val(data.address);
+        jquery('.input-amount').eq(this.qrIndex || 0).val(data.query ? (data.query.amount || 0) : 0);
         this.qrIndex = undefined;
         this.closePage();
     }
