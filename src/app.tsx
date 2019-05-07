@@ -6,8 +6,10 @@ import './styles/index.scss';
 import * as linq from 'linq';
 const { clipboard } = require('electron');
 import { ToastProvider, } from 'react-toast-notifications';
+import AppVersion from './data/AppVersion';
 
 linq.enable();
+AppVersion.check();
 
 // https://github.com/bitpay/bitcore/issues/1457#issuecomment-467594031
 Object.defineProperty(global, '_bitcore', { get() { return undefined }, set() { } });

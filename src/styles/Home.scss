@@ -70,6 +70,20 @@
   div.icon:active {
     background-color: rgb(71, 84, 148);
   }
+
+  .settings-icon {
+    #update-dot {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      top: 16px;
+      right: 16px;
+      font-size: 6px;
+      border-radius: 50%;
+      background: rgb(255, 20, 90);
+      z-index: -1;
+    }
+  }
 }
 
 .expand-area {

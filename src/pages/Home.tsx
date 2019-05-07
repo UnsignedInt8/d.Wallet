@@ -18,6 +18,7 @@ import CountUp from 'react-countup';
 import Transaction from './Transaction';
 import { observable } from 'mobx';
 import UIHelper from '../lib/UIHelper';
+import AppVersion from '../data/AppVersion';
 
 type Pages = 'sending' | 'receiving' | 'settings' | 'transaction';
 
@@ -222,8 +223,9 @@ class Home extends React.Component<{}, HomeState> {
                         <div className='icon no-drag' draggable={false} onClick={_ => this.togglePage('receiving')}>
                             <img src={qrcode} />
                         </div>
-                        <div className='icon no-drag' draggable={false} onClick={_ => this.togglePage('settings')}>
+                        <div className='icon no-drag settings-icon' draggable={false} onClick={_ => this.togglePage('settings')}>
                             <img src={settings} />
+                            {AppVersion.updateAvailable ? <div id='update-dot' /> : undefined}
                         </div>
                     </div>
                 </div>
