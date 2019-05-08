@@ -132,7 +132,7 @@ export default class Settings extends React.Component<{}, State> {
 
                 <div className='setting-item no-drag'>
                     <div className='setting-title clickable no-drag' onClick={_ => this.openPage('about')}>{this.i18n.settings.about.title}</div>
-                    <div className='setting-detail'>{AppVersion.updateAvailable ? this.i18n.about.updateAvailable(AppVersion.latest) : undefined}</div>
+                    <div id='update-available' className='setting-detail' onClick={_ => MiscHelper.openLink('https://d-wallet.app')}>{AppVersion.updateAvailable ? this.i18n.about.updateAvailable(AppVersion.latest) : undefined}</div>
                 </div>
 
                 {this.state.expandedPage ?
