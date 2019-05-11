@@ -5,6 +5,7 @@ import { getAppSettings } from '../data/AppSettings';
 import Particles from 'react-particles-js';
 import { nightSky } from './Welcome';
 import MiscHelper from '../lib/MiscHelper';
+import * as jquery from 'jquery';
 
 const blockchair = require('../assets/blockchair_light.png');
 const btcom = require('../assets/btc-com.png');
@@ -23,6 +24,10 @@ export default class About extends React.Component<Props, {}> {
 
     openLink(url: string) {
         MiscHelper.openLink(url);
+    }
+
+    componentDidMount() {
+        jquery('#close-about').focus();
     }
 
     render() {
@@ -60,8 +65,8 @@ export default class About extends React.Component<Props, {}> {
                     </div>
                 </div>
 
-                <div id='close'>
-                    <button onClick={e => this.props.onCancel!()}>{this.i18n.buttons.close}</button>
+                <div id='close' className='no-drag'>
+                    <button id='close-about' onClick={e => this.props.onCancel!()}>{this.i18n.buttons.close}</button>
                 </div>
             </div >
         );
