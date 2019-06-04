@@ -74,7 +74,7 @@ export default class Send extends React.Component<PageProps, PageState>{
     private async buildTx() {
 
         let addresses = jquery('.input-address').map((i, el) => jquery(el).val()).get() as string[];
-        let amounts = jquery('.input-amount').map((i, el) => Number.parseFloat(jquery(el).val()) || 0).get() as number[];
+        let amounts = jquery('.input-amount').map((i, el) => Math.max(Number.parseFloat(jquery(el).val()), 0.000001) || 0).get() as number[];
         let wallet = this.walletMan.wallets[this.props.symbol];
 
         let to = addresses.zip(amounts).select(i => { return { address: i[0], amount: i[1] } }).where(i => i.address.length > 0).toArray();
