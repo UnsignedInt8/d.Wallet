@@ -115,7 +115,6 @@ export default class ETHWallet extends Wallet {
         let amount = ETHUnit.toWei(to.amount, 'ether').toString();
         let gasPrice = ETHUnit.toWei(opts.gasPrice, 'gwei').toString();
 
-        console.log(to.address, amount);
         let { hex, txid, fee, value } = this.buildETHTx({ to: { address: to.address, amount }, msg: opts.message, gasPrice, nonce: info.nonce }, info.balance, privkey);
 
         return { hex, id: txid, change: { address: this.mainAddress[0], amount: 0 }, fee: Units.convert(fee || 0, 'wei', 'eth'), from: this.mainAddress, to: opts.to, msg: opts.message, value: Units.convert(value, 'wei', 'eth') }

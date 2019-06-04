@@ -118,7 +118,14 @@ export default class Send extends React.Component<PageProps, PageState>{
     private onPasswordVerified() {
         setTimeout(async () => {
             let txInfo = this.state.txInfo!;
-            let id = await this.walletMan.current.broadcastTx(txInfo.hex);
+            let id: string;
+            try {
+                id = await this.walletMan.current.broadcastTx(txInfo.hex);
+            } catch (error) {
+                Application.notify({ message: this.i18n.messages.broadcastFailed, appearance: 'error' });
+                return;
+            }
+
             let txid = `${txInfo.id.substring(0, 7)}...${txInfo.id.substring(txInfo.id.length - 7)}`
             if (txInfo.id === id) {
                 Application.notify({ message: `${this.i18n.messages.broadcastTx(txid)}`, appearance: 'success', });

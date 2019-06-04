@@ -1,5 +1,7 @@
 import * as React from 'react';
 import './Password.scss';
+import * as jquery from 'jquery';
+
 const lock = require('../assets/padlock.svg');
 
 interface Props {
@@ -14,6 +16,10 @@ export default class Password extends React.Component<Props, {}>{
 
     clean() {
         this.pwInput.value = '';
+    }
+
+    componentDidMount() {
+        setTimeout(() => jquery('input[type=password]').focus(), 2000);
     }
 
     render() {
