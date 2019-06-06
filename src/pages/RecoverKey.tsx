@@ -44,7 +44,6 @@ export default class RecoverKey extends React.Component<Props, State> {
         let appSettings = getAppSettings(PassMan.password);
         appSettings.mnemonic = this.state.mnemonic!;
 
-        console.log(PassMan.password, appSettings.mnemonic);
         this.props.onOk();
     }
 
