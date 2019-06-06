@@ -85,6 +85,7 @@ export default class Settings extends React.Component<{}, State> {
         this.appSettings.delete();
         PasswordMan.delete();
         this.closePage();
+        localStorage.clear();
         Application.notify({ message: this.i18n.messages.resetDone, appearance: 'success' });
         setTimeout(() => MiscHelper.relaunch(), 3000);
     }
