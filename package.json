@@ -166,7 +166,7 @@
     "keythereum": "^1.0.4",
     "linq": "github:unsignedint8/linq",
     "litecore-lib": "^0.13.22",
-    "mobx": "^5.10.0",
+    "mobx": "5.9.4",
     "mobx-react": "^5.4.4",
     "qrcode.react": "^0.9.3",
     "react": "^16.8.6",
