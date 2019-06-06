@@ -22,7 +22,7 @@ export abstract class Wallet {
         this._path = opts.path || this.getExternalPath();
 
         this.balance = this.load('balance') || '0';
-        this.txs = this.load('txs') || [];
+        // this.txs = this.load('txs') || [];
     }
 
     abstract get symbol(): string;
