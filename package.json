@@ -161,7 +161,7 @@
     "frameless-titlebar": "^1.0.8",
     "hex2dec": "^1.1.2",
     "history": "^4.9.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "keccak": "^2.0.0",
     "keythereum": "^1.0.4",
     "linq": "github:unsignedint8/linq",
