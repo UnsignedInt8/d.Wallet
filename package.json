@@ -141,7 +141,7 @@
   },
   "dependencies": {
     "animejs": "^3.0.1",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "bchaddrjs": "^0.3.2",
     "bignumber.js": "^8.1.1",
     "bip39": "^3.0.2",
